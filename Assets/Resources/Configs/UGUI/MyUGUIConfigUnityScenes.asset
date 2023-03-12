@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 971888be4933fc5439bef91678674f4f, type: 3}
+  m_Name: MyUGUIConfigUnityScenes
+  m_EditorClassIdentifier: 
+  ListUnityScene:
+  - IsFoldOut: 1
+    ID: 0
+    SceneName: MainUnityScene
+    SceneNameIndex: 1
+    HUDScriptPathIndex: 147
+    HUDPrefabNameIndex: 1
+    HUDScriptPath: Assets/_MyAssets/Scripts/Scenes/MainUnityScene/HUD/MainHUD.cs
+    HUDScriptName: MainHUD
+    HUDPrefabName: MainHUD
+    ListScene:
+    - IsFoldOut: 1
+      ID: 0
+      ScriptPathIndex: 150
+      PrefabNameIndex: 2
+      ScriptPath: Assets/_MyAssets/Scripts/Scenes/MainUnityScene/MainMenuScene/MainMenuScene.cs
+      ScriptName: MainMenuScene
+      PrefabName: MainMenuScene
+      AssetBundleURL: 
+      AssetBundleVersion: 0
+      IsInitWhenLoadUnityScene: 0
+      IsHideHUD: 0
+      FadeInDuration: 0.2
+      FadeOutDuration: 0.2
+    - IsFoldOut: 1
+      ID: 1
+      ScriptPathIndex: 146
+      PrefabNameIndex: 1
+      ScriptPath: Assets/_MyAssets/Scripts/Scenes/MainUnityScene/GameScene/GameScene.cs
+      ScriptName: GameScene
+      PrefabName: GameScene
+      AssetBundleURL: 
+      AssetBundleVersion: 0
+      IsInitWhenLoadUnityScene: 0
+      IsHideHUD: 0
+      FadeInDuration: 0.2
+      FadeOutDuration: 0.2
