@@ -18,3 +18,5 @@ Logs
 MyClasses-Framework.sln
 Assets/Resources/BillingMode.json
 Assets/Resources/BillingMode.json.meta
+.vs
+.vsconfig
