@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyUGUIToolEditor (version 2.30)
+ * Class:       MyUGUIToolEditor (version 2.31)
  */
 
 using System.IO;
@@ -294,13 +294,7 @@ namespace MyClasses.UI.Tool
                 if (File.Exists(samplePath))
                 {
                     string content = File.ReadAllText(samplePath);
-#if UNITY_EDITOR_WIN
-Debug.LogError("WIN");
-                    content = content.Substring(167).Replace("MyUGUISampleHUD", fileName);
-#else
-                    Debug.LogError("MAC");
-                    content = content.Substring(160).Replace("MyUGUISampleHUD", fileName);
-#endif
+                    content = content.Substring(content.IndexOf("using")).Replace("MyUGUISampleHUD", fileName);
                     File.WriteAllText(filePath, content);
                     AssetDatabase.Refresh();
                     Debug.Log("[MyClasses] " + fileName + ".cs was created.");
@@ -333,11 +327,7 @@ Debug.LogError("WIN");
                 if (File.Exists(samplePath))
                 {
                     string content = File.ReadAllText(samplePath);
-#if UNITY_EDITOR_WIN
-                    content = content.Substring(169).Replace("MyUGUISampleScene", fileName);
-#else
-                    content = content.Substring(162).Replace("MyUGUISampleScene", fileName);
-#endif
+                    content = content.Substring(content.IndexOf("using")).Replace("MyUGUISampleScene", fileName);
                     File.WriteAllText(filePath, content);
                     AssetDatabase.Refresh();
                     Debug.Log("[MyClasses] " + fileName + ".cs was created.");
@@ -370,11 +360,7 @@ Debug.LogError("WIN");
                 if (File.Exists(samplePath))
                 {
                     string content = File.ReadAllText(samplePath);
-#if UNITY_EDITOR_WIN
-                    content = content.Substring(169).Replace("MyUGUISamplePopup", fileName);
-#else
-                    content = content.Substring(162).Replace("MyUGUISamplePopup", fileName);
-#endif
+                    content = content.Substring(content.IndexOf("using")).Replace("MyUGUISamplePopup", fileName);
                     File.WriteAllText(filePath, content);
                     AssetDatabase.Refresh();
                     Debug.Log("[MyClasses] " + fileName + ".cs was created.");
@@ -407,11 +393,7 @@ Debug.LogError("WIN");
                 if (File.Exists(samplePath))
                 {
                     string content = File.ReadAllText(samplePath);
-#if UNITY_EDITOR_WIN
-                    content = content.Substring(183).Replace("MyUGUISampleReusableListViewItem", fileName);
-#else
-                    content = content.Substring(176).Replace("MyUGUISampleReusableListViewItem", fileName);
-#endif
+                    content = content.Substring(content.IndexOf("using")).Replace("MyUGUISampleReusableListViewItem", fileName);
                     File.WriteAllText(filePath, content);
                     AssetDatabase.Refresh();
                     Debug.Log("[MyClasses] " + fileName + ".cs was created.");

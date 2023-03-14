@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyUGUISampleHUD (version 2.24)
+ * Class:       MyUGUISampleHUD (version 2.25)
  */
 
 using UnityEngine;
@@ -20,7 +20,7 @@ namespace MyApp
     {
         #region ----- Variable -----
 
-        private MyUGUIButton _btnBack;
+        // private MyUGUIButton _btnBack;
 
         #endregion
 
@@ -41,7 +41,7 @@ namespace MyApp
 
             base.OnUGUIInit();
 
-            _btnBack = MyUtilities.FindObject(GameObject, "Something/Something/ButtonBack").GetComponent<MyUGUIButton>();
+            // _btnBack = MyUtilities.FindObject(GameObject, "Something/Something/ButtonBack").GetComponent<MyUGUIButton>();
         }
 
         public override void OnUGUIEnter()
@@ -49,6 +49,8 @@ namespace MyApp
             this.LogInfo("OnUGUIEnter", null, ELogColor.DARK_UI);
             
             base.OnUGUIEnter();
+
+            // _btnBack.OnEventPointerClick.AddListener(_OnClickBack);
         }
 
         public override void OnUGUIUpdate(float deltaTime)
@@ -60,6 +62,8 @@ namespace MyApp
             this.LogInfo("OnUGUIExit", null, ELogColor.DARK_UI);
             
             base.OnUGUIExit();
+
+            // _btnBack.OnEventPointerClick.RemoveAllListeners();
         }
 
         public override void OnUGUISceneSwitch(MyUGUIScene scene)

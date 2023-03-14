@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyUGUISamplePopup (version 2.24)
+ * Class:       MyUGUISamplePopup (version 2.25)
  */
 
 using UnityEngine;
@@ -20,7 +20,7 @@ namespace MyApp
     {
         #region ----- Variable -----
 
-        private MyUGUIButton _btnClose;
+        // private MyUGUIButton _btnClose;
 
         #endregion
 
@@ -41,7 +41,7 @@ namespace MyApp
 
             base.OnUGUIInit();
 
-            _btnClose = MyUtilities.FindObject(GameObject, "Container/ButtonClose").GetComponent<MyUGUIButton>();
+            // _btnClose = MyUtilities.FindObject(GameObject, "Container/ButtonClose").GetComponent<MyUGUIButton>();
         }
 
         public override void OnUGUIEnter()
@@ -50,7 +50,7 @@ namespace MyApp
 
             base.OnUGUIEnter();
 
-            _btnClose.OnEventPointerClick.AddListener(_OnClickClose);
+            // _btnClose.OnEventPointerClick.AddListener(_OnClickClose);
         }
 
         public override bool OnUGUIVisible()
@@ -74,7 +74,7 @@ namespace MyApp
 
             base.OnUGUIExit();
 
-            _btnClose.OnEventPointerClick.RemoveAllListeners();
+            // _btnClose.OnEventPointerClick.RemoveAllListeners();
         }
 
         public override bool OnUGUIInvisible()

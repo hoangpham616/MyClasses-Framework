@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyUGUISampleScene (version 2.24)
+ * Class:       MyUGUISampleScene (version 2.25)
  */
 
 using UnityEngine;
@@ -20,7 +20,7 @@ namespace MyApp
     {
         #region ----- Variable -----
 
-        private MyUGUIButton _btnSample;
+        // private MyUGUIButton _btnSample;
 
         #endregion
 
@@ -41,7 +41,7 @@ namespace MyApp
 
             base.OnUGUIInit();
 
-            _btnSample = MyUtilities.FindObject(GameObject, "Something/Something/ButtonSample").GetComponent<MyUGUIButton>();
+            // _btnSample = MyUtilities.FindObject(GameObject, "Something/Something/ButtonSample").GetComponent<MyUGUIButton>();
         }
 
         public override void OnUGUIEnter()
@@ -50,7 +50,7 @@ namespace MyApp
 
             base.OnUGUIEnter();
 
-            _btnSample.OnEventPointerClick.AddListener(_OnClickSample);
+            // _btnSample.OnEventPointerClick.AddListener(_OnClickSample);
         }
 
         public override bool OnUGUIVisible()
@@ -74,7 +74,7 @@ namespace MyApp
 
             base.OnUGUIExit();
 
-            _btnSample.OnEventPointerClick.RemoveAllListeners();
+            // _btnSample.OnEventPointerClick.RemoveAllListeners();
         }
 
         public override bool OnUGUIInvisible()
