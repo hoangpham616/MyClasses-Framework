@@ -11,7 +11,7 @@ Shader "MyClasses/Image Effect/Scan Line Glitch"
     Properties
     {
         _MainTex ("Main Texture", 2D) = "white" {}
-        _Intensity ("Intensity", Range(0, 1)) = 0.5
+        _Intensity ("Intensity", Range(0, 1)) = 0.3
     }
 
     SubShader
