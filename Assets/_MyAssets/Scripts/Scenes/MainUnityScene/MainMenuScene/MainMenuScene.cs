@@ -9,6 +9,7 @@ namespace MyApp.UI
         #region ----- Variable -----
 
         private MyUGUIButton _btnButton;
+        private MyUGUIToggleButton _tgToggle;
         private MyUGUIButton _btnRunningMessage;
         private MyUGUIButton _btnFlyingMessage;
         private MyUGUIButton _btnToastMessage;
@@ -42,6 +43,7 @@ namespace MyApp.UI
             base.OnUGUIInit();
 
             _btnButton = MyUtilities.FindObject(GameObject, "Buttons/ButtonButton").GetComponent<MyUGUIButton>();
+            _tgToggle = MyUtilities.FindObject(GameObject, "Buttons/Toggle/ToggleButton").GetComponent<MyUGUIToggleButton>();
             _btnRunningMessage = MyUtilities.FindObject(GameObject, "Buttons/ButtonRunningMessage").GetComponent<MyUGUIButton>();
             _btnFlyingMessage = MyUtilities.FindObject(GameObject, "Buttons/ButtonFlyingMessage").GetComponent<MyUGUIButton>();
             _btnToastMessage = MyUtilities.FindObject(GameObject, "Buttons/ButtonToastMessage").GetComponent<MyUGUIButton>();
@@ -63,6 +65,7 @@ namespace MyApp.UI
             base.OnUGUIEnter();
 
             _btnButton.OnEventPointerClick.AddListener(_OnClickButton);
+            _tgToggle.OnValueChange.AddListener(_OnToggleValueChange);
             _btnRunningMessage.OnEventPointerDoubleClick.AddListener(_OnClickRunningMessage);
             _btnFlyingMessage.OnEventPointerClick.AddListener(_OnClickFlyingMessage);
             _btnToastMessage.OnEventPointerClick.AddListener(_OnClickToastMessage);
@@ -75,6 +78,8 @@ namespace MyApp.UI
             _btnPool.OnEventPointerClick.AddListener(_OnClickPool);
             _btnLocalization.OnEventPointerClick.AddListener(_OnClickLocalization);
             _btnAdMob.OnEventPointerClick.AddListener(_OnClickAdMob);
+
+            _tgToggle.SetToggle(false, false);
         }
 
         public override bool OnUGUIVisible()
@@ -98,6 +103,7 @@ namespace MyApp.UI
             base.OnUGUIExit();
 
             _btnButton.OnEventPointerClick.RemoveAllListeners();
+            _tgToggle.OnValueChange.RemoveAllListeners();
             _btnRunningMessage.OnEventPointerDoubleClick.RemoveAllListeners();
             _btnFlyingMessage.OnEventPointerClick.RemoveAllListeners();
             _btnToastMessage.OnEventPointerClick.RemoveAllListeners();
@@ -152,6 +158,11 @@ namespace MyApp.UI
                 _btnButton.Normalize();
                 _btnButton.SetText("Button\n(Normal)");
             }
+        }
+
+        private void _OnToggleValueChange(bool isTurnOn)
+        {
+            this.LogInfo("_OnToggleValueChange", isTurnOn.ToString(), ELogColor.UI);
         }
 
         private void _OnClickRunningMessage(PointerEventData arg0)
