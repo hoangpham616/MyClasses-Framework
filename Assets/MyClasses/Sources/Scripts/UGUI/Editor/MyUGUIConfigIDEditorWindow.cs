@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyUGUIConfigIDEditor (version 2.7)
+ * Class:       MyUGUIConfigIDEditor (version 2.8)
  */
 
 using UnityEngine;
@@ -21,13 +21,16 @@ namespace MyClasses.UI.Tool
 
         #endregion
 
-        #region ----- Implement MonoBehaviour -----
+        #region ----- EditorWindow MonoBehaviour -----
 
         /// <summary>
         /// OnEnable.
         /// </summary>
         void OnEnable()
         {
+            titleContent = new GUIContent("[MyClasses] ID Configuration");
+            minSize = new Vector2(512, 512);
+
             if (!Directory.Exists("Assets/Resources/" + MyUGUIManager.CONFIG_DIRECTORY))
             {
                 Directory.CreateDirectory("Assets/Resources/" + MyUGUIManager.CONFIG_DIRECTORY);
@@ -50,10 +53,6 @@ namespace MyClasses.UI.Tool
 
             _LoadAssetFile();
         }
-
-        #endregion
-
-        #region ----- GUI Implementation -----
 
         /// <summary>
         /// OnGUI.
