@@ -31,12 +31,11 @@ namespace MyClasses.Tool
         private SubMesh mSubMesh = null;
         private List<Vector2[]> mUVs = new List<Vector2[]>();
         private Material mMaterial;
-        private Texture mTexture;
 
-        private Color mBackgroundColor = new Color(0, 0, 0, 0.2f);
-        private Color mLineColor = new Color(1, 1, 1, 0.2f);
-        private Color mFrontFaceColor = new Color(0, 1, 0, 0.2f);
-        private Color mBackFaceColor = new Color(1, 0, 0, 0.2f);
+        private Color mBackgroundColor = new Color(0, 0, 0, 0.05f);
+        private Color mLineColor = new Color(1, 1, 1, 0.4f);
+        private Color mFrontFaceColor = new Color(0, 1, 0, 0.4f);
+        private Color mBackFaceColor = new Color(1, 0, 0, 0.4f);
         private bool mIsDrawLine = true;
         private bool mIsDrawFrontTriangle = true;
         private bool mIsDrawBackTriangle = true;
@@ -141,8 +140,8 @@ namespace MyClasses.Tool
             }
 
             // texture size
-            mTexture = mSubMesh.Material.mainTexture;
-            Rect textureArea = new Rect(6, 176, mTexture != null ? mTexture.width : 512, mTexture != null ? mTexture.height : 512);
+            Texture texture = mSubMesh.Material.mainTexture;
+            Rect textureArea = new Rect(6, 176, texture != null ? texture.width : 512, texture != null ? texture.height : 512);
             textureArea.width *= mZoom;
             textureArea.height *= mZoom;
 
@@ -224,9 +223,9 @@ namespace MyClasses.Tool
             GL.End();
 
             // draw texture
-            if (mTexture != null)
+            if (texture != null)
             {
-                Graphics.DrawTexture(textureArea, mTexture, new Rect(0, 0, 1, 1), 0, 0, 0, 0, new Color(1, 1, 1, mBackgroundColor.a), null);
+                Graphics.DrawTexture(textureArea, texture, new Rect(0, 0, 1, 1), 0, 0, 0, 0, new Color(1, 1, 1, mBackgroundColor.a), null);
             }
                 
             if (mCurrentUVSet >= 0)
