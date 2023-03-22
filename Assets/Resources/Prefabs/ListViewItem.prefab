@@ -93,4 +93,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f57123a9bfb338743a9ed192c1093340, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mListView: {fileID: 0}
+  mIndex: 0
   _txtIndex: {fileID: 5923490496363267653}
