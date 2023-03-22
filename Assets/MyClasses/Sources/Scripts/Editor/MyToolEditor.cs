@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyToolEditor (version 1.4)
+ * Class:       MyToolEditor (version 1.5)
  */
 
 using UnityEditor;
@@ -164,7 +164,7 @@ namespace MyClasses.Tool
         /// <summary>
         /// Clear cached AssetBundles.
         /// </summary>
-        [MenuItem("MyClasses/Utilities/Clear AssetBundles", false, 2)]
+        [MenuItem("MyClasses/Utilities/Clear AssetBundles", false, 1)]
         public static void ClearAssetBundles()
         {
             Caching.ClearCache();
@@ -175,7 +175,7 @@ namespace MyClasses.Tool
         /// <summary>
         /// Check Packing Tag and Asset Bundle.
         /// </summary>
-        [MenuItem("MyClasses/Utilities/Check Sprite (Packing Tag and Asset Bundle)", false, 13)]
+        [MenuItem("MyClasses/Utilities/Check Sprite (Packing Tag and Asset Bundle)", false, 12)]
         public static void CheckSpriteTagsAndBundles()
         {
             Dictionary<string, string> spriteDict = new Dictionary<string, string>();
@@ -198,47 +198,69 @@ namespace MyClasses.Tool
         }
 
         /// <summary>
-        /// Create a noise texture.
+        /// Create some 32x32 noise texture.
         /// </summary>
-        [MenuItem("MyClasses/Utilities/Create Noise Texture (32x32)", false, 24)]
+        [MenuItem("MyClasses/Utilities/Create Noise Texture (32x32)", false, 23)]
         public static void CreateNoiseTexture32()
         {
-            Texture2D noiseTexture = new Texture2D(32, 32, TextureFormat.ARGB32, false);
-            Color color = Color.gray;
-            for (var c = 0; c < noiseTexture.width; c++)
+            int quantity = 5;
+            int size = 32;
+            for (int i = 0; i < quantity; ++i)
             {
-                for (var r = 0; r < noiseTexture.height; r++)
-                {
-                    if (Random.Range(0, 100) < 50)
-                    {
-                        float v = Random.Range(0f, 1f);
-                        color.r = v;
-                        color.g = v;
-                        color.b = v;
-                    }
-                    noiseTexture.SetPixel(r, c, color);
-                }
+                _CreateNoiseTexture(size);
             }
-            noiseTexture.Apply();
+            AssetDatabase.Refresh();
 
-            System.IO.File.WriteAllBytes("Assets/tex_noise.png", noiseTexture.EncodeToPNG());
-
-            Debug.Log("[MyClasses] Noise Texture (32x32) was created.");
+            Debug.Log(string.Format("[MyClasses] {0} Noise Textures ({1}x{2}) was created.", quantity, size, size));
         }
 
         /// <summary>
-        /// Create a noise texture.
+        /// Create some 64x64 noise texture.
         /// </summary>
-        [MenuItem("MyClasses/Utilities/Create Noise Texture (128x128)", false, 25)]
+        [MenuItem("MyClasses/Utilities/Create Noise Texture (64x64)", false, 23)]
+        public static void CreateNoiseTexture64()
+        {
+            int quantity = 5;
+            int size = 64;
+            for (int i = 0; i < quantity; ++i)
+            {
+                _CreateNoiseTexture(size);
+            }
+            AssetDatabase.Refresh();
+
+            Debug.Log(string.Format("[MyClasses] {0} Noise Textures ({1}x{2}) was created.", quantity, size, size));
+        }
+
+        /// <summary>
+        /// Create some 128x128 noise texture.
+        /// </summary>
+        [MenuItem("MyClasses/Utilities/Create Noise Texture (128x128)", false, 23)]
         public static void CreateNoiseTexture128()
         {
-            Texture2D noiseTexture = new Texture2D(128, 128, TextureFormat.ARGB32, false);
-            Color color = Color.gray;
+            int quantity = 5;
+            int size = 128;
+            for (int i = 0; i < quantity; ++i)
+            {
+                _CreateNoiseTexture(size);
+            }
+            AssetDatabase.Refresh();
+
+            Debug.Log(string.Format("[MyClasses] {0} Noise Textures ({1}x{2}) was created.", quantity, size, size));
+        }
+        
+        /// <summary>
+        /// Create a noise texture.
+        /// </summary>
+        private static void _CreateNoiseTexture(int size)
+        {
+            float randomRate = Random.Range(10, 90);
+            Texture2D noiseTexture = new Texture2D(size, size, TextureFormat.ARGB32, false);
+            Color color = Color.white;
             for (var c = 0; c < noiseTexture.width; c++)
             {
                 for (var r = 0; r < noiseTexture.height; r++)
                 {
-                    if (Random.Range(0, 100) < 50)
+                    if (Random.Range(0, 100) < randomRate)
                     {
                         float v = Random.Range(0f, 1f);
                         color.r = v;
@@ -250,9 +272,99 @@ namespace MyClasses.Tool
             }
             noiseTexture.Apply();
 
-            System.IO.File.WriteAllBytes("Assets/tex_noise.png", noiseTexture.EncodeToPNG());
+            for (int i = 1; i <= 1000; ++i)
+            {
+                string name = "Assets/tex_noise_" + size + " (" + i + ").png";
+                if (!System.IO.File.Exists(name))
+                {
+                    System.IO.File.WriteAllBytes(name, noiseTexture.EncodeToPNG());
+                    break;
+                }
+            }
+        }
 
-            Debug.Log("[MyClasses] Noise Texture (128x128) was created.");
+        /// <summary>
+        /// Create some 256x256 perlin noise textures.
+        /// </summary>
+        [MenuItem("MyClasses/Utilities/Create Perlin Noise Texture (256x256)", false, 23)]
+        public static void CreatePerlinNoiseTexture256()
+        {
+            int quantity = 5;
+            int size = 256;
+            for (int i = 0; i < quantity; ++i)
+            {
+                _CreatePerlinNoiseTexture(size, Random.Range(5, 30));
+            }
+            AssetDatabase.Refresh();
+
+            Debug.Log(string.Format("[MyClasses] {0} Perlin Noise Textures ({1}x{2}) was created.", quantity, size, size));
+        }
+
+        /// <summary>
+        /// Create some 512x512 perlin noise textures.
+        /// </summary>
+        [MenuItem("MyClasses/Utilities/Create Perlin Noise Texture (512x512)", false, 23)]
+        public static void CreatePerlinNoiseTexture512()
+        {
+            int quantity = 5;
+            int size = 512;
+            for (int i = 0; i < quantity; ++i)
+            {
+                _CreatePerlinNoiseTexture(size, Random.Range(5, 30));
+            }
+            AssetDatabase.Refresh();
+
+            Debug.Log(string.Format("[MyClasses] {0} Perlin Noise Textures ({1}x{2}) was created.", quantity, size, size));
+        }
+
+        /// <summary>
+        /// Create some 1024x1024 perlin noise textures.
+        /// </summary>
+        [MenuItem("MyClasses/Utilities/Create Perlin Noise Texture (1024x1024)", false, 23)]
+        public static void CreatePerlinNoiseTexture1024()
+        {
+            int quantity = 5;
+            int size = 1024;
+            for (int i = 0; i < quantity; ++i)
+            {
+                _CreatePerlinNoiseTexture(size, Random.Range(5, 30));
+            }
+            AssetDatabase.Refresh();
+
+            Debug.Log(string.Format("[MyClasses] {0} Perlin Noise Textures ({1}x{2}) was created.", quantity, size, size));
+        }
+        
+        /// <summary>
+        /// Create a perlin noise texture.
+        /// </summary>
+        private static void _CreatePerlinNoiseTexture(int size, float scale)
+        {
+            float offsetX = Random.Range(0, size);
+            float offsetY = Random.Range(0, size);
+            
+            Texture2D noiseTexture = new Texture2D(size, size, TextureFormat.ARGB32, false);
+            for (int c = 0; c < noiseTexture.width; ++c)
+            {
+                for (int r = 0; r < noiseTexture.height; ++r)
+                {
+                    float x = ((c / (float)noiseTexture.width) + offsetX) * scale;
+                    float y = ((r / (float)noiseTexture.height) + offsetY) * scale;
+                    float sample = Mathf.PerlinNoise(x, y);
+                    Color color = new Color(sample, sample, sample);
+                    noiseTexture.SetPixel(r, c, color);
+                }
+            }
+            noiseTexture.Apply();
+
+            for (int i = 1; i <= 1000; ++i)
+            {
+                string name = "Assets/tex_perlin_noise_" + size + " (" + i + ").png";
+                if (!System.IO.File.Exists(name))
+                {
+                    System.IO.File.WriteAllBytes(name, noiseTexture.EncodeToPNG());
+                    break;
+                }
+            }
         }
 
         #endregion
