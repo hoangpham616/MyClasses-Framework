@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyResourceManager (version 1.9)
+ * Class:       MyResourceManager (version 1.10)
  */
 
 using UnityEngine;
@@ -32,19 +32,61 @@ namespace MyClasses
         public static Material GetMaterialAlphaMask()
         {
 #if UNITY_EDITOR
-            Material mat = LoadMaterial("Materials/MyAlphaMask");
-            if (mat == null)
+            Material material = LoadMaterial("Materials/MyAlphaMask");
+            if (material == null)
             {
                 Debug.Log("[" + typeof(MyResourceManager).Name + "] GetMaterialMask(): A material was created at \"Assets/Resources/Materials/MyAlphaMask.mat\".");
                 if (!System.IO.Directory.Exists("Assets/Resources/Materials"))
                 {
                     System.IO.Directory.CreateDirectory("Assets/Resources/Materials");
                 }
-                mat = new Material(Shader.Find("MyClasses/Unlit/AlphaMask"));
-                UnityEditor.AssetDatabase.CreateAsset(mat, "Assets/Resources/Materials/MyAlphaMask.mat");
+                material = new Material(Shader.Find("MyClasses/Unlit/Alpha Mask"));
+                UnityEditor.AssetDatabase.CreateAsset(material, "Assets/Resources/Materials/MyAlphaMask.mat");
             }
 #endif
             return LoadMaterial("Materials/MyAlphaMask", true);
+        }
+
+        /// <summary>
+        /// Return Blended Color material.
+        /// </summary>
+        public static Material GetMaterialBlendedColor()
+        {
+#if UNITY_EDITOR
+            Material material = LoadMaterial("Materials/MyBlendedColor");
+            if (material == null)
+            {
+                Debug.Log("[" + typeof(MyResourceManager).Name + "] GetMaterialBlendedColor(): A material was created at \"Assets/Resources/Materials/MyBlendedColor.mat\".");
+                if (!System.IO.Directory.Exists("Assets/Resources/Materials"))
+                {
+                    System.IO.Directory.CreateDirectory("Assets/Resources/Materials");
+                }
+                material = new Material(Shader.Find("MyClasses/Unlit/Blended Color"));
+                UnityEditor.AssetDatabase.CreateAsset(material, "Assets/Resources/Materials/MyBlendedColor.mat");
+            }
+#endif
+            return LoadMaterial("Materials/MyBlendedColor", true);
+        }
+
+        /// <summary>
+        /// Return Blur material.
+        /// </summary>
+        public static Material GetMaterialBlur()
+        {
+#if UNITY_EDITOR
+            Material material = LoadMaterial("Materials/MyBlur");
+            if (material == null)
+            {
+                Debug.Log("[" + typeof(MyResourceManager).Name + "] GetMaterialBlur(): A material was created at \"Assets/Resources/Materials/MyBlur.mat\".");
+                if (!System.IO.Directory.Exists("Assets/Resources/Materials"))
+                {
+                    System.IO.Directory.CreateDirectory("Assets/Resources/Materials");
+                }
+                material = new Material(Shader.Find("MyClasses/Unlit/Blur"));
+                UnityEditor.AssetDatabase.CreateAsset(material, "Assets/Resources/Materials/MyBlur.mat");
+            }
+#endif
+            return LoadMaterial("Materials/MyBlur", true);
         }
 
         /// <summary>
@@ -53,16 +95,16 @@ namespace MyClasses
         public static Material GetMaterialDarkening()
         {
 #if UNITY_EDITOR
-            Material mat = LoadMaterial("Materials/MyDarkening");
-            if (mat == null)
+            Material material = LoadMaterial("Materials/MyDarkening");
+            if (material == null)
             {
                 Debug.Log("[" + typeof(MyResourceManager).Name + "] GetMaterialDarkening(): A material was created at \"Assets/Resources/Materials/MyDarkening.mat\".");
                 if (!System.IO.Directory.Exists("Assets/Resources/Materials"))
                 {
                     System.IO.Directory.CreateDirectory("Assets/Resources/Materials");
                 }
-                mat = new Material(Shader.Find("MyClasses/Unlit/Darkening"));
-                UnityEditor.AssetDatabase.CreateAsset(mat, "Assets/Resources/Materials/MyDarkening.mat");
+                material = new Material(Shader.Find("MyClasses/Unlit/Darkening"));
+                UnityEditor.AssetDatabase.CreateAsset(material, "Assets/Resources/Materials/MyDarkening.mat");
             }
 #endif
             return LoadMaterial("Materials/MyDarkening", true);
@@ -74,40 +116,19 @@ namespace MyClasses
         public static Material GetMaterialGrayscale()
         {
 #if UNITY_EDITOR
-            Material mat = LoadMaterial("Materials/MyGrayscale");
-            if (mat == null)
+            Material material = LoadMaterial("Materials/MyGrayscale");
+            if (material == null)
             {
                 Debug.Log("[" + typeof(MyResourceManager).Name + "] GetMaterialGrayscale(): A material was created at \"Assets/Resources/Materials/MyGrayscale.mat\".");
                 if (!System.IO.Directory.Exists("Assets/Resources/Materials"))
                 {
                     System.IO.Directory.CreateDirectory("Assets/Resources/Materials");
                 }
-                mat = new Material(Shader.Find("MyClasses/Unlit/Grayscale"));
-                UnityEditor.AssetDatabase.CreateAsset(mat, "Assets/Resources/Materials/MyGrayscale.mat");
+                material = new Material(Shader.Find("MyClasses/Unlit/Grayscale"));
+                UnityEditor.AssetDatabase.CreateAsset(material, "Assets/Resources/Materials/MyGrayscale.mat");
             }
 #endif
             return LoadMaterial("Materials/MyGrayscale", true);
-        }
-
-        /// <summary>
-        /// Return Blur material.
-        /// </summary>
-        public static Material GetMaterialBlur()
-        {
-#if UNITY_EDITOR
-            Material mat = LoadMaterial("Materials/MyBlur");
-            if (mat == null)
-            {
-                Debug.Log("[" + typeof(MyResourceManager).Name + "] GetMaterialBlur(): A material was created at \"Assets/Resources/Materials/MyBlur.mat\".");
-                if (!System.IO.Directory.Exists("Assets/Resources/Materials"))
-                {
-                    System.IO.Directory.CreateDirectory("Assets/Resources/Materials");
-                }
-                mat = new Material(Shader.Find("MyClasses/Unlit/MyBlur"));
-                UnityEditor.AssetDatabase.CreateAsset(mat, "Assets/Resources/Materials/MyBlur.mat");
-            }
-#endif
-            return LoadMaterial("Materials/MyBlur", true);
         }
 
         /// <summary>

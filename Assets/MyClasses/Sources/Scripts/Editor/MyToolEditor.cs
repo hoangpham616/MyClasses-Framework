@@ -135,6 +135,19 @@ namespace MyClasses.Tool
 
         #endregion
 
+        #region ----- Panels -----
+
+        /// <summary>
+        /// Open UI Config Scene.
+        /// </summary>
+        [MenuItem("MyClasses/Panels/UV Viewer", false, 1)]
+        public static void OpenUVViewerPanel()
+        {
+            EditorWindow.GetWindow(typeof(MyUVViewerEditorWindow));
+        }
+
+        #endregion
+
         #region ----- Utilities -----
 
         /// <summary>

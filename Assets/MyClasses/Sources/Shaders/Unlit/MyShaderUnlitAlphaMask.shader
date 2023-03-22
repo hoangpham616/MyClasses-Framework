@@ -2,10 +2,10 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Shader:      Unlit/AlphaMask (version 1.2)
+ * Shader:      Unlit/Alpha Mask (version 1.3)
  */
 
-Shader "MyClasses/Unlit/AlphaMask"
+Shader "MyClasses/Unlit/Alpha Mask"
 {
 	Properties
 	{
