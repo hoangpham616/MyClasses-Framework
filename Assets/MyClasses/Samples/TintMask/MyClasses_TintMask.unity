@@ -195,11 +195,6 @@ GameObject:
   m_Component:
   - component: {fileID: 777153841}
   - component: {fileID: 777153840}
-  - component: {fileID: 777153842}
-  - component: {fileID: 777153843}
-  - component: {fileID: 777153846}
-  - component: {fileID: 777153845}
-  - component: {fileID: 777153844}
   - component: {fileID: 777153847}
   m_Layer: 0
   m_Name: Camera
@@ -266,73 +261,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 12, y: 0, z: 0}
---- !u!114 &777153842
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 777153838}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc3f9ea579425be4593cc7025a506a64, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mAmplitude: 0.02
-  mIntensity: 0.1
---- !u!114 &777153843
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 777153838}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74dd68ed1c8f4994eb2b1c4d43163deb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mIntensity: 0.3
---- !u!114 &777153844
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 777153838}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec6e28017997cda428f65acd4d10296d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mWave: 0.01
-  mIntensity: 0.01
---- !u!114 &777153845
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 777153838}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9ea09dcce51d49b44b10e2006d401bee, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mIntensity: 0.1
---- !u!114 &777153846
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 777153838}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 12fd85f35f1288345884b6dd0fede73c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mIntensity: 0.1
 --- !u!114 &777153847
 MonoBehaviour:
   m_ObjectHideFlags: 0
