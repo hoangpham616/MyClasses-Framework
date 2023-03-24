@@ -1,7 +1,7 @@
 ﻿/*
 * Copyright (c) 2016 Phạm Minh Hoàng
 * Framework:   MyClasses
-* Class:       MyReactionParameter (version 1.0)
+* Class:       MyReactionParameter (version 1.1)
 */
 
 namespace MyClasses.CoReaction
@@ -12,9 +12,9 @@ namespace MyClasses.CoReaction
     {
         #region ----- Variable -----
 
-        protected EType mType;
-        protected string mName;
-        protected object mValue;
+        protected EType _type;
+        protected string _name;
+        protected object _value;
 
         #endregion
 
@@ -22,17 +22,17 @@ namespace MyClasses.CoReaction
 
         public EType Type
         {
-            get { return mType; }
+            get { return _type; }
         }
 
         public string Name
         {
-            get { return mName; }
+            get { return _name; }
         }
 
         public object Value
         {
-            get { return mValue; }
+            get { return _value; }
         }
 
         #endregion
@@ -57,7 +57,7 @@ namespace MyClasses.CoReaction
         /// </summary>
         public void SetName(string name)
         {
-            mName = name != null ? name : string.Empty;
+            _name = name != null ? name : string.Empty;
         }
 
         /// <summary>
@@ -109,7 +109,7 @@ namespace MyClasses.CoReaction
         /// </summary>
         public MyReactionFloatParameter(string name, object defaultValue) : base(name, defaultValue)
         {
-            mType = EType.Float;
+            _type = EType.Float;
         }
 
         /// <summary>
@@ -117,7 +117,7 @@ namespace MyClasses.CoReaction
         /// </summary>
         public override void SetValue(object value)
         {
-            mValue = value != null && value is float ? (float)value : 0;
+            _value = value != null && value is float ? (float)value : 0;
         }
 
         /// <summary>
@@ -127,7 +127,7 @@ namespace MyClasses.CoReaction
         {
             if (value is float)
             {
-                return UnityEngine.Mathf.Abs((float)mValue - (float)value) <= float.Epsilon;
+                return UnityEngine.Mathf.Abs((float)_value - (float)value) <= float.Epsilon;
             }
             return false;
         }
@@ -143,11 +143,11 @@ namespace MyClasses.CoReaction
                 {
                     case MyReactionCondition.EComparedType.FloatGreater:
                         {
-                            return (float)mValue > (float)comparedValue;
+                            return (float)_value > (float)comparedValue;
                         }
                     case MyReactionCondition.EComparedType.FloatLess:
                         {
-                            return (float)mValue < (float)comparedValue;
+                            return (float)_value < (float)comparedValue;
                         }
                 }
             }
@@ -162,7 +162,7 @@ namespace MyClasses.CoReaction
         /// </summary>
         public MyReactionIntParameter(string name, object defaultValue) : base(name, defaultValue)
         {
-            mType = EType.Int;
+            _type = EType.Int;
         }
 
         /// <summary>
@@ -170,7 +170,7 @@ namespace MyClasses.CoReaction
         /// </summary>
         public override void SetValue(object value)
         {
-            mValue = value != null && value is int ? (int)value : 0;
+            _value = value != null && value is int ? (int)value : 0;
         }
 
         /// <summary>
@@ -180,7 +180,7 @@ namespace MyClasses.CoReaction
         {
             if (comparedValue is int)
             {
-                return (int)mValue == (int)comparedValue;
+                return (int)_value == (int)comparedValue;
             }
             return false;
         }
@@ -196,19 +196,19 @@ namespace MyClasses.CoReaction
                 {
                     case MyReactionCondition.EComparedType.IntEquals:
                         {
-                            return (int)mValue == (int)comparedValue;
+                            return (int)_value == (int)comparedValue;
                         }
                     case MyReactionCondition.EComparedType.IntNotEqual:
                         {
-                            return (int)mValue != (int)comparedValue;
+                            return (int)_value != (int)comparedValue;
                         }
                     case MyReactionCondition.EComparedType.IntGreater:
                         {
-                            return (int)mValue > (int)comparedValue;
+                            return (int)_value > (int)comparedValue;
                         }
                     case MyReactionCondition.EComparedType.IntLess:
                         {
-                            return (int)mValue < (int)comparedValue;
+                            return (int)_value < (int)comparedValue;
                         }
                 }
             }
@@ -224,7 +224,7 @@ namespace MyClasses.CoReaction
         /// </summary>
         public MyReactionBoolParameter(string name, object defaultValue) : base(name, defaultValue)
         {
-            mType = EType.Bool;
+            _type = EType.Bool;
         }
 
         /// <summary>
@@ -232,7 +232,7 @@ namespace MyClasses.CoReaction
         /// </summary>
         public override void SetValue(object value)
         {
-            mValue = value != null && value is bool ? (bool)value : false;
+            _value = value != null && value is bool ? (bool)value : false;
         }
 
         /// <summary>
@@ -242,7 +242,7 @@ namespace MyClasses.CoReaction
         {
             if (value is bool)
             {
-                return (bool)mValue == (bool)value;
+                return (bool)_value == (bool)value;
             }
             return false;
         }
@@ -256,11 +256,11 @@ namespace MyClasses.CoReaction
             {
                 case MyReactionCondition.EComparedType.BoolTrue:
                     {
-                        return (bool)mValue == true;
+                        return (bool)_value == true;
                     }
                 case MyReactionCondition.EComparedType.BoolFalse:
                     {
-                        return (bool)mValue == false;
+                        return (bool)_value == false;
                     }
             }
             return false;
@@ -274,7 +274,7 @@ namespace MyClasses.CoReaction
         /// </summary>
         public MyReactionTriggerParameter(string name, object defaultValue) : base(name, defaultValue)
         {
-            mType = EType.Trigger;
+            _type = EType.Trigger;
         }
 
         /// <summary>
@@ -282,7 +282,7 @@ namespace MyClasses.CoReaction
         /// </summary>
         public override void SetValue(object value)
         {
-            mValue = value != null && value is bool ? (bool)value : false;
+            _value = value != null && value is bool ? (bool)value : false;
         }
 
         /// <summary>
@@ -292,7 +292,7 @@ namespace MyClasses.CoReaction
         {
             if (comparedValue is bool)
             {
-                return (bool)mValue == (bool)comparedValue;
+                return (bool)_value == (bool)comparedValue;
             }
             return false;
         }
@@ -306,7 +306,7 @@ namespace MyClasses.CoReaction
             {
                 case MyReactionCondition.EComparedType.Trigger:
                     {
-                        return (bool)mValue;
+                        return (bool)_value;
                     }
             }
             return false;

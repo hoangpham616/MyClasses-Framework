@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyBitSet32 (version 1.2)
+ * Class:       MyBitSet32 (version 1.3)
  */
 
 using System;
@@ -15,7 +15,7 @@ namespace MyClasses
 
         private const byte NUM_BIT = 32;
 
-        private uint mValue = 0;
+        private uint _value = 0;
 
         #endregion
 
@@ -23,8 +23,8 @@ namespace MyClasses
 
         public uint Value
         {
-            get { return mValue; }
-            set { mValue = value; }
+            get { return _value; }
+            set { _value = value; }
         }
 
         #endregion
@@ -36,7 +36,7 @@ namespace MyClasses
         /// </summary>
         public void Reset()
         {
-            mValue = 0;
+            _value = 0;
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace MyClasses
 
             uint mask = 0x01;
             mask = (uint)(mask << index);
-            mValue = value ? (uint)(mValue | mask) : (uint)(mValue & (~mask));
+            _value = value ? (uint)(_value | mask) : (uint)(_value & (~mask));
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace MyClasses
 
             uint mask = 0x01;
             mask = (uint)(mask << index);
-            return (mValue & mask) != 0;
+            return (_value & mask) != 0;
         }
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace MyClasses
             {
                 SetValueOfBit(i, false);
             }
-            mValue = (uint)(mValue | (value << fromIndex));
+            _value = (uint)(_value | (value << fromIndex));
         }
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace MyClasses
             }
 
             byte length = (byte)(toIndex - fromIndex + 1);
-            uint result = (uint)(mValue << (NUM_BIT - length - fromIndex));
+            uint result = (uint)(_value << (NUM_BIT - length - fromIndex));
             return result = (uint)(result >> (NUM_BIT - length));
         }
 

@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyTextStyle (version 1.0)
+ * Class:       MyTextStyle (version 1.1)
  */
 
 #if UNITY_EDITOR
@@ -26,13 +26,13 @@ namespace MyClasses
         #region ----- Variable -----
 
         [SerializeField]
-        private MyTextStyleManager.EStyle mStyle = MyTextStyleManager.EStyle.UNDEFINED;
+        private MyTextStyleManager.EStyle _style = MyTextStyleManager.EStyle.UNDEFINED;
 
 #if USE_MY_UI_TMPRO
-        private TextMeshProUGUI mTextTMPro;
+        private TextMeshProUGUI _textTMPro;
 #endif
 
-        private Text mText;
+        private Text _text;
 
         #endregion
 
@@ -40,10 +40,10 @@ namespace MyClasses
 
         public MyTextStyleManager.EStyle Style
         {
-            get { return mStyle; }
+            get { return _style; }
             set
             {
-                mStyle = value;
+                _style = value;
                 Refresh();
             }
         }
@@ -69,44 +69,44 @@ namespace MyClasses
         /// </summary>
         public void Refresh()
         {
-            MyTextStyleManager.MyTextStyleInfo info = MyTextStyleManager.Instance.GetInfo(mStyle);
+            MyTextStyleManager.MyTextStyleInfo info = MyTextStyleManager.Instance.GetInfo(_style);
             if (info == null)
             {
                 return;
             }
 
-            if (mText == null)
+            if (_text == null)
             {
-                mText = gameObject.GetComponent<Text>();
+                _text = gameObject.GetComponent<Text>();
 #if USE_MY_UI_TMPRO
-                if (mText == null)
+                if (_text == null)
                 {
-                    mTextTMPro = gameObject.GetComponent<TextMeshProUGUI>();
+                    _textTMPro = gameObject.GetComponent<TextMeshProUGUI>();
                 }
 #endif
             }
 
-            if (mText != null)
+            if (_text != null)
             {
                 if (info.Font != null)
                 {
-                    mText.font = info.Font;
+                    _text.font = info.Font;
                 }
-                mText.fontSize = info.FontSizeMin;
-                mText.color = info.Color;
+                _text.fontSize = info.FontSizeMin;
+                _text.color = info.Color;
             }
 #if USE_MY_UI_TMPRO
-            else if (mTextTMPro != null)
+            else if (_textTMPro != null)
             {
                 if (info.TMPFontAsset != null)
                 {
-                    mTextTMPro.font = info.TMPFontAsset;
+                    _textTMPro.font = info.TMPFontAsset;
                 }
-                mTextTMPro.fontSize = info.FontSizeMin;
-                mTextTMPro.fontSizeMin = info.FontSizeMin;
-                mTextTMPro.fontSizeMax = info.FontSizeMax;
-                mTextTMPro.enableAutoSizing = info.FontSizeMin < info.FontSizeMax;
-                mTextTMPro.color = info.Color;
+                _textTMPro.fontSize = info.FontSizeMin;
+                _textTMPro.fontSizeMin = info.FontSizeMin;
+                _textTMPro.fontSizeMax = info.FontSizeMax;
+                _textTMPro.enableAutoSizing = info.FontSizeMin < info.FontSizeMax;
+                _textTMPro.color = info.Color;
             }
 #endif
         }
@@ -119,16 +119,16 @@ namespace MyClasses
     [CustomEditor(typeof(MyTextStyle)), CanEditMultipleObjects]
     public class MyTextEditor : Editor
     {
-        private MyTextStyle mScript;
-        private SerializedProperty mStyle;
+        private MyTextStyle _script;
+        private SerializedProperty _style;
 
         /// <summary>
         /// OnEnable.
         /// </summary>
         void OnEnable()
         {
-            mScript = (MyTextStyle)target;
-            mStyle = serializedObject.FindProperty("mStyle");
+            _script = (MyTextStyle)target;
+            _style = serializedObject.FindProperty("_style");
         }
 
         /// <summary>
@@ -136,21 +136,21 @@ namespace MyClasses
         /// </summary>
         public override void OnInspectorGUI()
         {
-            EditorGUILayout.ObjectField("Script", MonoScript.FromMonoBehaviour(mScript), typeof(MyTextStyle), false);
+            EditorGUILayout.ObjectField("Script", MonoScript.FromMonoBehaviour(_script), typeof(MyTextStyle), false);
 
             serializedObject.Update();
 
             EditorGUI.BeginChangeCheck();
 
-            mStyle.enumValueIndex = (int)(MyTextStyleManager.EStyle)EditorGUILayout.EnumPopup("Style", (MyTextStyleManager.EStyle)mStyle.enumValueIndex);
+            _style.enumValueIndex = (int)(MyTextStyleManager.EStyle)EditorGUILayout.EnumPopup("Style", (MyTextStyleManager.EStyle)_style.enumValueIndex);
 
             if (EditorGUI.EndChangeCheck())
             {
                 serializedObject.ApplyModifiedProperties();
-                mScript.Refresh();
+                _script.Refresh();
             }
 
-            MyTextStyleManager.MyTextStyleInfo info = MyTextStyleManager.Instance.GetInfo((MyTextStyleManager.EStyle)mStyle.enumValueIndex);
+            MyTextStyleManager.MyTextStyleInfo info = MyTextStyleManager.Instance.GetInfo((MyTextStyleManager.EStyle)_style.enumValueIndex);
             EditorGUILayout.LabelField("Your Note", info != null ? info.Note : string.Empty);
         }
     }

@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyLocalizationManager (version 3.3)
+ * Class:       MyLocalizationManager (version 3.4)
  */
 
 #pragma warning disable 0162
@@ -32,15 +32,15 @@ namespace MyClasses
         public static string CONFIG_DIRECTORY = "Configs/";
 
         [SerializeField]
-        private MyLocalizationConfig mConfig;
+        private MyLocalizationConfig _config;
         [SerializeField]
-        private bool mIsAutoSaveOnChange = true;
+        private bool _isAutoSaveOnChange = true;
 
-        private ELanguage mLanguageType = ELanguage.None;
-        private string[] mLanguageKeys;
-        private int mLanguageIndex;
-        private Dictionary<string, string[]> mDictionary = new Dictionary<string, string[]>();
-        private List<MyLocalization> mListLocalization = new List<MyLocalization>();
+        private ELanguage _languageType = ELanguage.None;
+        private string[] _languageKeys;
+        private int _languageIndex;
+        private Dictionary<string, string[]> _dictionary = new Dictionary<string, string[]>();
+        private List<MyLocalization> _listLocalization = new List<MyLocalization>();
 
         #endregion
 
@@ -48,14 +48,14 @@ namespace MyClasses
 
         public MyLocalizationConfig Config
         {
-            get { return mConfig; }
+            get { return _config; }
         }
 
         public ELanguage Language
         {
             get
             {
-                if (mLanguageType == ELanguage.None)
+                if (_languageType == ELanguage.None)
                 {
                     switch (Config.Mode)
                     {
@@ -78,13 +78,13 @@ namespace MyClasses
                             break;
                     }
                 }
-                return mLanguageType;
+                return _languageType;
             }
             set
             {
-                mLanguageType = value;
+                _languageType = value;
 
-                PlayerPrefs.SetInt("MyLocalizationManager_Language", (int)mLanguageType);
+                PlayerPrefs.SetInt("MyLocalizationManager_Language", (int)_languageType);
                 PlayerPrefs.Save();
             }
         }
@@ -93,22 +93,22 @@ namespace MyClasses
 
         #region ----- Singleton -----
 
-        private static object mSingletonLock = new object();
-        private static MyLocalizationManager mInstance;
+        private static object _singletonLock = new object();
+        private static MyLocalizationManager _instance;
 
         public static MyLocalizationManager Instance
         {
             get
             {
-                if (mInstance == null)
+                if (_instance == null)
                 {
-                    lock (mSingletonLock)
+                    lock (_singletonLock)
                     {
-                        mInstance = (MyLocalizationManager)FindObjectOfType(typeof(MyLocalizationManager));
-                        if (mInstance == null)
+                        _instance = (MyLocalizationManager)FindObjectOfType(typeof(MyLocalizationManager));
+                        if (_instance == null)
                         {
                             GameObject obj = new GameObject(typeof(MyLocalizationManager).Name);
-                            mInstance = obj.AddComponent<MyLocalizationManager>();
+                            _instance = obj.AddComponent<MyLocalizationManager>();
                             if (Application.isPlaying)
                             {
                                 DontDestroyOnLoad(obj);
@@ -116,12 +116,12 @@ namespace MyClasses
                         }
                         else if (Application.isPlaying)
                         {
-                            DontDestroyOnLoad(mInstance);
+                            DontDestroyOnLoad(_instance);
                         }
-                        mInstance.LoadConfig();
+                        _instance.LoadConfig();
                     }
                 }
-                return mInstance;
+                return _instance;
             }
         }
 
@@ -149,7 +149,7 @@ namespace MyClasses
         /// </summary>
         public void SaveConfig()
         {
-            EditorUtility.SetDirty(mConfig);
+            EditorUtility.SetDirty(_config);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
         }
@@ -161,7 +161,7 @@ namespace MyClasses
         /// </summary>
         public void LoadConfig()
         {
-            if (mConfig != null)
+            if (_config != null)
             {
                 return;
             }
@@ -174,12 +174,12 @@ namespace MyClasses
 #endif
 
             string filePath = MyLocalizationManager.CONFIG_DIRECTORY + typeof(MyLocalizationConfig).Name + ".asset";
-            mConfig = Resources.Load(filePath, typeof(MyLocalizationConfig)) as MyLocalizationConfig;
+            _config = Resources.Load(filePath, typeof(MyLocalizationConfig)) as MyLocalizationConfig;
 #if UNITY_EDITOR
-            if (mConfig == null)
+            if (_config == null)
             {
-                mConfig = ScriptableObject.CreateInstance<MyLocalizationConfig>();
-                AssetDatabase.CreateAsset(mConfig, "Assets/Resources/" + filePath);
+                _config = ScriptableObject.CreateInstance<MyLocalizationConfig>();
+                AssetDatabase.CreateAsset(_config, "Assets/Resources/" + filePath);
                 AssetDatabase.SaveAssets();
             }
 #endif
@@ -194,10 +194,10 @@ namespace MyClasses
 
             if (isForce)
             {
-                mLanguageKeys = null;
+                _languageKeys = null;
             }
 
-            if (mLanguageKeys == null)
+            if (_languageKeys == null)
             {
                 _LoadLocalization();
             }
@@ -206,11 +206,11 @@ namespace MyClasses
             MyFontKhmerConverter.Initialize();
 #endif
 
-            for (int i = 0; i < mLanguageKeys.Length; i++)
+            for (int i = 0; i < _languageKeys.Length; i++)
             {
-                if (mLanguageKeys[i].Equals(Language.ToString()))
+                if (_languageKeys[i].Equals(Language.ToString()))
                 {
-                    mLanguageIndex = i;
+                    _languageIndex = i;
                     break;
                 }
             }
@@ -221,12 +221,12 @@ namespace MyClasses
         /// </summary>
         public string LoadKey(string key)
         {
-            if (mLanguageType == ELanguage.None)
+            if (_languageType == ELanguage.None)
             {
                 LoadLanguage(Language);
             }
 
-            if (mDictionary.ContainsKey(key))
+            if (_dictionary.ContainsKey(key))
             {
 #if USE_MY_LOCALIZATION_ARABIC
                 // please import "Arabic Support" package
@@ -259,7 +259,7 @@ namespace MyClasses
                     return MyFontKhmerConverter.Convert(mDictionary[key][mLanguageIndex]);
                 }
 #endif
-                return mDictionary[key][mLanguageIndex];
+                return _dictionary[key][_languageIndex];
             }
 
             Debug.LogWarning("[" + typeof(MyLocalizationManager).Name + "] LoadKey(): Key \"" + key + "\" missing or null");
@@ -272,7 +272,7 @@ namespace MyClasses
         /// </summary>
         public void Register(MyLocalization localization)
         {
-            mListLocalization.Add(localization);
+            _listLocalization.Add(localization);
         }
 
         /// <summary>
@@ -280,7 +280,7 @@ namespace MyClasses
         /// </summary>
         public void Unregister(MyLocalization localization)
         {
-            mListLocalization.Remove(localization);
+            _listLocalization.Remove(localization);
         }
 
         /// <summary>
@@ -288,15 +288,15 @@ namespace MyClasses
         /// </summary>
         public void Refresh()
         {
-            for (int i = mListLocalization.Count - 1; i >= 0; i--)
+            for (int i = _listLocalization.Count - 1; i >= 0; i--)
             {
-                if (mListLocalization[i] == null)
+                if (_listLocalization[i] == null)
                 {
-                    mListLocalization.RemoveAt(i);
+                    _listLocalization.RemoveAt(i);
                 }
-                else if (mListLocalization[i].gameObject.activeInHierarchy)
+                else if (_listLocalization[i].gameObject.activeInHierarchy)
                 {
-                    mListLocalization[i].Localize();
+                    _listLocalization[i].Localize();
                 }
             }
         }
@@ -366,15 +366,15 @@ namespace MyClasses
                     }
                     else
                     {
-                        mDictionary = MyCSV.DeserializeByRowAndRowName(textAsset.text);
-                        mLanguageKeys = mDictionary.First().Value;
+                        _dictionary = MyCSV.DeserializeByRowAndRowName(textAsset.text);
+                        _languageKeys = _dictionary.First().Value;
                     }
                 }
                 else
                 {
                     string text = File.ReadAllText(Application.persistentDataPath + Config.PersistentPath);
-                    mDictionary = MyCSV.DeserializeByRowAndRowName(text);
-                    mLanguageKeys = mDictionary.First().Value;
+                    _dictionary = MyCSV.DeserializeByRowAndRowName(text);
+                    _languageKeys = _dictionary.First().Value;
                 }
             }
             else
@@ -386,15 +386,15 @@ namespace MyClasses
                 }
                 else
                 {
-                    mDictionary = MyCSV.DeserializeByRowAndRowName(textAsset.text);
-                    mLanguageKeys = mDictionary.First().Value;
+                    _dictionary = MyCSV.DeserializeByRowAndRowName(textAsset.text);
+                    _languageKeys = _dictionary.First().Value;
                 }
             }
 
-            if (mLanguageKeys == null)
+            if (_languageKeys == null)
             {
-                mLanguageKeys = new string[1];
-                mLanguageKeys[0] = Config.DefaultLanguage.ToString();
+                _languageKeys = new string[1];
+                _languageKeys[0] = Config.DefaultLanguage.ToString();
             }
         }
 
@@ -406,11 +406,11 @@ namespace MyClasses
             int languageValue = PlayerPrefs.GetInt("MyLocalizationManager_Language", (int)ELanguage.None);
             if (languageValue != (int)ELanguage.None && Enum.IsDefined(typeof(ELanguage), languageValue))
             {
-                mLanguageType = (ELanguage)languageValue;
+                _languageType = (ELanguage)languageValue;
             }
             else
             {
-                mLanguageType = Config.DefaultLanguage;
+                _languageType = Config.DefaultLanguage;
             }
         }
 
@@ -421,11 +421,11 @@ namespace MyClasses
         {
             if (Application.systemLanguage < SystemLanguage.Unknown && Enum.IsDefined(typeof(ELanguage), (int)Application.systemLanguage))
             {
-                mLanguageType = (ELanguage)Application.systemLanguage;
+                _languageType = (ELanguage)Application.systemLanguage;
             }
             else
             {
-                mLanguageType = Config.DefaultLanguage;
+                _languageType = Config.DefaultLanguage;
             }
         }
 
@@ -437,7 +437,7 @@ namespace MyClasses
             int languageValue = PlayerPrefs.GetInt("MyLocalizationManager_Language", (int)ELanguage.None);
             if (languageValue != (int)ELanguage.None && Enum.IsDefined(typeof(ELanguage), languageValue))
             {
-                mLanguageType = (ELanguage)languageValue;
+                _languageType = (ELanguage)languageValue;
             }
             else
             {
@@ -519,22 +519,22 @@ namespace MyClasses
     [CustomEditor(typeof(MyLocalizationManager))]
     public class MyLocalizationManagerEditor : Editor
     {
-        private MyLocalizationManager mScript;
-        private SerializedProperty mConfig;
-        private SerializedProperty mIsAutoSaveOnChange;
+        private MyLocalizationManager _script;
+        private SerializedProperty _config;
+        private SerializedProperty _isAutoSaveOnChange;
 
         /// <summary>
         /// OnEnable.
         /// </summary>
         void OnEnable()
         {
-            mScript = (MyLocalizationManager)target;
-            mConfig = serializedObject.FindProperty("mConfig");
-            mIsAutoSaveOnChange = serializedObject.FindProperty("mIsAutoSaveOnChange");
+            _script = (MyLocalizationManager)target;
+            _config = serializedObject.FindProperty("_config");
+            _isAutoSaveOnChange = serializedObject.FindProperty("_isAutoSaveOnChange");
 
-            if (mScript.Config == null)
+            if (_script.Config == null)
             {
-                mScript.LoadConfig();
+                _script.LoadConfig();
             }
         }
 
@@ -543,45 +543,45 @@ namespace MyClasses
         /// </summary>
         public override void OnInspectorGUI()
         {
-            EditorGUILayout.ObjectField("Script", MonoScript.FromMonoBehaviour(mScript), typeof(MyLocalizationManager), false);
+            EditorGUILayout.ObjectField("Script", MonoScript.FromMonoBehaviour(_script), typeof(MyLocalizationManager), false);
 
             serializedObject.Update();
 
-            EditorGUILayout.ObjectField(mConfig, new GUIContent("Config File"));
+            EditorGUILayout.ObjectField(_config, new GUIContent("Config File"));
 
             EditorGUI.BeginChangeCheck();
 
-            mIsAutoSaveOnChange.boolValue = EditorGUILayout.Toggle("Auto Save On Change", mIsAutoSaveOnChange.boolValue);
+            _isAutoSaveOnChange.boolValue = EditorGUILayout.Toggle("Auto Save On Change", _isAutoSaveOnChange.boolValue);
 
             EditorGUILayout.LabelField(string.Empty);
             if (GUILayout.Button("Save"))
             {
-                mScript.SaveConfig();
+                _script.SaveConfig();
             }
 
             EditorGUILayout.LabelField(string.Empty);
             EditorGUILayout.LabelField("Location", EditorStyles.boldLabel);
-            mScript.Config.Location = (MyLocalizationManager.ELocation)EditorGUILayout.EnumPopup("   Location", mScript.Config.Location);
-            if (mScript.Config.Location == MyLocalizationManager.ELocation.RESOURCES)
+            _script.Config.Location = (MyLocalizationManager.ELocation)EditorGUILayout.EnumPopup("   Location", _script.Config.Location);
+            if (_script.Config.Location == MyLocalizationManager.ELocation.RESOURCES)
             {
-                mScript.Config.ResourcesPath = EditorGUILayout.TextField("   Path", mScript.Config.ResourcesPath);
+                _script.Config.ResourcesPath = EditorGUILayout.TextField("   Path", _script.Config.ResourcesPath);
             }
             else
             {
-                mScript.Config.PersistentPath = EditorGUILayout.TextField("   Path", mScript.Config.PersistentPath);
+                _script.Config.PersistentPath = EditorGUILayout.TextField("   Path", _script.Config.PersistentPath);
             }
 
             EditorGUILayout.LabelField(string.Empty);
             EditorGUILayout.LabelField("Other", EditorStyles.boldLabel);
-            mScript.Config.Mode = (MyLocalizationManager.EMode)EditorGUILayout.EnumPopup("   Mode", mScript.Config.Mode);
-            mScript.Config.DefaultLanguage = (MyLocalizationManager.ELanguage)EditorGUILayout.EnumPopup("   Default Language", mScript.Config.DefaultLanguage);
+            _script.Config.Mode = (MyLocalizationManager.EMode)EditorGUILayout.EnumPopup("   Mode", _script.Config.Mode);
+            _script.Config.DefaultLanguage = (MyLocalizationManager.ELanguage)EditorGUILayout.EnumPopup("   Default Language", _script.Config.DefaultLanguage);
 
             if (EditorGUI.EndChangeCheck())
             {
                 serializedObject.ApplyModifiedProperties();
-                if (mIsAutoSaveOnChange.boolValue)
+                if (_isAutoSaveOnChange.boolValue)
                 {
-                    mScript.SaveConfig();
+                    _script.SaveConfig();
                 }
             }
         }

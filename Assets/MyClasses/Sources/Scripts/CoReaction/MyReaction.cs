@@ -1,7 +1,7 @@
 ﻿/*
 * Copyright (c) 2016 Phạm Minh Hoàng
 * Framework:   MyClasses
-* Class:       MyReaction (version 1.0)
+* Class:       MyReaction (version 1.1)
 */
 
 using System;
@@ -13,9 +13,9 @@ namespace MyClasses.CoReaction
     {
         #region ----- Variable -----
 
-        private List<MyReactionCondition> mListCondition = new List<MyReactionCondition>();
-        private Action mAction;
-        private bool mIsActive;
+        private List<MyReactionCondition> _listCondition = new List<MyReactionCondition>();
+        private Action _action;
+        private bool _isActive;
 
         #endregion
 
@@ -23,7 +23,7 @@ namespace MyClasses.CoReaction
 
         public List<MyReactionCondition> ListCondition
         {
-            get { return mListCondition; }
+            get { return _listCondition; }
         }
 
         #endregion
@@ -35,7 +35,7 @@ namespace MyClasses.CoReaction
         /// </summary>
         public virtual void AddCondition(int parameterID, MyReactionCondition.EComparedType conditionType, object comparedValue = null)
         {
-            mListCondition.Add(new MyReactionCondition(parameterID, conditionType, comparedValue));
+            _listCondition.Add(new MyReactionCondition(parameterID, conditionType, comparedValue));
         }
 
         /// <summary>
@@ -43,11 +43,11 @@ namespace MyClasses.CoReaction
         /// </summary>
         public virtual void RemoveCondition(int parameterID)
         {
-            foreach (MyReactionCondition condition in mListCondition)
+            foreach (MyReactionCondition condition in _listCondition)
             {
                 if (condition.ParameterID == parameterID)
                 {
-                    mListCondition.Remove(condition);
+                    _listCondition.Remove(condition);
                 }
             }
         }
@@ -57,7 +57,7 @@ namespace MyClasses.CoReaction
         /// </summary>
         public virtual void RemoveAllConditions()
         {
-            mListCondition.Clear();
+            _listCondition.Clear();
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace MyClasses.CoReaction
         /// </summary>
         public virtual void SetAction(Action action)
         {
-            mAction = action;
+            _action = action;
         }
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace MyClasses.CoReaction
         /// </summary>
         public virtual void SetActive(bool isActive)
         {
-            mIsActive = isActive;
+            _isActive = isActive;
         }
 
         /// <summary>
@@ -81,9 +81,9 @@ namespace MyClasses.CoReaction
         /// </summary>
         public virtual void Run()
         {
-            if (mIsActive && mAction != null)
+            if (_isActive && _action != null)
             {
-                mAction();
+                _action();
             }
         }
 
@@ -94,7 +94,7 @@ namespace MyClasses.CoReaction
         {
             bool isPass = true;
 
-            foreach (MyReactionCondition condition in mListCondition)
+            foreach (MyReactionCondition condition in _listCondition)
             {
                 if (!condition.ComparedFunction(condition.ComparedType, condition.ComparedValue))
                 {

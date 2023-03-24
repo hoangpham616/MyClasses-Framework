@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MySingleton (version 1.0)
+ * Class:       MySingleton (version 1.1)
  */
 
 namespace MyClasses
@@ -11,7 +11,7 @@ namespace MyClasses
     {
         #region ----- Variable -----
 
-        private static T mInstance = null;
+        private static T _instance = null;
 
         #endregion
 
@@ -24,11 +24,11 @@ namespace MyClasses
         {
             get
             {
-                if (mInstance == null)
+                if (_instance == null)
                 {
-                    mInstance = new T();
+                    _instance = new T();
                 }
-                return mInstance;
+                return _instance;
             }
         }
 
@@ -41,7 +41,7 @@ namespace MyClasses
         /// </summary>
         public virtual void DestroyInstance()
         {
-            mInstance = null;
+            _instance = null;
         }
 
         #endregion

@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyPrivateCoroutiner (version 1.0)
+ * Class:       MyPrivateCoroutiner (version 1.1)
  */
 
 using UnityEngine;
@@ -14,11 +14,19 @@ namespace MyClasses
 {
     public class MyPrivateCoroutiner
     {
+        #region ----- Internal Class -----
+
+        public class CoroutineInstance : MonoBehaviour
+        {
+        }
+
+        #endregion
+
         #region ----- Variable -----
 
-        private static GameObject mCoroutineObject;
-        private static CoroutineInstance mCoroutineInstance;
-        private static Dictionary<string, IEnumerator> mDictionaryRoutine;
+        private static GameObject _coroutineObject;
+        private static CoroutineInstance _coroutineInstance;
+        private static Dictionary<string, IEnumerator> _dictionaryRoutine;
 
         #endregion
 
@@ -31,7 +39,7 @@ namespace MyClasses
         {
             _Initialize();
 
-            mCoroutineInstance.StartCoroutine(_DelayActionUntilEndOfFrame(action));
+            _coroutineInstance.StartCoroutine(_DelayActionUntilEndOfFrame(action));
         }
 
         /// <summary>
@@ -43,7 +51,7 @@ namespace MyClasses
 
             if (delayTime > 0)
             {
-                mCoroutineInstance.StartCoroutine(_DelayActionByTime(delayTime, action));
+                _coroutineInstance.StartCoroutine(_DelayActionByTime(delayTime, action));
             }
             else
             {
@@ -81,7 +89,7 @@ namespace MyClasses
 
             if (delayFrame > 0)
             {
-                mCoroutineInstance.StartCoroutine(_DelayActionByFrame(delayFrame, action));
+                _coroutineInstance.StartCoroutine(_DelayActionByFrame(delayFrame, action));
             }
             else
             {
@@ -117,7 +125,7 @@ namespace MyClasses
         {
             _Initialize();
 
-            mCoroutineInstance.StartCoroutine(routine);
+            _coroutineInstance.StartCoroutine(routine);
         }
 
         /// <summary>
@@ -127,17 +135,17 @@ namespace MyClasses
         {
             _Initialize();
 
-            if (mDictionaryRoutine.ContainsKey(key))
+            if (_dictionaryRoutine.ContainsKey(key))
             {
-                if (mDictionaryRoutine[key] != null)
+                if (_dictionaryRoutine[key] != null)
                 {
-                    mCoroutineInstance.StopCoroutine(mDictionaryRoutine[key]);
+                    _coroutineInstance.StopCoroutine(_dictionaryRoutine[key]);
                 }
-                mDictionaryRoutine.Remove(key);
+                _dictionaryRoutine.Remove(key);
             }
 
-            mCoroutineInstance.StartCoroutine(routine);
-            mDictionaryRoutine.Add(key, routine);
+            _coroutineInstance.StartCoroutine(routine);
+            _dictionaryRoutine.Add(key, routine);
         }
 
         /// <summary>
@@ -147,13 +155,13 @@ namespace MyClasses
         {
             _Initialize();
 
-            if (mDictionaryRoutine.ContainsKey(key))
+            if (_dictionaryRoutine.ContainsKey(key))
             {
-                if (mDictionaryRoutine[key] != null)
+                if (_dictionaryRoutine[key] != null)
                 {
-                    mCoroutineInstance.StopCoroutine(mDictionaryRoutine[key]);
+                    _coroutineInstance.StopCoroutine(_dictionaryRoutine[key]);
                 }
-                mDictionaryRoutine.Remove(key);
+                _dictionaryRoutine.Remove(key);
             }
         }
 
@@ -166,29 +174,29 @@ namespace MyClasses
         /// </summary>
         protected static void _Initialize()
         {
-            if (mCoroutineObject == null)
+            if (_coroutineObject == null)
             {
                 string objName = typeof(MyPrivateCoroutiner).Name;
 
-                mCoroutineObject = MyUtilities.FindObjectInRoot(objName);
+                _coroutineObject = MyUtilities.FindObjectInRoot(objName);
 
-                if (mCoroutineObject == null)
+                if (_coroutineObject == null)
                 {
-                    mCoroutineObject = new GameObject(objName);
+                    _coroutineObject = new GameObject(objName);
                 }
 
-                GameObject.DontDestroyOnLoad(mCoroutineObject);
+                GameObject.DontDestroyOnLoad(_coroutineObject);
 
-                mDictionaryRoutine = new Dictionary<string, IEnumerator>();
+                _dictionaryRoutine = new Dictionary<string, IEnumerator>();
             }
 
-            if (mCoroutineInstance == null)
+            if (_coroutineInstance == null)
             {
-                mCoroutineInstance = mCoroutineObject.GetComponent<CoroutineInstance>();
+                _coroutineInstance = _coroutineObject.GetComponent<CoroutineInstance>();
 
-                if (mCoroutineInstance == null)
+                if (_coroutineInstance == null)
                 {
-                    mCoroutineInstance = mCoroutineObject.AddComponent(typeof(CoroutineInstance)) as CoroutineInstance;
+                    _coroutineInstance = _coroutineObject.AddComponent(typeof(CoroutineInstance)) as CoroutineInstance;
                 }
             }
         }
@@ -233,14 +241,6 @@ namespace MyClasses
             {
                 action();
             }
-        }
-
-        #endregion
-
-        #region ----- Internal Class -----
-
-        public class CoroutineInstance : MonoBehaviour
-        {
         }
 
         #endregion

@@ -1301,7 +1301,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b713e7e3e758a2547832b57fd5e9a7ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mItemPrefab: {fileID: 2065121631604084541, guid: 476b5a64332045a488a005db0893e8a9, type: 3}
+  mItemPrefab: {fileID: 2065121631604084541, guid: 476b5a64332045a488a005db0893e8a9,
+    type: 3}
   mItemSize: {x: 300, y: 100}
   mItemSpacing: {x: 0, y: 0}
   mItemFixedLine: 1

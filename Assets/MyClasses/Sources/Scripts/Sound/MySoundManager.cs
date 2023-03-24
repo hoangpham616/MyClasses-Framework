@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MySoundManager (version 2.18)
+ * Class:       MySoundManager (version 2.19)
  */
 
 using UnityEngine;
@@ -14,34 +14,34 @@ namespace MyClasses
     {
         #region ----- Variable -----
 
-        private AudioSource mAudioSourceBGM;
-        private List<AudioSource> mListAudioSourceSFX;
+        private AudioSource _audioSourceBGM;
+        private List<AudioSource> _listAudioSourceSFX;
 
         #endregion
 
         #region ----- Singleton -----
 
-        private static object mSingletonLock = new object();
-        private static MySoundManager mInstance;
+        private static object _singletonLock = new object();
+        private static MySoundManager _instance;
 
         public static MySoundManager Instance
         {
             get
             {
-                if (mInstance == null)
+                if (_instance == null)
                 {
-                    lock (mSingletonLock)
+                    lock (_singletonLock)
                     {
-                        mInstance = (MySoundManager)FindObjectOfType(typeof(MySoundManager));
-                        if (mInstance == null)
+                        _instance = (MySoundManager)FindObjectOfType(typeof(MySoundManager));
+                        if (_instance == null)
                         {
                             GameObject obj = new GameObject(typeof(MySoundManager).Name);
-                            mInstance = obj.AddComponent<MySoundManager>();
+                            _instance = obj.AddComponent<MySoundManager>();
                             DontDestroyOnLoad(obj);
                         }
                     }
                 }
-                return mInstance;
+                return _instance;
             }
         }
 
@@ -60,7 +60,7 @@ namespace MyClasses
             set
             {
                 PlayerPrefs.SetInt("MyBGM_Mute", value ? 1 : 0);
-                mAudioSourceBGM.volume = value ? 0 : VolumeBGM;
+                _audioSourceBGM.volume = value ? 0 : VolumeBGM;
             }
         }
 
@@ -71,7 +71,7 @@ namespace MyClasses
             {
                 float volume = Mathf.Clamp01(value);
                 PlayerPrefs.SetFloat("MyBGM_Volume", volume);
-                mAudioSourceBGM.volume = IsMuteBGM ? 0 : volume;
+                _audioSourceBGM.volume = IsMuteBGM ? 0 : volume;
             }
         }
 
@@ -87,9 +87,9 @@ namespace MyClasses
             {
                 PlayerPrefs.SetInt("MySFX_Mute", value ? 1 : 0);
                 float volume = value ? 0 : VolumeSFX;
-                for (int i = mListAudioSourceSFX.Count - 1; i >= 0; i--)
+                for (int i = _listAudioSourceSFX.Count - 1; i >= 0; i--)
                 {
-                    mListAudioSourceSFX[i].volume = volume;
+                    _listAudioSourceSFX[i].volume = volume;
                 }
             }
         }
@@ -105,9 +105,9 @@ namespace MyClasses
                 {
                     volume = 0;
                 }
-                for (int i = mListAudioSourceSFX.Count - 1; i >= 0; i--)
+                for (int i = _listAudioSourceSFX.Count - 1; i >= 0; i--)
                 {
-                    mListAudioSourceSFX[i].volume = volume;
+                    _listAudioSourceSFX[i].volume = volume;
                 }
             }
         }
@@ -127,8 +127,8 @@ namespace MyClasses
         /// </summary>
         void Awake()
         {
-            mAudioSourceBGM = gameObject.AddComponent<AudioSource>();
-            mListAudioSourceSFX = new List<AudioSource>();
+            _audioSourceBGM = gameObject.AddComponent<AudioSource>();
+            _listAudioSourceSFX = new List<AudioSource>();
         }
 
         #endregion
@@ -157,10 +157,10 @@ namespace MyClasses
         /// <param name="delayTime">delay time specified in seconds</param>
         public void PlayBGM(AudioClip audioClip, bool isLoop = true, float delayTime = 0)
         {
-            mAudioSourceBGM.clip = audioClip;
-            mAudioSourceBGM.loop = isLoop;
-            mAudioSourceBGM.volume = IsMuteBGM ? 0 : VolumeBGM;
-            mAudioSourceBGM.PlayDelayed(delayTime);
+            _audioSourceBGM.clip = audioClip;
+            _audioSourceBGM.loop = isLoop;
+            _audioSourceBGM.volume = IsMuteBGM ? 0 : VolumeBGM;
+            _audioSourceBGM.PlayDelayed(delayTime);
         }
 
         /// <summary>
@@ -168,7 +168,7 @@ namespace MyClasses
         /// </summary>
         public void PauseBGM()
         {
-            mAudioSourceBGM.Pause();
+            _audioSourceBGM.Pause();
         }
 
         /// <summary>
@@ -176,7 +176,7 @@ namespace MyClasses
         /// </summary>
         public void ResumeBGM()
         {
-            mAudioSourceBGM.UnPause();
+            _audioSourceBGM.UnPause();
         }
 
         /// <summary>
@@ -184,7 +184,7 @@ namespace MyClasses
         /// </summary>
         public void StopBGM()
         {
-            mAudioSourceBGM.Stop();
+            _audioSourceBGM.Stop();
         }
 
         /// <summary>
@@ -192,7 +192,7 @@ namespace MyClasses
         /// </summary>
         public bool IsPlayingBGM()
         {
-            return mAudioSourceBGM != null && mAudioSourceBGM.clip != null && mAudioSourceBGM.isPlaying;
+            return _audioSourceBGM != null && _audioSourceBGM.clip != null && _audioSourceBGM.isPlaying;
         }
 
         /// <summary>
@@ -202,7 +202,7 @@ namespace MyClasses
         {
             if (IsPlayingBGM())
             {
-                return mAudioSourceBGM.clip.name.Equals(filename);
+                return _audioSourceBGM.clip.name.Equals(filename);
             }
 
             return false;
@@ -215,7 +215,7 @@ namespace MyClasses
         {
             if (IsPlayingBGM())
             {
-                return audioClip != null && mAudioSourceBGM.clip.name.Equals(audioClip.name);
+                return audioClip != null && _audioSourceBGM.clip.name.Equals(audioClip.name);
             }
 
             return false;
@@ -259,9 +259,9 @@ namespace MyClasses
         /// </summary>
         public void PauseAllSFXs()
         {
-            for (int i = mListAudioSourceSFX.Count - 1; i >= 0; i--)
+            for (int i = _listAudioSourceSFX.Count - 1; i >= 0; i--)
             {
-                mListAudioSourceSFX[i].Pause();
+                _listAudioSourceSFX[i].Pause();
             }
         }
 
@@ -270,9 +270,9 @@ namespace MyClasses
         /// </summary>
         public void ResumeAllSFXs()
         {
-            for (int i = mListAudioSourceSFX.Count - 1; i >= 0; i--)
+            for (int i = _listAudioSourceSFX.Count - 1; i >= 0; i--)
             {
-                mListAudioSourceSFX[i].UnPause();
+                _listAudioSourceSFX[i].UnPause();
             }
         }
 
@@ -281,9 +281,9 @@ namespace MyClasses
         /// </summary>
         public void StopAllSFXs()
         {
-            for (int i = mListAudioSourceSFX.Count - 1; i >= 0; i--)
+            for (int i = _listAudioSourceSFX.Count - 1; i >= 0; i--)
             {
-                mListAudioSourceSFX[i].Stop();
+                _listAudioSourceSFX[i].Stop();
             }
         }
 
@@ -292,7 +292,7 @@ namespace MyClasses
         /// </summary>
         private AudioSource _GetAudioSourceSFX()
         {
-            foreach (AudioSource audioSource in mListAudioSourceSFX)
+            foreach (AudioSource audioSource in _listAudioSourceSFX)
             {
                 if (audioSource.clip == null || (!audioSource.isPlaying && audioSource.time == 0))
                 {
@@ -302,7 +302,7 @@ namespace MyClasses
 
             AudioSource newAudioSource = gameObject.AddComponent<AudioSource>();
             newAudioSource.playOnAwake = false;
-            mListAudioSourceSFX.Add(newAudioSource);
+            _listAudioSourceSFX.Add(newAudioSource);
             return newAudioSource;
         }
 

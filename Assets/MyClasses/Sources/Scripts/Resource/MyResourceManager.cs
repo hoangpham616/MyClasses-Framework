@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyResourceManager (version 1.10)
+ * Class:       MyResourceManager (version 1.11)
  */
 
 using UnityEngine;
@@ -16,11 +16,11 @@ namespace MyClasses
     {
         #region ----- Variable -----
 
-        private static Dictionary<string, GameObject> mDictPrefab = new Dictionary<string, GameObject>();
-        private static Dictionary<string, Material> mDictMaterial = new Dictionary<string, Material>();
-        private static Dictionary<string, Texture> mDictTexture = new Dictionary<string, Texture>();
-        private static Dictionary<string, Sprite> mDictSprite = new Dictionary<string, Sprite>();
-        private static Dictionary<string, Dictionary<string, Sprite>> mDictAtlas = new Dictionary<string, Dictionary<string, Sprite>>();
+        private static Dictionary<string, GameObject> _dictionaryPrefab = new Dictionary<string, GameObject>();
+        private static Dictionary<string, Material> _dictionaryMaterial = new Dictionary<string, Material>();
+        private static Dictionary<string, Texture> _dictionaryTexture = new Dictionary<string, Texture>();
+        private static Dictionary<string, Sprite> _dictionarySprite = new Dictionary<string, Sprite>();
+        private static Dictionary<string, Dictionary<string, Sprite>> _dictionaryAtlas = new Dictionary<string, Dictionary<string, Sprite>>();
 
         #endregion
 
@@ -136,9 +136,9 @@ namespace MyClasses
         /// </summary>
         public static GameObject LoadPrefab(string path, bool isCache = true)
         {
-            if (mDictPrefab.ContainsKey(path))
+            if (_dictionaryPrefab.ContainsKey(path))
             {
-                return mDictPrefab[path];
+                return _dictionaryPrefab[path];
             }
 
             GameObject asset = Resources.Load(path, typeof(GameObject)) as GameObject;
@@ -148,7 +148,7 @@ namespace MyClasses
             }
             else if (isCache)
             {
-                mDictPrefab[path] = asset;
+                _dictionaryPrefab[path] = asset;
             }
             return asset;
         }
@@ -173,11 +173,11 @@ namespace MyClasses
         /// </summary>
         public static void LoadAsyncPrefab(string path, Action<float> onLoading, Action<GameObject> onLoadComplete, bool isCache = true)
         {
-            if (mDictPrefab.ContainsKey(path))
+            if (_dictionaryPrefab.ContainsKey(path))
             {
                 if (onLoadComplete != null)
                 {
-                    onLoadComplete(mDictPrefab[path]);
+                    onLoadComplete(_dictionaryPrefab[path]);
                 }
                 return;
             }
@@ -198,9 +198,9 @@ namespace MyClasses
         /// </summary>
         public static Material LoadMaterial(string path, bool isCache = true)
         {
-            if (mDictMaterial.ContainsKey(path))
+            if (_dictionaryMaterial.ContainsKey(path))
             {
-                return mDictMaterial[path];
+                return _dictionaryMaterial[path];
             }
 
             Material asset = Resources.Load(path, typeof(Material)) as Material;
@@ -210,7 +210,7 @@ namespace MyClasses
             }
             else if (isCache)
             {
-                mDictMaterial[path] = asset;
+                _dictionaryMaterial[path] = asset;
             }
             return asset;
         }
@@ -235,11 +235,11 @@ namespace MyClasses
         /// </summary>
         public static void LoadAsyncMaterial(string path, Action<Material> onLoadComplete, bool isCache = true)
         {
-            if (mDictMaterial.ContainsKey(path))
+            if (_dictionaryMaterial.ContainsKey(path))
             {
                 if (onLoadComplete != null)
                 {
-                    onLoadComplete(mDictMaterial[path]);
+                    onLoadComplete(_dictionaryMaterial[path]);
                 }
                 return;
             }
@@ -260,9 +260,9 @@ namespace MyClasses
         /// </summary>
         public static Texture LoadTexture(string path, bool isCache = true)
         {
-            if (mDictTexture.ContainsKey(path))
+            if (_dictionaryTexture.ContainsKey(path))
             {
-                return mDictTexture[path];
+                return _dictionaryTexture[path];
             }
 
             Texture asset = Resources.Load(path, typeof(Texture)) as Texture;
@@ -272,7 +272,7 @@ namespace MyClasses
             }
             else if (isCache)
             {
-                mDictTexture[path] = asset;
+                _dictionaryTexture[path] = asset;
             }
             return asset;
         }
@@ -298,11 +298,11 @@ namespace MyClasses
         /// <param name="isCache">texture will be saved to re-use</param>
         public static void LoadAsyncTexture(string path, Action<Texture> onLoadComplete, bool isCache = true)
         {
-            if (mDictTexture.ContainsKey(path))
+            if (_dictionaryTexture.ContainsKey(path))
             {
                 if (onLoadComplete != null)
                 {
-                    onLoadComplete(mDictTexture[path]);
+                    onLoadComplete(_dictionaryTexture[path]);
                 }
                 return;
             }
@@ -324,9 +324,9 @@ namespace MyClasses
         /// </summary>
         public static Sprite LoadSprite(string path, bool isCache = true)
         {
-            if (mDictSprite.ContainsKey(path))
+            if (_dictionarySprite.ContainsKey(path))
             {
-                return mDictSprite[path];
+                return _dictionarySprite[path];
             }
 
             Sprite asset = Resources.Load(path, typeof(Sprite)) as Sprite;
@@ -336,7 +336,7 @@ namespace MyClasses
             }
             else if (isCache)
             {
-                mDictSprite[path] = asset;
+                _dictionarySprite[path] = asset;
             }
             return asset;
         }
@@ -346,9 +346,9 @@ namespace MyClasses
         /// </summary>
         public static Sprite LoadSpriteFromAtlas(string atlasPath, string spriteName, bool isCache = true)
         {
-            if (mDictAtlas.ContainsKey(atlasPath))
+            if (_dictionaryAtlas.ContainsKey(atlasPath))
             {
-                Dictionary<string, Sprite> dictSprite = mDictAtlas[atlasPath];
+                Dictionary<string, Sprite> dictSprite = _dictionaryAtlas[atlasPath];
                 if (!dictSprite.ContainsKey(spriteName))
                 {
                     Debug.LogError("[" + typeof(MyResourceManager).Name + "] LoadSpriteFromAtlas(): Could not find sprite \"" + spriteName + "\".");
@@ -364,7 +364,7 @@ namespace MyClasses
             {
                 LoadAtlas(atlasPath);
 
-                Dictionary<string, Sprite> dictSprite = mDictAtlas[atlasPath];
+                Dictionary<string, Sprite> dictSprite = _dictionaryAtlas[atlasPath];
                 if (!dictSprite.ContainsKey(spriteName))
                 {
                     Debug.LogError("[" + typeof(MyResourceManager).Name + "] LoadSpriteFromAtlas(): Could not find sprite \"" + spriteName + "\".");
@@ -419,11 +419,11 @@ namespace MyClasses
         /// </summary>
         public static void LoadAsyncSprite(string path, Action<Sprite> onLoadComplete, bool isCache = true)
         {
-            if (mDictSprite.ContainsKey(path))
+            if (_dictionarySprite.ContainsKey(path))
             {
                 if (onLoadComplete != null)
                 {
-                    onLoadComplete(mDictSprite[path]);
+                    onLoadComplete(_dictionarySprite[path]);
                 }
                 return;
             }
@@ -444,7 +444,7 @@ namespace MyClasses
         /// </summary>
         public static void LoadAtlas(string path)
         {
-            if (!mDictAtlas.ContainsKey(path))
+            if (!_dictionaryAtlas.ContainsKey(path))
             {
                 Sprite[] assets = Resources.LoadAll<Sprite>(path);
                 if (assets == null)
@@ -459,7 +459,7 @@ namespace MyClasses
                         Sprite sprite = assets[i];
                         dictSprite[sprite.name] = sprite;
                     }
-                    mDictAtlas[path] = dictSprite;
+                    _dictionaryAtlas[path] = dictSprite;
                 }
             }
         }
@@ -469,11 +469,11 @@ namespace MyClasses
         /// </summary>
         public static void UnloadAll()
         {
-            mDictPrefab.Clear();
-            mDictMaterial.Clear();
-            mDictTexture.Clear();
-            mDictSprite.Clear();
-            mDictAtlas.Clear();
+            _dictionaryPrefab.Clear();
+            _dictionaryMaterial.Clear();
+            _dictionaryTexture.Clear();
+            _dictionarySprite.Clear();
+            _dictionaryAtlas.Clear();
         }
 
         /// <summary>
@@ -481,7 +481,7 @@ namespace MyClasses
         /// </summary>
         public static void UnloadPrefabs()
         {
-            mDictPrefab.Clear();
+            _dictionaryPrefab.Clear();
         }
 
         /// <summary>
@@ -489,7 +489,7 @@ namespace MyClasses
         /// </summary>
         public static void UnloadMaterials()
         {
-            mDictMaterial.Clear();
+            _dictionaryMaterial.Clear();
         }
 
         /// <summary>
@@ -497,7 +497,7 @@ namespace MyClasses
         /// </summary>
         public static void UnloadTextures()
         {
-            mDictTexture.Clear();
+            _dictionaryTexture.Clear();
         }
 
         /// <summary>
@@ -505,7 +505,7 @@ namespace MyClasses
         /// </summary>
         public static void UnloadAllAtlases()
         {
-            mDictAtlas.Clear();
+            _dictionaryAtlas.Clear();
         }
 
         /// <summary>
@@ -513,7 +513,7 @@ namespace MyClasses
         /// </summary>
         public static void UnloadAtlas(string path)
         {
-            mDictAtlas.Remove(path);
+            _dictionaryAtlas.Remove(path);
         }
 
         #endregion
@@ -548,7 +548,7 @@ namespace MyClasses
             GameObject asset = requester.asset as GameObject;
             if (isCache)
             {
-                mDictPrefab[path] = asset;
+                _dictionaryPrefab[path] = asset;
             }
             if (onLoadComplete != null)
             {
@@ -565,9 +565,9 @@ namespace MyClasses
 
             foreach (var path in paths)
             {
-                if (mDictPrefab.ContainsKey(path))
+                if (_dictionaryPrefab.ContainsKey(path))
                 {
-                    assets.Add(mDictPrefab[path]);
+                    assets.Add(_dictionaryPrefab[path]);
                     continue;
                 }
 
@@ -583,7 +583,7 @@ namespace MyClasses
                 GameObject asset = requester.asset as GameObject;
                 if (isCache)
                 {
-                    mDictPrefab[path] = asset;
+                    _dictionaryPrefab[path] = asset;
                 }
                 assets.Add(asset);
             }
@@ -615,7 +615,7 @@ namespace MyClasses
             Material asset = requester.asset as Material;
             if (isCache)
             {
-                mDictMaterial[path] = asset;
+                _dictionaryMaterial[path] = asset;
             }
             if (onLoadComplete != null)
             {
@@ -632,9 +632,9 @@ namespace MyClasses
 
             foreach (var path in paths)
             {
-                if (mDictMaterial.ContainsKey(path))
+                if (_dictionaryMaterial.ContainsKey(path))
                 {
-                    assets.Add(mDictMaterial[path]);
+                    assets.Add(_dictionaryMaterial[path]);
                     continue;
                 }
 
@@ -650,7 +650,7 @@ namespace MyClasses
                 Material asset = requester.asset as Material;
                 if (isCache)
                 {
-                    mDictMaterial[path] = asset;
+                    _dictionaryMaterial[path] = asset;
                 }
                 assets.Add(asset);
             }
@@ -682,7 +682,7 @@ namespace MyClasses
             Texture asset = requester.asset as Texture;
             if (isCache)
             {
-                mDictTexture[path] = asset;
+                _dictionaryTexture[path] = asset;
             }
             if (onLoadComplete != null)
             {
@@ -699,9 +699,9 @@ namespace MyClasses
 
             foreach (var path in paths)
             {
-                if (mDictTexture.ContainsKey(path))
+                if (_dictionaryTexture.ContainsKey(path))
                 {
-                    assets.Add(mDictTexture[path]);
+                    assets.Add(_dictionaryTexture[path]);
                     continue;
                 }
 
@@ -717,7 +717,7 @@ namespace MyClasses
                 Texture asset = requester.asset as Texture;
                 if (isCache)
                 {
-                    mDictTexture[path] = asset;
+                    _dictionaryTexture[path] = asset;
                 }
                 assets.Add(asset);
             }
@@ -749,7 +749,7 @@ namespace MyClasses
             Sprite asset = requester.asset as Sprite;
             if (isCache)
             {
-                mDictSprite[path] = asset;
+                _dictionarySprite[path] = asset;
             }
             if (onLoadComplete != null)
             {
@@ -766,9 +766,9 @@ namespace MyClasses
 
             foreach (var path in paths)
             {
-                if (mDictSprite.ContainsKey(path))
+                if (_dictionarySprite.ContainsKey(path))
                 {
-                    assets.Add(mDictSprite[path]);
+                    assets.Add(_dictionarySprite[path]);
                     continue;
                 }
 
@@ -784,7 +784,7 @@ namespace MyClasses
                 Sprite asset = requester.asset as Sprite;
                 if (isCache)
                 {
-                    mDictSprite[path] = asset;
+                    _dictionarySprite[path] = asset;
                 }
                 assets.Add(asset);
             }

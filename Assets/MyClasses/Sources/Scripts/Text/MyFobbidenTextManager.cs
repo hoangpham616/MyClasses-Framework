@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyForbbidenTextManager (version 1.1)
+ * Class:       MyForbbidenTextManager (version 1.2)
  */
 
 using UnityEngine;
@@ -12,11 +12,20 @@ namespace MyClasses
 {
     public class MyForbbidenTextManager
     {
+        #region ----- Enumeration -----
+
+        public enum EFormat
+        {
+            CSV
+        }
+
+        #endregion
+
         #region ----- Variable -----
 
         private const EFormat FORMAT = EFormat.CSV;
 
-        private static string[] mForbiddenTexts;
+        private static string[] _forbiddenTexts;
 
         #endregion
 
@@ -37,7 +46,7 @@ namespace MyClasses
                 }
                 else
                 {
-                    mForbiddenTexts = MyCSV.DeserializeByCell(textAsset.text).ToArray();
+                    _forbiddenTexts = MyCSV.DeserializeByCell(textAsset.text).ToArray();
                 }
             }
         }
@@ -50,7 +59,7 @@ namespace MyClasses
         /// <param name="isIgnoreCase">ignore case while finding forbidden words</param>
         public static bool ExistForbiddenWord(string text, bool isNormalizeWhitespaces = false, bool isIgnoreCase = true)
         {
-            if (mForbiddenTexts == null)
+            if (_forbiddenTexts == null)
             {
                 LoadData();
             }
@@ -68,10 +77,10 @@ namespace MyClasses
             StringComparison comparison = isIgnoreCase ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
             string textForComparison = isIgnoreCase ? text.ToLower() : text;
 
-            int count = mForbiddenTexts.Length;
+            int count = _forbiddenTexts.Length;
             for (int i = 0; i < count; i++)
             {
-                if (textForComparison.IndexOf(mForbiddenTexts[i], comparison) >= 0)
+                if (textForComparison.IndexOf(_forbiddenTexts[i], comparison) >= 0)
                 {
                     return true;
                 }
@@ -90,7 +99,7 @@ namespace MyClasses
         /// <param name="charReplace">a string which replaces every illegal character in forbidden word</param>
         public static string ReplaceForbiddenWords(string text, bool isTrim = true, bool isNormalizeWhitespaces = false, bool isIgnoreCase = true, string charReplace = "*")
         {
-            if (mForbiddenTexts == null)
+            if (_forbiddenTexts == null)
             {
                 LoadData();
             }
@@ -120,10 +129,10 @@ namespace MyClasses
             StringComparison comparison = isIgnoreCase ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
             string textForComparison = isIgnoreCase ? text.ToLower() : text;
 
-            int count = mForbiddenTexts.Length;
+            int count = _forbiddenTexts.Length;
             for (int i = 0; i < count; i++)
             {
-                string forbiddenText = mForbiddenTexts[i];
+                string forbiddenText = _forbiddenTexts[i];
                 int leftIndex = textForComparison.IndexOf(forbiddenText, comparison);
                 if (leftIndex >= 0)
                 {
@@ -151,15 +160,6 @@ namespace MyClasses
             }
 
             return text;
-        }
-
-        #endregion
-
-        #region ----- Enumeration -----
-
-        public enum EFormat
-        {
-            CSV
         }
 
         #endregion

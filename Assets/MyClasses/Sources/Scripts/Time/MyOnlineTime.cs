@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyOnlineTime (version 1.1)
+ * Class:       MyOnlineTime (version 1.2)
  */
 
 using System;
@@ -13,7 +13,7 @@ namespace MyClasses
     {
         #region ----- Variable -----
 
-        private static long mOffsetUnixTime = 0;
+        private static long _offsetUnixTime = 0;
 
         #endregion
 
@@ -24,7 +24,7 @@ namespace MyClasses
         /// </summary>
         public static long CurrentUnixTime
         {
-            get { return MyLocalTime.CurrentUnixTime + mOffsetUnixTime; }
+            get { return MyLocalTime.CurrentUnixTime + _offsetUnixTime; }
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace MyClasses
         /// <param name="onlineUnixTime">milliseconds</param>
         public static void SyncOnlineTime(long onlineUnixTime)
         {
-            mOffsetUnixTime = onlineUnixTime - MyLocalTime.CurrentUnixTime;
+            _offsetUnixTime = onlineUnixTime - MyLocalTime.CurrentUnixTime;
         }
 
         #endregion

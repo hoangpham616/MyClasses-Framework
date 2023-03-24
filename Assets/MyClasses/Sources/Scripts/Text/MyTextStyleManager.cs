@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyTextStyleManager (version 1.0)
+ * Class:       MyTextStyleManager (version 1.1)
  */
 
 #pragma warning disable 0162
@@ -26,9 +26,9 @@ namespace MyClasses
         public static string CONFIG_DIRECTORY = "Configs/";
 
         [SerializeField]
-        private MyTextStyleConfig mConfig;
+        private MyTextStyleConfig _config;
         [SerializeField]
-        private bool mIsAutoSaveOnChange = true;
+        private bool _isAutoSaveOnChange = true;
 
         #endregion
 
@@ -36,34 +36,34 @@ namespace MyClasses
 
         public MyTextStyleConfig Config
         {
-            get { return mConfig; }
+            get { return _config; }
         }
 
         public MyTextStyleInfo[] Infos
         {
-            get { return mConfig.Infos; }
+            get { return _config.Infos; }
         }
 
         #endregion
 
         #region ----- Singleton -----
 
-        private static object mSingletonLock = new object();
-        private static MyTextStyleManager mInstance;
+        private static object _singletonLock = new object();
+        private static MyTextStyleManager _instance;
 
         public static MyTextStyleManager Instance
         {
             get
             {
-                if (mInstance == null)
+                if (_instance == null)
                 {
-                    lock (mSingletonLock)
+                    lock (_singletonLock)
                     {
-                        mInstance = (MyTextStyleManager)FindObjectOfType(typeof(MyTextStyleManager));
-                        if (mInstance == null)
+                        _instance = (MyTextStyleManager)FindObjectOfType(typeof(MyTextStyleManager));
+                        if (_instance == null)
                         {
                             GameObject obj = new GameObject(typeof(MyTextStyleManager).Name);
-                            mInstance = obj.AddComponent<MyTextStyleManager>();
+                            _instance = obj.AddComponent<MyTextStyleManager>();
                             if (Application.isPlaying)
                             {
                                 DontDestroyOnLoad(obj);
@@ -71,12 +71,12 @@ namespace MyClasses
                         }
                         else if (Application.isPlaying)
                         {
-                            DontDestroyOnLoad(mInstance);
+                            DontDestroyOnLoad(_instance);
                         }
-                        mInstance.LoadConfig();
+                        _instance.LoadConfig();
                     }
                 }
-                return mInstance;
+                return _instance;
             }
         }
 
@@ -116,7 +116,7 @@ namespace MyClasses
         /// </summary>
         public void SaveConfig()
         {
-            EditorUtility.SetDirty(mConfig);
+            EditorUtility.SetDirty(_config);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
         }
@@ -128,7 +128,7 @@ namespace MyClasses
         /// </summary>
         public void LoadConfig()
         {
-            if (mConfig != null)
+            if (_config != null)
             {
                 return;
             }
@@ -141,18 +141,18 @@ namespace MyClasses
 #endif
 
             string filePath = MyTextStyleManager.CONFIG_DIRECTORY + typeof(MyTextStyleConfig).Name + ".asset";
-            mConfig = Resources.Load(filePath, typeof(MyTextStyleConfig)) as MyTextStyleConfig;
+            _config = Resources.Load(filePath, typeof(MyTextStyleConfig)) as MyTextStyleConfig;
 #if UNITY_EDITOR
-            if (mConfig == null)
+            if (_config == null)
             {
-                mConfig = ScriptableObject.CreateInstance<MyTextStyleConfig>();
-                mConfig.Infos = new MyTextStyleInfo[(int)EStyle.Length];
-                for (int i = 0; i < mConfig.Infos.Length; ++i)
+                _config = ScriptableObject.CreateInstance<MyTextStyleConfig>();
+                _config.Infos = new MyTextStyleInfo[(int)EStyle.Length];
+                for (int i = 0; i < _config.Infos.Length; ++i)
                 {
-                    mConfig.Infos[i] = new MyTextStyleInfo();
-                    mConfig.Infos[i].Type = (EStyle)i;
+                    _config.Infos[i] = new MyTextStyleInfo();
+                    _config.Infos[i].Type = (EStyle)i;
                 }
-                AssetDatabase.CreateAsset(mConfig, filePath);
+                AssetDatabase.CreateAsset(_config, filePath);
                 AssetDatabase.SaveAssets();
             }
 #endif
@@ -167,7 +167,7 @@ namespace MyClasses
             {
                 return null;
             }
-            return mConfig.Infos[(int)type];
+            return _config.Infos[(int)type];
         }
 
         #endregion
@@ -315,36 +315,36 @@ namespace MyClasses
     [CustomEditor(typeof(MyTextStyleManager))]
     public class MyTextStyleManagerEditor : Editor
     {
-        private MyTextStyleManager mScript;
-        private SerializedProperty mConfig;
-        private SerializedProperty mIsAutoSaveOnChange;
-        private bool mIsSceneTitlesVisible = false;
-        private bool mIsSceneButtonsVisible = false;
-        private bool mIsPopupTitlesVisible = false;
-        private bool mIsPopupButtonsVisible = false;
-        private bool mIsSmallButtonsVisible = false;
-        private bool mIsMediumButtonsVisible = false;
-        private bool mIsLargeButtonsVisible = false;
-        private bool mIsCustomButtonsVisible = false;
-        private bool mIsMoneyTextsVisible = false;
-        private bool mIsTinyTextsVisible = false;
-        private bool mIsSmallTextsVisible = false;
-        private bool mIsMediumTextsVisible = false;
-        private bool mIsLargeTextsVisible = false;
-        private bool mIsHugeTextsVisible = false;
-        private bool mIsGiganticTextsVisible = false;
-        private bool mIsCustomsVisible = false;
+        private MyTextStyleManager _script;
+        private SerializedProperty _config;
+        private SerializedProperty _isAutoSaveOnChange;
+        private bool _isSceneTitlesVisible = false;
+        private bool _isSceneButtonsVisible = false;
+        private bool _isPopupTitlesVisible = false;
+        private bool _isPopupButtonsVisible = false;
+        private bool _isSmallButtonsVisible = false;
+        private bool _isMediumButtonsVisible = false;
+        private bool _isLargeButtonsVisible = false;
+        private bool _isCustomButtonsVisible = false;
+        private bool _isMoneyTextsVisible = false;
+        private bool _isTinyTextsVisible = false;
+        private bool _isSmallTextsVisible = false;
+        private bool _isMediumTextsVisible = false;
+        private bool _isLargeTextsVisible = false;
+        private bool _isHugeTextsVisible = false;
+        private bool _isGiganticTextsVisible = false;
+        private bool _isCustomsVisible = false;
 
         /// <summary>
         /// OnEnable.
         /// </summary>
         void OnEnable()
         {
-            mScript = (MyTextStyleManager)target;
-            mConfig = serializedObject.FindProperty("mConfig");
-            mIsAutoSaveOnChange = serializedObject.FindProperty("mIsAutoSaveOnChange");
+            _script = (MyTextStyleManager)target;
+            _config = serializedObject.FindProperty("_config");
+            _isAutoSaveOnChange = serializedObject.FindProperty("_isAutoSaveOnChange");
 
-            mScript.LoadConfig();
+            _script.LoadConfig();
         }
 
         /// <summary>
@@ -352,333 +352,333 @@ namespace MyClasses
         /// </summary>
         public override void OnInspectorGUI()
         {
-            EditorGUILayout.ObjectField("Script", MonoScript.FromMonoBehaviour(mScript), typeof(MyTextStyleManager), false);
+            EditorGUILayout.ObjectField("Script", MonoScript.FromMonoBehaviour(_script), typeof(MyTextStyleManager), false);
 
             serializedObject.Update();
 
-            EditorGUILayout.ObjectField(mConfig, new GUIContent("Config File"));
+            EditorGUILayout.ObjectField(_config, new GUIContent("Config File"));
 
             EditorGUI.BeginChangeCheck();
 
-            mIsAutoSaveOnChange.boolValue = EditorGUILayout.Toggle("Auto Save On Change", mIsAutoSaveOnChange.boolValue);
+            _isAutoSaveOnChange.boolValue = EditorGUILayout.Toggle("Auto Save On Change", _isAutoSaveOnChange.boolValue);
 
             EditorGUILayout.LabelField(string.Empty);
             EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Show All"))
             {
-                mIsSceneTitlesVisible = true;
-                mIsSceneButtonsVisible = true;
-                mIsPopupTitlesVisible = true;
-                mIsPopupButtonsVisible = true;
-                mIsSmallButtonsVisible = true;
-                mIsMediumButtonsVisible = true;
-                mIsLargeButtonsVisible = true;
-                mIsCustomButtonsVisible = true;
-                mIsMoneyTextsVisible = true;
-                mIsTinyTextsVisible = true;
-                mIsSmallTextsVisible = true;
-                mIsMediumTextsVisible = true;
-                mIsLargeTextsVisible = true;
-                mIsHugeTextsVisible = true;
-                mIsGiganticTextsVisible = true;
-                mIsCustomsVisible = true;
+                _isSceneTitlesVisible = true;
+                _isSceneButtonsVisible = true;
+                _isPopupTitlesVisible = true;
+                _isPopupButtonsVisible = true;
+                _isSmallButtonsVisible = true;
+                _isMediumButtonsVisible = true;
+                _isLargeButtonsVisible = true;
+                _isCustomButtonsVisible = true;
+                _isMoneyTextsVisible = true;
+                _isTinyTextsVisible = true;
+                _isSmallTextsVisible = true;
+                _isMediumTextsVisible = true;
+                _isLargeTextsVisible = true;
+                _isHugeTextsVisible = true;
+                _isGiganticTextsVisible = true;
+                _isCustomsVisible = true;
             }
             if (GUILayout.Button("Hide All"))
             {
-                mIsSceneTitlesVisible = false;
-                mIsSceneButtonsVisible = false;
-                mIsPopupTitlesVisible = false;
-                mIsPopupButtonsVisible = false;
-                mIsSmallButtonsVisible = false;
-                mIsMediumButtonsVisible = false;
-                mIsLargeButtonsVisible = false;
-                mIsCustomButtonsVisible = false;
-                mIsMoneyTextsVisible = false;
-                mIsTinyTextsVisible = false;
-                mIsSmallTextsVisible = false;
-                mIsMediumTextsVisible = false;
-                mIsLargeTextsVisible = false;
-                mIsHugeTextsVisible = false;
-                mIsGiganticTextsVisible = false;
-                mIsCustomsVisible = false;
+                _isSceneTitlesVisible = false;
+                _isSceneButtonsVisible = false;
+                _isPopupTitlesVisible = false;
+                _isPopupButtonsVisible = false;
+                _isSmallButtonsVisible = false;
+                _isMediumButtonsVisible = false;
+                _isLargeButtonsVisible = false;
+                _isCustomButtonsVisible = false;
+                _isMoneyTextsVisible = false;
+                _isTinyTextsVisible = false;
+                _isSmallTextsVisible = false;
+                _isMediumTextsVisible = false;
+                _isLargeTextsVisible = false;
+                _isHugeTextsVisible = false;
+                _isGiganticTextsVisible = false;
+                _isCustomsVisible = false;
             }
             EditorGUILayout.EndHorizontal();
             if (GUILayout.Button("Save"))
             {
-                mScript.SaveConfig();
+                _script.SaveConfig();
             }
 
             bool isVisible = false;
-            for (int i = 1; i < mScript.Infos.Length; ++i)
+            for (int i = 1; i < _script.Infos.Length; ++i)
             {
                 switch ((MyTextStyleManager.EStyle)i)
                 {
                     case MyTextStyleManager.EStyle.SCENE_TITLE_1:
                         {
                             EditorGUILayout.LabelField(string.Empty);
-                            mIsSceneTitlesVisible = EditorGUILayout.Foldout(mIsSceneTitlesVisible, "Scene Titles");
-                            if (mIsSceneTitlesVisible)
+                            _isSceneTitlesVisible = EditorGUILayout.Foldout(_isSceneTitlesVisible, "Scene Titles");
+                            if (_isSceneTitlesVisible)
                             {
                                 EditorGUI.indentLevel++;
                             }
-                            isVisible = mIsSceneTitlesVisible;
+                            isVisible = _isSceneTitlesVisible;
                         }
                         break;
                     case MyTextStyleManager.EStyle.SCENE_BUTTON_1:
                         {
-                            if (mIsSceneTitlesVisible)
+                            if (_isSceneTitlesVisible)
                             {
                                 EditorGUI.indentLevel--;
                             }
 
                             EditorGUILayout.LabelField(string.Empty);
-                            mIsSceneButtonsVisible = EditorGUILayout.Foldout(mIsSceneButtonsVisible, "Scene Buttons");
-                            if (mIsSceneButtonsVisible)
+                            _isSceneButtonsVisible = EditorGUILayout.Foldout(_isSceneButtonsVisible, "Scene Buttons");
+                            if (_isSceneButtonsVisible)
                             {
                                 EditorGUI.indentLevel++;
                             }
-                            isVisible = mIsSceneButtonsVisible;
+                            isVisible = _isSceneButtonsVisible;
                         }
                         break;
                     case MyTextStyleManager.EStyle.POPUP_TITLE_1:
                         {
-                            if (mIsSceneButtonsVisible)
+                            if (_isSceneButtonsVisible)
                             {
                                 EditorGUI.indentLevel--;
                             }
 
                             EditorGUILayout.LabelField(string.Empty);
-                            mIsPopupTitlesVisible = EditorGUILayout.Foldout(mIsPopupTitlesVisible, "Popup Titles");
-                            if (mIsPopupTitlesVisible)
+                            _isPopupTitlesVisible = EditorGUILayout.Foldout(_isPopupTitlesVisible, "Popup Titles");
+                            if (_isPopupTitlesVisible)
                             {
                                 EditorGUI.indentLevel++;
                             }
-                            isVisible = mIsPopupTitlesVisible;
+                            isVisible = _isPopupTitlesVisible;
                         }
                         break;
                     case MyTextStyleManager.EStyle.POPUP_BUTTON_1:
                         {
-                            if (mIsPopupTitlesVisible)
+                            if (_isPopupTitlesVisible)
                             {
                                 EditorGUI.indentLevel--;
                             }
 
                             EditorGUILayout.LabelField(string.Empty);
-                            mIsPopupButtonsVisible = EditorGUILayout.Foldout(mIsPopupButtonsVisible, "Popup Buttons");
-                            if (mIsPopupButtonsVisible)
+                            _isPopupButtonsVisible = EditorGUILayout.Foldout(_isPopupButtonsVisible, "Popup Buttons");
+                            if (_isPopupButtonsVisible)
                             {
                                 EditorGUI.indentLevel++;
                             }
-                            isVisible = mIsPopupButtonsVisible;
+                            isVisible = _isPopupButtonsVisible;
                         }
                         break;
                     case MyTextStyleManager.EStyle.SMALL_BUTTON_1:
                         {
-                            if (mIsPopupButtonsVisible)
+                            if (_isPopupButtonsVisible)
                             {
                                 EditorGUI.indentLevel--;
                             }
 
                             EditorGUILayout.LabelField(string.Empty);
-                            mIsSmallButtonsVisible = EditorGUILayout.Foldout(mIsSmallButtonsVisible, "Small Buttons");
-                            if (mIsSmallButtonsVisible)
+                            _isSmallButtonsVisible = EditorGUILayout.Foldout(_isSmallButtonsVisible, "Small Buttons");
+                            if (_isSmallButtonsVisible)
                             {
                                 EditorGUI.indentLevel++;
                             }
-                            isVisible = mIsSmallButtonsVisible;
+                            isVisible = _isSmallButtonsVisible;
                         }
                         break;
                     case MyTextStyleManager.EStyle.MEDIUM_BUTTON_1:
                         {
-                            if (mIsSmallButtonsVisible)
+                            if (_isSmallButtonsVisible)
                             {
                                 EditorGUI.indentLevel--;
                             }
 
                             EditorGUILayout.LabelField(string.Empty);
-                            mIsMediumButtonsVisible = EditorGUILayout.Foldout(mIsMediumButtonsVisible, "Medium Buttons");
-                            if (mIsMediumButtonsVisible)
+                            _isMediumButtonsVisible = EditorGUILayout.Foldout(_isMediumButtonsVisible, "Medium Buttons");
+                            if (_isMediumButtonsVisible)
                             {
                                 EditorGUI.indentLevel++;
                             }
-                            isVisible = mIsMediumButtonsVisible;
+                            isVisible = _isMediumButtonsVisible;
                         }
                         break;
                     case MyTextStyleManager.EStyle.LARGE_BUTTON_1:
                         {
-                            if (mIsMediumButtonsVisible)
+                            if (_isMediumButtonsVisible)
                             {
                                 EditorGUI.indentLevel--;
                             }
 
                             EditorGUILayout.LabelField(string.Empty);
-                            mIsLargeButtonsVisible = EditorGUILayout.Foldout(mIsLargeButtonsVisible, "Large Buttons");
-                            if (mIsLargeButtonsVisible)
+                            _isLargeButtonsVisible = EditorGUILayout.Foldout(_isLargeButtonsVisible, "Large Buttons");
+                            if (_isLargeButtonsVisible)
                             {
                                 EditorGUI.indentLevel++;
                             }
-                            isVisible = mIsLargeButtonsVisible;
+                            isVisible = _isLargeButtonsVisible;
                         }
                         break;
                     case MyTextStyleManager.EStyle.CUSTOM_BUTTON_1:
                         {
-                            if (mIsLargeButtonsVisible)
+                            if (_isLargeButtonsVisible)
                             {
                                 EditorGUI.indentLevel--;
                             }
 
                             EditorGUILayout.LabelField(string.Empty);
-                            mIsCustomButtonsVisible = EditorGUILayout.Foldout(mIsCustomButtonsVisible, "Custom Buttons");
-                            if (mIsCustomButtonsVisible)
+                            _isCustomButtonsVisible = EditorGUILayout.Foldout(_isCustomButtonsVisible, "Custom Buttons");
+                            if (_isCustomButtonsVisible)
                             {
                                 EditorGUI.indentLevel++;
                             }
-                            isVisible = mIsCustomButtonsVisible;
+                            isVisible = _isCustomButtonsVisible;
                         }
                         break;
                     case MyTextStyleManager.EStyle.MONEY_TEXT_1:
                         {
-                            if (mIsPopupButtonsVisible)
+                            if (_isPopupButtonsVisible)
                             {
                                 EditorGUI.indentLevel--;
                             }
 
                             EditorGUILayout.LabelField(string.Empty);
-                            mIsMoneyTextsVisible = EditorGUILayout.Foldout(mIsMoneyTextsVisible, "Money Texts");
-                            if (mIsMoneyTextsVisible)
+                            _isMoneyTextsVisible = EditorGUILayout.Foldout(_isMoneyTextsVisible, "Money Texts");
+                            if (_isMoneyTextsVisible)
                             {
                                 EditorGUI.indentLevel++;
                             }
-                            isVisible = mIsMoneyTextsVisible;
+                            isVisible = _isMoneyTextsVisible;
                         }
                         break;
                     case MyTextStyleManager.EStyle.TINY_TEXT_1:
                         {
-                            if (mIsMoneyTextsVisible)
+                            if (_isMoneyTextsVisible)
                             {
                                 EditorGUI.indentLevel--;
                             }
 
                             EditorGUILayout.LabelField(string.Empty);
-                            mIsTinyTextsVisible = EditorGUILayout.Foldout(mIsTinyTextsVisible, "Tiny Texts");
-                            if (mIsTinyTextsVisible)
+                            _isTinyTextsVisible = EditorGUILayout.Foldout(_isTinyTextsVisible, "Tiny Texts");
+                            if (_isTinyTextsVisible)
                             {
                                 EditorGUI.indentLevel++;
                             }
-                            isVisible = mIsTinyTextsVisible;
+                            isVisible = _isTinyTextsVisible;
                         }
                         break;
                     case MyTextStyleManager.EStyle.SMALL_TEXT_1:
                         {
-                            if (mIsTinyTextsVisible)
+                            if (_isTinyTextsVisible)
                             {
                                 EditorGUI.indentLevel--;
                             }
 
                             EditorGUILayout.LabelField(string.Empty);
-                            mIsSmallTextsVisible = EditorGUILayout.Foldout(mIsSmallTextsVisible, "Small Texts");
-                            if (mIsSmallTextsVisible)
+                            _isSmallTextsVisible = EditorGUILayout.Foldout(_isSmallTextsVisible, "Small Texts");
+                            if (_isSmallTextsVisible)
                             {
                                 EditorGUI.indentLevel++;
                             }
-                            isVisible = mIsSmallTextsVisible;
+                            isVisible = _isSmallTextsVisible;
                         }
                         break;
                     case MyTextStyleManager.EStyle.MEDIUM_TEXT_1:
                         {
-                            if (mIsSmallTextsVisible)
+                            if (_isSmallTextsVisible)
                             {
                                 EditorGUI.indentLevel--;
                             }
 
                             EditorGUILayout.LabelField(string.Empty);
-                            mIsMediumTextsVisible = EditorGUILayout.Foldout(mIsMediumTextsVisible, "Medium Texts");
-                            if (mIsMediumTextsVisible)
+                            _isMediumTextsVisible = EditorGUILayout.Foldout(_isMediumTextsVisible, "Medium Texts");
+                            if (_isMediumTextsVisible)
                             {
                                 EditorGUI.indentLevel++;
                             }
-                            isVisible = mIsMediumTextsVisible;
+                            isVisible = _isMediumTextsVisible;
                         }
                         break;
                     case MyTextStyleManager.EStyle.LARGE_TEXT_1:
                         {
-                            if (mIsMediumTextsVisible)
+                            if (_isMediumTextsVisible)
                             {
                                 EditorGUI.indentLevel--;
                             }
 
                             EditorGUILayout.LabelField(string.Empty);
-                            mIsLargeTextsVisible = EditorGUILayout.Foldout(mIsLargeTextsVisible, "Large Texts");
-                            if (mIsLargeTextsVisible)
+                            _isLargeTextsVisible = EditorGUILayout.Foldout(_isLargeTextsVisible, "Large Texts");
+                            if (_isLargeTextsVisible)
                             {
                                 EditorGUI.indentLevel++;
                             }
-                            isVisible = mIsLargeTextsVisible;
+                            isVisible = _isLargeTextsVisible;
                         }
                         break;
                     case MyTextStyleManager.EStyle.HUGE_TEXT_1:
                         {
-                            if (mIsLargeTextsVisible)
+                            if (_isLargeTextsVisible)
                             {
                                 EditorGUI.indentLevel--;
                             }
 
                             EditorGUILayout.LabelField(string.Empty);
-                            mIsHugeTextsVisible = EditorGUILayout.Foldout(mIsHugeTextsVisible, "Huge Texts");
-                            if (mIsHugeTextsVisible)
+                            _isHugeTextsVisible = EditorGUILayout.Foldout(_isHugeTextsVisible, "Huge Texts");
+                            if (_isHugeTextsVisible)
                             {
                                 EditorGUI.indentLevel++;
                             }
-                            isVisible = mIsHugeTextsVisible;
+                            isVisible = _isHugeTextsVisible;
                         }
                         break;
                     case MyTextStyleManager.EStyle.GIGANTIC_TEXT_1:
                         {
-                            if (mIsHugeTextsVisible)
+                            if (_isHugeTextsVisible)
                             {
                                 EditorGUI.indentLevel--;
                             }
 
                             EditorGUILayout.LabelField(string.Empty);
-                            mIsGiganticTextsVisible = EditorGUILayout.Foldout(mIsGiganticTextsVisible, "Gigantic Texts");
-                            if (mIsGiganticTextsVisible)
+                            _isGiganticTextsVisible = EditorGUILayout.Foldout(_isGiganticTextsVisible, "Gigantic Texts");
+                            if (_isGiganticTextsVisible)
                             {
                                 EditorGUI.indentLevel++;
                             }
-                            isVisible = mIsGiganticTextsVisible;
+                            isVisible = _isGiganticTextsVisible;
                         }
                         break;
                     case MyTextStyleManager.EStyle.CUSTOM_1:
                         {
-                            if (mIsGiganticTextsVisible)
+                            if (_isGiganticTextsVisible)
                             {
                                 EditorGUI.indentLevel++;
                             }
 
                             EditorGUILayout.LabelField(string.Empty);
-                            mIsCustomsVisible = EditorGUILayout.Foldout(mIsCustomsVisible, "Customs");
-                            if (mIsCustomsVisible)
+                            _isCustomsVisible = EditorGUILayout.Foldout(_isCustomsVisible, "Customs");
+                            if (_isCustomsVisible)
                             {
                                 EditorGUI.indentLevel++;
                             }
-                            isVisible = mIsCustomsVisible;
+                            isVisible = _isCustomsVisible;
                         }
                         break;
                 }
                 if (isVisible)
                 {
-                    EditorGUILayout.LabelField(mScript.Infos[i].Type.ToString(), EditorStyles.foldoutHeader);
-                    mScript.Infos[i].Font = (Font)EditorGUILayout.ObjectField("Font For Text", mScript.Infos[i].Font, typeof(Font), true);
-                    mScript.Infos[i].TMPFontAsset = (TMP_FontAsset)EditorGUILayout.ObjectField("Font For TMPro", mScript.Infos[i].TMPFontAsset, typeof(TMP_FontAsset), true);
-                    mScript.Infos[i].FontSizeMin = EditorGUILayout.IntField("Min Font Size", mScript.Infos[i].FontSizeMin);
-                    mScript.Infos[i].FontSizeMax = EditorGUILayout.IntField("Max Font Size", mScript.Infos[i].FontSizeMax);
-                    mScript.Infos[i].Color = EditorGUILayout.ColorField("Color", mScript.Infos[i].Color);
-                    mScript.Infos[i].Note = EditorGUILayout.TextField("Your Note", mScript.Infos[i].Note);
+                    EditorGUILayout.LabelField(_script.Infos[i].Type.ToString(), EditorStyles.foldoutHeader);
+                    _script.Infos[i].Font = (Font)EditorGUILayout.ObjectField("Font For Text", _script.Infos[i].Font, typeof(Font), true);
+                    _script.Infos[i].TMPFontAsset = (TMP_FontAsset)EditorGUILayout.ObjectField("Font For TMPro", _script.Infos[i].TMPFontAsset, typeof(TMP_FontAsset), true);
+                    _script.Infos[i].FontSizeMin = EditorGUILayout.IntField("Min Font Size", _script.Infos[i].FontSizeMin);
+                    _script.Infos[i].FontSizeMax = EditorGUILayout.IntField("Max Font Size", _script.Infos[i].FontSizeMax);
+                    _script.Infos[i].Color = EditorGUILayout.ColorField("Color", _script.Infos[i].Color);
+                    _script.Infos[i].Note = EditorGUILayout.TextField("Your Note", _script.Infos[i].Note);
                     EditorGUILayout.LabelField(string.Empty);
                 }
-                if (i == mScript.Infos.Length - 1)
+                if (i == _script.Infos.Length - 1)
                 {
-                    if (mIsCustomsVisible)
+                    if (_isCustomsVisible)
                     {
                         EditorGUI.indentLevel--;
                     }
@@ -688,9 +688,9 @@ namespace MyClasses
             if (EditorGUI.EndChangeCheck())
             {
                 serializedObject.ApplyModifiedProperties();
-                if (mIsAutoSaveOnChange.boolValue)
+                if (_isAutoSaveOnChange.boolValue)
                 {
-                    mScript.SaveConfig();
+                    _script.SaveConfig();
                 }
             }
 
@@ -698,46 +698,46 @@ namespace MyClasses
             EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Show All"))
             {
-                mIsSceneTitlesVisible = true;
-                mIsSceneButtonsVisible = true;
-                mIsPopupTitlesVisible = true;
-                mIsPopupButtonsVisible = true;
-                mIsSmallButtonsVisible = true;
-                mIsMediumButtonsVisible = true;
-                mIsLargeButtonsVisible = true;
-                mIsCustomButtonsVisible = true;
-                mIsMoneyTextsVisible = true;
-                mIsTinyTextsVisible = true;
-                mIsSmallTextsVisible = true;
-                mIsMediumTextsVisible = true;
-                mIsLargeTextsVisible = true;
-                mIsHugeTextsVisible = true;
-                mIsGiganticTextsVisible = true;
-                mIsCustomsVisible = true;
+                _isSceneTitlesVisible = true;
+                _isSceneButtonsVisible = true;
+                _isPopupTitlesVisible = true;
+                _isPopupButtonsVisible = true;
+                _isSmallButtonsVisible = true;
+                _isMediumButtonsVisible = true;
+                _isLargeButtonsVisible = true;
+                _isCustomButtonsVisible = true;
+                _isMoneyTextsVisible = true;
+                _isTinyTextsVisible = true;
+                _isSmallTextsVisible = true;
+                _isMediumTextsVisible = true;
+                _isLargeTextsVisible = true;
+                _isHugeTextsVisible = true;
+                _isGiganticTextsVisible = true;
+                _isCustomsVisible = true;
             }
             if (GUILayout.Button("Hide All"))
             {
-                mIsSceneTitlesVisible = false;
-                mIsSceneButtonsVisible = false;
-                mIsPopupTitlesVisible = false;
-                mIsPopupButtonsVisible = false;
-                mIsSmallButtonsVisible = false;
-                mIsMediumButtonsVisible = false;
-                mIsLargeButtonsVisible = false;
-                mIsCustomButtonsVisible = false;
-                mIsMoneyTextsVisible = false;
-                mIsTinyTextsVisible = false;
-                mIsSmallTextsVisible = false;
-                mIsMediumTextsVisible = false;
-                mIsLargeTextsVisible = false;
-                mIsHugeTextsVisible = false;
-                mIsGiganticTextsVisible = false;
-                mIsCustomsVisible = false;
+                _isSceneTitlesVisible = false;
+                _isSceneButtonsVisible = false;
+                _isPopupTitlesVisible = false;
+                _isPopupButtonsVisible = false;
+                _isSmallButtonsVisible = false;
+                _isMediumButtonsVisible = false;
+                _isLargeButtonsVisible = false;
+                _isCustomButtonsVisible = false;
+                _isMoneyTextsVisible = false;
+                _isTinyTextsVisible = false;
+                _isSmallTextsVisible = false;
+                _isMediumTextsVisible = false;
+                _isLargeTextsVisible = false;
+                _isHugeTextsVisible = false;
+                _isGiganticTextsVisible = false;
+                _isCustomsVisible = false;
             }
             EditorGUILayout.EndHorizontal();
             if (GUILayout.Button("Save"))
             {
-                mScript.SaveConfig();
+                _script.SaveConfig();
             }
         }
     }

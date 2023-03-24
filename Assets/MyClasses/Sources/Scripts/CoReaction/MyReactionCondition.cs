@@ -1,11 +1,10 @@
 ﻿/*
 * Copyright (c) 2016 Phạm Minh Hoàng
 * Framework:   MyClasses
-* Class:       MyReactionCondition (version 1.0)
+* Class:       MyReactionCondition (version 1.1)
 */
 
 using System;
-using System.Collections.Generic;
 
 namespace MyClasses.CoReaction
 {
@@ -13,10 +12,10 @@ namespace MyClasses.CoReaction
     {
         #region ----- Variable -----
 
-        private int mParameterID;
-        private EComparedType mComparedType;
-        private object mComparedValue;
-        private Func<MyReactionCondition.EComparedType, object, bool> mComparedFunction;
+        private int _parameterID;
+        private EComparedType _comparedType;
+        private object _comparedValue;
+        private Func<MyReactionCondition.EComparedType, object, bool> _comparedFunction;
 
         #endregion
 
@@ -24,22 +23,22 @@ namespace MyClasses.CoReaction
 
         public int ParameterID
         {
-            get { return mParameterID; }
+            get { return _parameterID; }
         }
 
         public EComparedType ComparedType
         {
-            get { return mComparedType; }
+            get { return _comparedType; }
         }
 
         public object ComparedValue
         {
-            get { return mComparedValue; }
+            get { return _comparedValue; }
         }
 
         public Func<MyReactionCondition.EComparedType, object, bool> ComparedFunction
         {
-            get { return mComparedFunction; }
+            get { return _comparedFunction; }
         }
 
         #endregion
@@ -51,9 +50,9 @@ namespace MyClasses.CoReaction
         /// </summary>
         public MyReactionCondition(int parameterID, EComparedType comparedType, object comparedValue)
         {
-            mParameterID = parameterID;
-            mComparedType = comparedType;
-            mComparedValue = comparedValue;
+            _parameterID = parameterID;
+            _comparedType = comparedType;
+            _comparedValue = comparedValue;
         }
 
         #endregion
@@ -65,7 +64,7 @@ namespace MyClasses.CoReaction
         /// </summary>
         public void SetComparedFunction(Func<MyReactionCondition.EComparedType, object, bool> comparedFunction)
         {
-            mComparedFunction = comparedFunction;
+            _comparedFunction = comparedFunction;
         }
 
         #endregion

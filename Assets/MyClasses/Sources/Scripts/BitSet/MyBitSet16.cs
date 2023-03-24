@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyBitSet16 (version 1.2)
+ * Class:       MyBitSet16 (version 1.3)
  */
 
 using System;
@@ -15,7 +15,7 @@ namespace MyClasses
 
         private const byte NUM_BIT = 16;
 
-        private ushort mValue = 0;
+        private ushort _value = 0;
 
         #endregion
 
@@ -23,8 +23,8 @@ namespace MyClasses
 
         public ushort Value
         {
-            get { return mValue; }
-            set { mValue = value; }
+            get { return _value; }
+            set { _value = value; }
         }
 
         #endregion
@@ -36,7 +36,7 @@ namespace MyClasses
         /// </summary>
         public void Reset()
         {
-            mValue = 0;
+            _value = 0;
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace MyClasses
 
             ushort mask = 0x01;
             mask = (ushort)(mask << index);
-            mValue = value ? (ushort)(mValue | mask) : (ushort)(mValue & (~mask));
+            _value = value ? (ushort)(_value | mask) : (ushort)(_value & (~mask));
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace MyClasses
 
             ushort mask = 0x01;
             mask = (ushort)(mask << index);
-            return (mValue & mask) != 0;
+            return (_value & mask) != 0;
         }
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace MyClasses
             {
                 SetValueOfBit(i, false);
             }
-            mValue = (ushort)(mValue | (value << fromIndex));
+            _value = (ushort)(_value | (value << fromIndex));
         }
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace MyClasses
             }
 
             byte length = (byte)(toIndex - fromIndex + 1);
-            ushort result = (ushort)(mValue << (NUM_BIT - length - fromIndex));
+            ushort result = (ushort)(_value << (NUM_BIT - length - fromIndex));
             return result = (ushort)(result >> (NUM_BIT - length));
         }
 

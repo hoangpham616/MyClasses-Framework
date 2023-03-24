@@ -11,7 +11,7 @@ namespace MyClasses
 {
     public static partial class MyUtilities
     {
-        #region ----- Public Method -----
+        #region ----- Public Function -----
 
         /// <summary>
         /// Get application version code.

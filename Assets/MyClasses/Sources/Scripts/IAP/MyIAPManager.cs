@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyIAPManager (version 1.7)
+ * Class:       MyIAPManager (version 1.8)
  */
 
 #if USE_MY_IAP && (UNITY_ANDROID || UNITY_IOS)
@@ -16,14 +16,14 @@ public class MyIAPManager : MonoBehaviour, IStoreListener
 {
     #region ----- Variable -----
 
-    private static IStoreController mStoreController;
-    private static IExtensionProvider mStoreExtensionProvider;
-    private string mPurchasingProductID;
+    private static IStoreController _storeController;
+    private static IExtensionProvider _StoreExtensionProvider;
+    private string _purchasingProductID;
 
-    private Action mOnInitializationSuccessCallback;
-    private Action<InitializationFailureReason> mOnInitializationFailureCallback;
-    private Action<string> mOnPurchaseSuccessCallback;
-    private Action<Product, PurchaseFailureReason> mOnPurchaseFailureCallback;
+    private Action _onInitializationSuccessCallback;
+    private Action<InitializationFailureReason> _onInitializationFailureCallback;
+    private Action<string> _onPurchaseSuccessCallback;
+    private Action<Product, PurchaseFailureReason> _onPurchaseFailureCallback;
 
     #endregion
 
@@ -31,7 +31,7 @@ public class MyIAPManager : MonoBehaviour, IStoreListener
 
     public bool IsInitialized
     {
-        get { return mStoreController != null && mStoreExtensionProvider != null; }
+        get { return _storeController != null && _StoreExtensionProvider != null; }
     }
 
     public bool IsNeedInitialization
@@ -41,34 +41,34 @@ public class MyIAPManager : MonoBehaviour, IStoreListener
 
     public Product[] Products
     {
-        get { return mStoreController != null ? mStoreController.products.all : null; }
+        get { return _storeController != null ? _storeController.products.all : null; }
     }
 
     #endregion
 
     #region ----- Singleton -----
 
-    private static object mSingletonLock = new object();
-    private static MyIAPManager mInstance;
+    private static object _singletonLock = new object();
+    private static MyIAPManager _instance;
 
     public static MyIAPManager Instance
     {
         get
         {
-            if (mInstance == null)
+            if (_instance == null)
             {
-                lock (mSingletonLock)
+                lock (_singletonLock)
                 {
-                    mInstance = (MyIAPManager)FindObjectOfType(typeof(MyIAPManager));
-                    if (mInstance == null)
+                    _instance = (MyIAPManager)FindObjectOfType(typeof(MyIAPManager));
+                    if (_instance == null)
                     {
                         GameObject obj = new GameObject(typeof(MyIAPManager).Name);
-                        mInstance = obj.AddComponent<MyIAPManager>();
+                        _instance = obj.AddComponent<MyIAPManager>();
                         DontDestroyOnLoad(obj);
                     }
                 }
             }
-            return mInstance;
+            return _instance;
         }
     }
 
@@ -85,10 +85,10 @@ public class MyIAPManager : MonoBehaviour, IStoreListener
         Debug.Log(string.Format("[" + typeof(MyIAPManager).Name + "] OnInitialized()"));
 #endif
 
-        mStoreController = controller;
-        mStoreExtensionProvider = extensions;
+        _storeController = controller;
+        _StoreExtensionProvider = extensions;
 
-        mStoreExtensionProvider.GetExtension<IAppleExtensions>().RestoreTransactions(result =>
+        _StoreExtensionProvider.GetExtension<IAppleExtensions>().RestoreTransactions(result =>
         {
             if (result)
             {
@@ -96,10 +96,10 @@ public class MyIAPManager : MonoBehaviour, IStoreListener
                 Debug.Log(string.Format("[" + typeof(MyIAPManager).Name + "] OnInitialized(): restoration process succeeded"));
 #endif
 
-                if (mOnInitializationSuccessCallback != null)
+                if (_onInitializationSuccessCallback != null)
                 {
-                    mOnInitializationSuccessCallback();
-                    mOnInitializationSuccessCallback = null;
+                    _onInitializationSuccessCallback();
+                    _onInitializationSuccessCallback = null;
                 }
             }
             else
@@ -117,10 +117,10 @@ public class MyIAPManager : MonoBehaviour, IStoreListener
         Debug.Log(string.Format("[" + typeof(MyIAPManager).Name + "] OnInitializeFailed(): error={0}", error.ToString()));
 #endif
 
-        if (mOnInitializationFailureCallback != null)
+        if (_onInitializationFailureCallback != null)
         {
-            mOnInitializationFailureCallback(error);
-            mOnInitializationFailureCallback = null;
+            _onInitializationFailureCallback(error);
+            _onInitializationFailureCallback = null;
         }
     }
     
@@ -130,10 +130,10 @@ public class MyIAPManager : MonoBehaviour, IStoreListener
         Debug.Log(string.Format("[" + typeof(MyIAPManager).Name + "] OnInitializeFailed(): error={0} | message={1}", error.ToString(), message));
 #endif
 
-        if (mOnInitializationFailureCallback != null)
+        if (_onInitializationFailureCallback != null)
         {
-            mOnInitializationFailureCallback(error);
-            mOnInitializationFailureCallback = null;
+            _onInitializationFailureCallback(error);
+            _onInitializationFailureCallback = null;
         }
     }
 
@@ -146,12 +146,12 @@ public class MyIAPManager : MonoBehaviour, IStoreListener
         Debug.LogError(string.Format("[" + typeof(MyIAPManager).Name + "] OnPurchaseFailed(): storeSpecificId={0} | failureReason={1}", product.definition.storeSpecificId, failureReason.ToString()));
 #endif
 
-        mPurchasingProductID = null;
+        _purchasingProductID = null;
 
-        if (mOnPurchaseFailureCallback != null)
+        if (_onPurchaseFailureCallback != null)
         {
-            mOnPurchaseFailureCallback(product, failureReason);
-            mOnPurchaseFailureCallback = null;
+            _onPurchaseFailureCallback(product, failureReason);
+            _onPurchaseFailureCallback = null;
         }
     }
 
@@ -164,16 +164,16 @@ public class MyIAPManager : MonoBehaviour, IStoreListener
         Debug.Log("[" + typeof(MyIAPManager).Name + "] ProcessPurchase()");
 #endif
 
-        if (String.Equals(args.purchasedProduct.definition.id, mPurchasingProductID, StringComparison.Ordinal))
+        if (String.Equals(args.purchasedProduct.definition.id, _purchasingProductID, StringComparison.Ordinal))
         {
 #if DEBUG_MY_IAP || UNITY_EDITOR
             Debug.Log(string.Format("[" + typeof(MyIAPManager).Name + "] ProcessPurchase(): id={0}", args.purchasedProduct.definition.id));
 #endif
 
-            if (mOnPurchaseSuccessCallback != null)
+            if (_onPurchaseSuccessCallback != null)
             {
-                mOnPurchaseSuccessCallback(args.purchasedProduct.receipt);
-                mOnPurchaseSuccessCallback = null;
+                _onPurchaseSuccessCallback(args.purchasedProduct.receipt);
+                _onPurchaseSuccessCallback = null;
             }
         }
         else
@@ -183,7 +183,7 @@ public class MyIAPManager : MonoBehaviour, IStoreListener
 #endif
         }
 
-        mPurchasingProductID = null;
+        _purchasingProductID = null;
 
         return PurchaseProcessingResult.Complete;
     }
@@ -201,8 +201,8 @@ public class MyIAPManager : MonoBehaviour, IStoreListener
         Debug.Log(string.Format("[" + typeof(MyIAPManager).Name + "] Initialize(): consumablePackages={0} | nonComsumablePackages={1} | subscriptionPackages={2}", MyUtilities.ToString(consumablePackages), MyUtilities.ToString(nonComsumablePackages), MyUtilities.ToString(subscriptionPackages)));
 #endif
 
-        mOnInitializationSuccessCallback = onSuccessCallback;
-        mOnInitializationFailureCallback = onFailureCallback;
+        _onInitializationSuccessCallback = onSuccessCallback;
+        _onInitializationFailureCallback = onFailureCallback;
 
         var builder = ConfigurationBuilder.Instance(StandardPurchasingModule.Instance());
 
@@ -251,7 +251,7 @@ public class MyIAPManager : MonoBehaviour, IStoreListener
                 return;
             }
 
-            Product product = mStoreController.products.WithID(productId);
+            Product product = _storeController.products.WithID(productId);
             if (product == null || !product.availableToPurchase)
             {
 #if DEBUG_MY_IAP || UNITY_EDITOR
@@ -261,11 +261,11 @@ public class MyIAPManager : MonoBehaviour, IStoreListener
 
             if (product != null && product.availableToPurchase)
             {
-                mPurchasingProductID = productId;
-                mOnPurchaseSuccessCallback = onSuccessCallback;
-                mOnPurchaseFailureCallback = onFailureCallback;
+                _purchasingProductID = productId;
+                _onPurchaseSuccessCallback = onSuccessCallback;
+                _onPurchaseFailureCallback = onFailureCallback;
 
-                mStoreController.InitiatePurchase(product);
+                _storeController.InitiatePurchase(product);
             }
         }
         catch (Exception e)
@@ -286,10 +286,10 @@ public class MyIAPManager : MonoBehaviour, IStoreListener
         Debug.Log(string.Format("[" + typeof(MyIAPManager).Name + "] ConfirmPendingPurchase(): productId={0}", productId));
 #endif
 
-        if (mStoreController != null)
+        if (_storeController != null)
         {
-            Product product = mStoreController.products.WithID(productId);
-            mStoreController.ConfirmPendingPurchase(product);
+            Product product = _storeController.products.WithID(productId);
+            _storeController.ConfirmPendingPurchase(product);
         }
     }
 
@@ -312,7 +312,7 @@ public class MyIAPManager : MonoBehaviour, IStoreListener
             Debug.Log(string.Format("[" + typeof(MyIAPManager).Name + "] RestorePurchases()"));
 #endif
 
-            mStoreExtensionProvider.GetExtension<IAppleExtensions>().RestoreTransactions((result) =>
+            _StoreExtensionProvider.GetExtension<IAppleExtensions>().RestoreTransactions((result) =>
             {
 #if DEBUG_MY_IAP || UNITY_EDITOR
                 Debug.Log(string.Format("[" + typeof(MyIAPManager).Name + "] RestorePurchases(): result={0}", result));
@@ -344,7 +344,7 @@ public class MyIAPManager : MonoBehaviour, IStoreListener
     {
         if (IsInitialized)
         {
-            return mStoreController.products.WithID(productId);
+            return _storeController.products.WithID(productId);
         }
 
         return null;

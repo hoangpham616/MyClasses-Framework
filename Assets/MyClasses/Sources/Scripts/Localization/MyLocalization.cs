@@ -233,7 +233,7 @@ namespace MyClasses
     [CustomEditor(typeof(MyLocalization)), CanEditMultipleObjects]
     public class MyLocalizationEditor : Editor
     {
-        private MyLocalization mScript;
+        private MyLocalization _script;
         private SerializedProperty mImageLanguages;
         private SerializedProperty mImageObjects;
         private SerializedProperty mImageInvisibleTexts;
@@ -248,7 +248,7 @@ namespace MyClasses
         /// </summary>
         void OnEnable()
         {
-            mScript = (MyLocalization)target;
+            _script = (MyLocalization)target;
             mKey = serializedObject.FindProperty("mKey");
             mPrefix = serializedObject.FindProperty("mPrefix");
             mSuffix = serializedObject.FindProperty("mSuffix");
@@ -263,7 +263,7 @@ namespace MyClasses
         /// </summary>
         public override void OnInspectorGUI()
         {
-            EditorGUILayout.ObjectField("Script", MonoScript.FromMonoBehaviour(mScript), typeof(MyLocalization), false);
+            EditorGUILayout.ObjectField("Script", MonoScript.FromMonoBehaviour(_script), typeof(MyLocalization), false);
 
             serializedObject.Update();
 
@@ -282,8 +282,8 @@ namespace MyClasses
                 if (!Application.isPlaying)
                 {
                     MyLocalizationManager.Instance.LoadLanguage(MyLocalizationManager.Instance.Language, true);
-                    mScript.Initialize();
-                    mScript.Localize();
+                    _script.Initialize();
+                    _script.Localize();
                 }
             }
 

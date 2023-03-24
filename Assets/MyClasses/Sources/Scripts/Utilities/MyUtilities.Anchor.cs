@@ -11,7 +11,7 @@ namespace MyClasses
 {
     public static partial class MyUtilities
     {
-        #region ----- Public Method -----
+        #region ----- Public Function -----
 
         /// <summary>
         /// Anchor.
@@ -95,7 +95,7 @@ namespace MyClasses
 
         #endregion
 
-        #region ----- Private Method -----
+        #region ----- Private Function -----
 
         /// <summary>
         /// Set anchor preset.

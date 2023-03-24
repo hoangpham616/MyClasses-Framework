@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyRandom (version 1.1)
+ * Class:       MyRandom (version 1.2)
  */
 
 using UnityEngine;
@@ -14,11 +14,11 @@ namespace MyClasses
     {
         #region ----- Variable -----
 
-        private static long mEvenFactor;
-        private static long mOddFactor;
-        private static long mFirstValue;
-        private static long mCurValue;
-        private static long mCount;
+        private static long _evenFactor;
+        private static long _oddFactor;
+        private static long _firstValue;
+        private static long _curValue;
+        private static long _count;
 
         #endregion
 
@@ -35,12 +35,12 @@ namespace MyClasses
             }
             seed += 1;
 
-            mEvenFactor = (seed * 2) + 2;
-            mOddFactor = (seed * 3 / 2) + 1;
+            _evenFactor = (seed * 2) + 2;
+            _oddFactor = (seed * 3 / 2) + 1;
 
             _NextValue();
 
-            mFirstValue = mCurValue;
+            _firstValue = _curValue;
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace MyClasses
 
             _NextValue();
 
-            return (int)(mCurValue % range) + begin;
+            return (int)(_curValue % range) + begin;
         }
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace MyClasses
         {
             _NextValue();
 
-            return (mCurValue % 10000) / 10000f;
+            return (_curValue % 10000) / 10000f;
         }
 
         /// <summary>
@@ -123,12 +123,12 @@ namespace MyClasses
         /// </summary>
         private static void _NextValue()
         {
-            mCurValue = ((mCurValue * mOddFactor) + mEvenFactor + mCount++) % int.MaxValue;
+            _curValue = ((_curValue * _oddFactor) + _evenFactor + _count++) % int.MaxValue;
 
-            if (mFirstValue == mCurValue)
+            if (_firstValue == _curValue)
             {
-                mCurValue = (mCurValue + mCount) % int.MaxValue;
-                mCount = 0;
+                _curValue = (_curValue + _count) % int.MaxValue;
+                _count = 0;
             }
         }
 

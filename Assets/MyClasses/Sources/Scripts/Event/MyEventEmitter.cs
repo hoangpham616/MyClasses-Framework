@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyEventEmitter (version 1.0)
+ * Class:       MyEventEmitter (version 1.1)
  */
 
 using System;
@@ -14,7 +14,7 @@ namespace MyClasses
     {
         #region ----- Variable -----
 
-        private static Dictionary<int, List<Action<object>>> mEventData = new Dictionary<int, List<Action<object>>>();
+        private static Dictionary<int, List<Action<object>>> _eventData = new Dictionary<int, List<Action<object>>>();
 
         #endregion
 
@@ -25,11 +25,11 @@ namespace MyClasses
         /// </summary>
         public static void Register(int eventID, Action<object> callback)
         {
-            if (!mEventData.ContainsKey(eventID))
+            if (!_eventData.ContainsKey(eventID))
             {
-                mEventData[eventID] = new List<Action<object>>();
+                _eventData[eventID] = new List<Action<object>>();
             }
-            mEventData[eventID].Add(callback);
+            _eventData[eventID].Add(callback);
         }
 
         /// <summary>
@@ -37,9 +37,9 @@ namespace MyClasses
         /// </summary>
         public static void Unregister(int eventID)
         {
-            if (mEventData.ContainsKey(eventID))
+            if (_eventData.ContainsKey(eventID))
             {
-                mEventData.Remove(eventID);
+                _eventData.Remove(eventID);
             }
         }
 
@@ -48,9 +48,9 @@ namespace MyClasses
         /// </summary>
         public static void Unregister(int eventID, Action<object> callback)
         {
-            if (mEventData.ContainsKey(eventID))
+            if (_eventData.ContainsKey(eventID))
             {
-                mEventData[eventID].Remove(callback);
+                _eventData[eventID].Remove(callback);
             }
         }
 
@@ -59,7 +59,7 @@ namespace MyClasses
         /// </summary>
         public static void UnregisterAll()
         {
-            mEventData.Clear();
+            _eventData.Clear();
         }
 
         /// <summary>
@@ -67,9 +67,9 @@ namespace MyClasses
         /// </summary>
         public static void Emit(int eventID, object param)
         {
-            if (mEventData.ContainsKey(eventID))
+            if (_eventData.ContainsKey(eventID))
             {
-                List<Action<object>> actions = mEventData[eventID];
+                List<Action<object>> actions = _eventData[eventID];
                 int length = actions.Count;
                 for (int i = 0; i < length; i++)
                 {

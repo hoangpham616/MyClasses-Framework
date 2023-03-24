@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyUtilities.Convert (version 1.5)
+ * Class:       MyUtilities.Convert (version 1.6)
  */
 
 using UnityEngine;
@@ -14,8 +14,12 @@ namespace MyClasses
 {
     public static partial class MyUtilities
     {
-        private static StringBuilder mStringBuilerConvert;
-        private static StringBuilder mStringBuilerConvert2;
+        #region ----- Variable -----
+
+        private static StringBuilder _stringBuilerConvert;
+        private static StringBuilder _stringBuilerConvert2;
+
+        #endregion
 
         #region ----- From Array -----
 
@@ -30,21 +34,21 @@ namespace MyClasses
                 return null;
             }
 
-            if (mStringBuilerConvert == null)
+            if (_stringBuilerConvert == null)
             {
-                mStringBuilerConvert = new StringBuilder();
+                _stringBuilerConvert = new StringBuilder();
             }
 
-            mStringBuilerConvert.Length = 0;
+            _stringBuilerConvert.Length = 0;
             for (int i = 0; i < content.Length; i++)
             {
                 if (i > 0)
                 {
-                    mStringBuilerConvert.Append(mergeChar);
+                    _stringBuilerConvert.Append(mergeChar);
                 }
-                mStringBuilerConvert.Append(content[i]);
+                _stringBuilerConvert.Append(content[i]);
             }
-            return mStringBuilerConvert.ToString();
+            return _stringBuilerConvert.ToString();
         }
 
         /// <summary>
@@ -58,21 +62,21 @@ namespace MyClasses
                 return null;
             }
 
-            if (mStringBuilerConvert2 == null)
+            if (_stringBuilerConvert2 == null)
             {
-                mStringBuilerConvert2 = new StringBuilder();
+                _stringBuilerConvert2 = new StringBuilder();
             }
 
-            mStringBuilerConvert2.Length = 0;
+            _stringBuilerConvert2.Length = 0;
             for (int i = 0; i < content.Length; i++)
             {
                 if (i > 0)
                 {
-                    mStringBuilerConvert2.Append(mergeChar1);
+                    _stringBuilerConvert2.Append(mergeChar1);
                 }
-                mStringBuilerConvert2.Append(ConvertBoolArrayToString(content[i], mergeChar2));
+                _stringBuilerConvert2.Append(ConvertBoolArrayToString(content[i], mergeChar2));
             }
-            return mStringBuilerConvert2.ToString();
+            return _stringBuilerConvert2.ToString();
         }
 
         /// <summary>
@@ -86,21 +90,21 @@ namespace MyClasses
                 return null;
             }
 
-            if (mStringBuilerConvert2 == null)
+            if (_stringBuilerConvert2 == null)
             {
-                mStringBuilerConvert2 = new StringBuilder();
+                _stringBuilerConvert2 = new StringBuilder();
             }
 
-            mStringBuilerConvert2.Length = 0;
+            _stringBuilerConvert2.Length = 0;
             for (int i = 0; i < content.Length; i++)
             {
                 if (i > 0)
                 {
-                    mStringBuilerConvert2.Append(mergeChar1);
+                    _stringBuilerConvert2.Append(mergeChar1);
                 }
-                mStringBuilerConvert2.Append(ConvertBoolArrayToString(content[i], mergeChar2));
+                _stringBuilerConvert2.Append(ConvertBoolArrayToString(content[i], mergeChar2));
             }
-            return mStringBuilerConvert2.ToString();
+            return _stringBuilerConvert2.ToString();
         }
 
         /// <summary>
@@ -114,21 +118,21 @@ namespace MyClasses
                 return null;
             }
 
-            if (mStringBuilerConvert == null)
+            if (_stringBuilerConvert == null)
             {
-                mStringBuilerConvert = new StringBuilder();
+                _stringBuilerConvert = new StringBuilder();
             }
 
-            mStringBuilerConvert.Length = 0;
+            _stringBuilerConvert.Length = 0;
             for (int i = 0; i < content.Length; i++)
             {
                 if (i > 0)
                 {
-                    mStringBuilerConvert.Append(mergeChar);
+                    _stringBuilerConvert.Append(mergeChar);
                 }
-                mStringBuilerConvert.Append(content[i]);
+                _stringBuilerConvert.Append(content[i]);
             }
-            return mStringBuilerConvert.ToString();
+            return _stringBuilerConvert.ToString();
         }
 
         /// <summary>
@@ -142,21 +146,21 @@ namespace MyClasses
                 return null;
             }
 
-            if (mStringBuilerConvert2 == null)
+            if (_stringBuilerConvert2 == null)
             {
-                mStringBuilerConvert2 = new StringBuilder();
+                _stringBuilerConvert2 = new StringBuilder();
             }
 
-            mStringBuilerConvert2.Length = 0;
+            _stringBuilerConvert2.Length = 0;
             for (int i = 0; i < content.Length; i++)
             {
                 if (i > 0)
                 {
-                    mStringBuilerConvert2.Append(mergeChar1);
+                    _stringBuilerConvert2.Append(mergeChar1);
                 }
-                mStringBuilerConvert2.Append(ConvertIntArrayToString(content[i], mergeChar2));
+                _stringBuilerConvert2.Append(ConvertIntArrayToString(content[i], mergeChar2));
             }
-            return mStringBuilerConvert2.ToString();
+            return _stringBuilerConvert2.ToString();
         }
 
         /// <summary>
@@ -170,21 +174,21 @@ namespace MyClasses
                 return null;
             }
 
-            if (mStringBuilerConvert == null)
+            if (_stringBuilerConvert == null)
             {
-                mStringBuilerConvert = new StringBuilder();
+                _stringBuilerConvert = new StringBuilder();
             }
 
-            mStringBuilerConvert.Length = 0;
+            _stringBuilerConvert.Length = 0;
             for (int i = 0; i < content.Length; i++)
             {
                 if (i > 0)
                 {
-                    mStringBuilerConvert.Append(mergeChar);
+                    _stringBuilerConvert.Append(mergeChar);
                 }
-                mStringBuilerConvert.Append(content[i]);
+                _stringBuilerConvert.Append(content[i]);
             }
-            return mStringBuilerConvert.ToString();
+            return _stringBuilerConvert.ToString();
         }
 
         /// <summary>
@@ -198,21 +202,21 @@ namespace MyClasses
                 return null;
             }
 
-            if (mStringBuilerConvert2 == null)
+            if (_stringBuilerConvert2 == null)
             {
-                mStringBuilerConvert2 = new StringBuilder();
+                _stringBuilerConvert2 = new StringBuilder();
             }
 
-            mStringBuilerConvert2.Length = 0;
+            _stringBuilerConvert2.Length = 0;
             for (int i = 0; i < content.Length; i++)
             {
                 if (i > 0)
                 {
-                    mStringBuilerConvert2.Append(mergeChar1);
+                    _stringBuilerConvert2.Append(mergeChar1);
                 }
-                mStringBuilerConvert2.Append(ConvertFloatArrayToString(content[i], mergeChar2));
+                _stringBuilerConvert2.Append(ConvertFloatArrayToString(content[i], mergeChar2));
             }
-            return mStringBuilerConvert2.ToString();
+            return _stringBuilerConvert2.ToString();
         }
 
         #endregion
@@ -703,16 +707,16 @@ namespace MyClasses
         /// <param name="mergeChar">a delimiter to merge values of vector into one string</param>
         public static string ConvertVector2ToString(Vector3 vector2, char mergeChar)
         {
-            if (mStringBuilerConvert == null)
+            if (_stringBuilerConvert == null)
             {
-                mStringBuilerConvert = new StringBuilder();
+                _stringBuilerConvert = new StringBuilder();
             }
 
-            mStringBuilerConvert.Length = 0;
-            mStringBuilerConvert.Append(vector2.x);
-            mStringBuilerConvert.Append(mergeChar);
-            mStringBuilerConvert.Append(vector2.y);
-            return mStringBuilerConvert.ToString();
+            _stringBuilerConvert.Length = 0;
+            _stringBuilerConvert.Append(vector2.x);
+            _stringBuilerConvert.Append(mergeChar);
+            _stringBuilerConvert.Append(vector2.y);
+            return _stringBuilerConvert.ToString();
         }
 
         /// <summary>
@@ -721,18 +725,18 @@ namespace MyClasses
         /// <param name="mergeChar">a delimiter to merge values of vector into one string</param>
         public static string ConvertVector3ToString(Vector3 vector3, char mergeChar)
         {
-            if (mStringBuilerConvert == null)
+            if (_stringBuilerConvert == null)
             {
-                mStringBuilerConvert = new StringBuilder();
+                _stringBuilerConvert = new StringBuilder();
             }
 
-            mStringBuilerConvert.Length = 0;
-            mStringBuilerConvert.Append(vector3.x);
-            mStringBuilerConvert.Append(mergeChar);
-            mStringBuilerConvert.Append(vector3.y);
-            mStringBuilerConvert.Append(mergeChar);
-            mStringBuilerConvert.Append(vector3.z);
-            return mStringBuilerConvert.ToString();
+            _stringBuilerConvert.Length = 0;
+            _stringBuilerConvert.Append(vector3.x);
+            _stringBuilerConvert.Append(mergeChar);
+            _stringBuilerConvert.Append(vector3.y);
+            _stringBuilerConvert.Append(mergeChar);
+            _stringBuilerConvert.Append(vector3.z);
+            return _stringBuilerConvert.ToString();
         }
 
         #endregion

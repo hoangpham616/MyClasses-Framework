@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyInternetChecking (version 2.0)
+ * Class:       MyInternetChecking (version 1.1)
  */
 
 #pragma warning disable 0414
@@ -22,18 +22,18 @@ namespace MyClasses
         #region ----- Variable -----
 
         [SerializeField]
-        private string[] mGlobalDNSs = new string[] { "8.8.8.8", "208.67.222.222", "8.26.56.26", "4.2.2.1" };   // International DNS
+        private string[] _globalDNSs = new string[] { "8.8.8.8", "208.67.222.222", "8.26.56.26", "4.2.2.1" };   // International DNS
         [SerializeField]
-        private string[] mLocalDNSs = new string[] { "203.162.4.191", "203.113.131.1", "210.245.24.20" };       // Vietnam DNS
+        private string[] _localDNSs = new string[] { "203.162.4.191", "203.113.131.1", "210.245.24.20" };       // Vietnam DNS
         [SerializeField]
-        private float mCheckTime = 0;
+        private float _checkTime = 0;
 
-        private int mGlobalIndex = 0;
-        private int mLocalIndex = 0;
-        private bool mIsGlobalCheck = true;
-        private bool mIsConnecting = false;
-        private float mLastTimePingAllSuccess = -1;
-        private Action<bool> mPingCallback = null;
+        private int _globalIndex = 0;
+        private int _localIndex = 0;
+        private bool _isGlobalCheck = true;
+        private bool _isConnecting = false;
+        private float _lastTimePingAllSuccess = -1;
+        private Action<bool> _onPingCallback = null;
 
         #endregion
 
@@ -41,39 +41,39 @@ namespace MyClasses
 
         public float CheckingTime
         {
-            get { return mCheckTime; }
+            get { return _checkTime; }
         }
 
         public bool IsConnecting
         {
-            get { return mCheckTime > 0 && mIsConnecting && Application.internetReachability != NetworkReachability.NotReachable; }
+            get { return _checkTime > 0 && _isConnecting && Application.internetReachability != NetworkReachability.NotReachable; }
         }
 
         #endregion
 
         #region ----- Singleton -----
 
-        private static object mSingletonLock = new object();
-        private static MyInternetChecking mInstance;
+        private static object _singletonLock = new object();
+        private static MyInternetChecking _instance;
 
         public static MyInternetChecking Instance
         {
             get
             {
-                if (mInstance == null)
+                if (_instance == null)
                 {
-                    lock (mSingletonLock)
+                    lock (_singletonLock)
                     {
-                        mInstance = (MyInternetChecking)FindObjectOfType(typeof(MyInternetChecking));
-                        if (mInstance == null)
+                        _instance = (MyInternetChecking)FindObjectOfType(typeof(MyInternetChecking));
+                        if (_instance == null)
                         {
                             GameObject obj = new GameObject(typeof(MyInternetChecking).Name);
-                            mInstance = obj.AddComponent<MyInternetChecking>();
+                            _instance = obj.AddComponent<MyInternetChecking>();
                             DontDestroyOnLoad(obj);
                         }
                     }
                 }
-                return mInstance;
+                return _instance;
             }
         }
 
@@ -107,14 +107,14 @@ namespace MyClasses
         /// <summary>
         /// Set ping frequency.
         /// </summary>
-        /// <param name="firstResultCallback">callback when the first ping done</param>
-        public void SetFrequency(float checkTime, Action<bool> firstResultCallback = null)
+        /// <param name="onFirstResultCallback">callback when the first ping done</param>
+        public void SetFrequency(float checkTime, Action<bool> onFirstResultCallback = null)
         {
-            mCheckTime = checkTime >= 0.025f ? checkTime : 0.025f;
+            _checkTime = checkTime >= 0.025f ? checkTime : 0.025f;
 
-            if (firstResultCallback != null)
+            if (onFirstResultCallback != null)
             {
-                mPingCallback = firstResultCallback;
+                _onPingCallback = onFirstResultCallback;
             }
         }
 
@@ -128,12 +128,12 @@ namespace MyClasses
         private IEnumerator _Ping()
         {
 #if UNITY_WEBGL
-            mIsConnecting = true;
+            _isConnecting = true;
 
-            if (mPingCallback != null)
+            if (_onPingCallback != null)
             {
-                mPingCallback(mIsConnecting);
-                mPingCallback = null;
+                _onPingCallback(_isConnecting);
+                _onPingCallback = null;
             }
 
             yield return null;
@@ -142,7 +142,7 @@ namespace MyClasses
 
             while (true)
             {
-                if (mCheckTime <= 0)
+                if (_checkTime <= 0)
                 {
                     yield return null;
                     continue;
@@ -150,37 +150,37 @@ namespace MyClasses
 
                 if (Application.internetReachability == NetworkReachability.NotReachable)
                 {
-                    mIsConnecting = false;
+                    _isConnecting = false;
 
-                    if (mPingCallback != null)
+                    if (_onPingCallback != null)
                     {
-                        mPingCallback(mIsConnecting);
-                        mPingCallback = null;
+                        _onPingCallback(_isConnecting);
+                        _onPingCallback = null;
                     }
 
-                    yield return new WaitForSecondsRealtime(mCheckTime);
+                    yield return new WaitForSecondsRealtime(_checkTime);
                 }
                 else
                 {
-                    Ping ping = new Ping(mIsGlobalCheck ? mGlobalDNSs[mGlobalIndex] : mLocalDNSs[mLocalIndex]);
+                    Ping ping = new Ping(_isGlobalCheck ? _globalDNSs[_globalIndex] : _localDNSs[_localIndex]);
                     float deadline = Time.time + timeout;
                     while (!ping.isDone && Time.time < deadline)
                     {
                         yield return null;
                     }
 
-                    mIsConnecting = ping.isDone && ping.time >= 0;
-                    if (!mIsConnecting)
+                    _isConnecting = ping.isDone && ping.time >= 0;
+                    if (!_isConnecting)
                     {
-                        if (mIsGlobalCheck)
+                        if (_isGlobalCheck)
                         {
-                            mGlobalIndex = (mGlobalIndex + 1) % mGlobalDNSs.Length;
+                            _globalIndex = (_globalIndex + 1) % _globalDNSs.Length;
                         }
                         else
                         {
-                            mLocalIndex = (mLocalIndex + 1) % mLocalDNSs.Length;
+                            _localIndex = (_localIndex + 1) % _localDNSs.Length;
                         }
-                        mIsGlobalCheck = !mIsGlobalCheck;
+                        _isGlobalCheck = !_isGlobalCheck;
 
                         timeout = Mathf.Clamp(timeout + 0.25f, 1, 3);
                     }
@@ -189,19 +189,19 @@ namespace MyClasses
                         timeout = 1;
                     }
 
-                    if (mLastTimePingAllSuccess > 0 && Time.time - mLastTimePingAllSuccess < 3)
+                    if (_lastTimePingAllSuccess > 0 && Time.time - _lastTimePingAllSuccess < 3)
                     {
-                        mLastTimePingAllSuccess = -1;
-                        mIsConnecting = true;
+                        _lastTimePingAllSuccess = -1;
+                        _isConnecting = true;
                     }
 
-                    if (mPingCallback != null)
+                    if (_onPingCallback != null)
                     {
-                        mPingCallback(mIsConnecting);
-                        mPingCallback = null;
+                        _onPingCallback(_isConnecting);
+                        _onPingCallback = null;
                     }
 
-                    yield return new WaitForSecondsRealtime(mIsConnecting || mCheckTime < 0.25f ? mCheckTime : mCheckTime / 10f);
+                    yield return new WaitForSecondsRealtime(_isConnecting || _checkTime < 0.25f ? _checkTime : _checkTime / 10f);
                 }
             }
 #endif
@@ -215,22 +215,22 @@ namespace MyClasses
 #if UNITY_WEBGL
             yield return null;
             
-            mIsConnecting = true;
+            _isConnecting = true;
 
-            callback(mIsConnecting);
+            callback(_isConnecting);
 #else
             bool isConnect = false;
 
             if (Application.internetReachability != NetworkReachability.NotReachable)
             {
-                Ping[] pings = new Ping[mLocalDNSs.Length + mGlobalDNSs.Length];
-                for (int i = 0; i < mLocalDNSs.Length; i++)
+                Ping[] pings = new Ping[_localDNSs.Length + _globalDNSs.Length];
+                for (int i = 0; i < _localDNSs.Length; i++)
                 {
-                    pings[i] = new Ping(mLocalDNSs[i]);
+                    pings[i] = new Ping(_localDNSs[i]);
                 }
-                for (int i = 0; i < mGlobalDNSs.Length; i++)
+                for (int i = 0; i < _globalDNSs.Length; i++)
                 {
-                    pings[mLocalDNSs.Length + i] = new Ping(mGlobalDNSs[i]);
+                    pings[_localDNSs.Length + i] = new Ping(_globalDNSs[i]);
                 }
 
                 float deadline = Time.time + timeout;
@@ -240,8 +240,8 @@ namespace MyClasses
                     {
                         if (pings[i].isDone && pings[i].time >= 0)
                         {
-                            mLastTimePingAllSuccess = Time.time;
-                            mIsConnecting = true;
+                            _lastTimePingAllSuccess = Time.time;
+                            _isConnecting = true;
                             isConnect = true;
                             callback(true);
 
@@ -258,8 +258,8 @@ namespace MyClasses
 
             if (!isConnect)
             {
-                mLastTimePingAllSuccess = -1;
-                mIsConnecting = false;
+                _lastTimePingAllSuccess = -1;
+                _isConnecting = false;
                 callback(false);
             }
 #endif
@@ -287,14 +287,14 @@ namespace MyClasses
     [CustomEditor(typeof(MyInternetChecking))]
     public class MyInternetCheckingEditor : Editor
     {
-        private MyInternetChecking mScript;
+        private MyInternetChecking _script;
 
         /// <summary>
         /// OnEnable.
         /// </summary>
         void OnEnable()
         {
-            mScript = (MyInternetChecking)target;
+            _script = (MyInternetChecking)target;
         }
 
         /// <summary>
@@ -302,10 +302,10 @@ namespace MyClasses
         /// </summary>
         public override void OnInspectorGUI()
         {
-            EditorGUILayout.ObjectField("Script", MonoScript.FromMonoBehaviour(mScript), typeof(MyInternetChecking), false);
+            EditorGUILayout.ObjectField("Script", MonoScript.FromMonoBehaviour(_script), typeof(MyInternetChecking), false);
 
-            SerializedProperty globalProperty = serializedObject.FindProperty("mGlobalDNSs");
-            SerializedProperty localProperty = serializedObject.FindProperty("mLocalDNSs");
+            SerializedProperty globalProperty = serializedObject.FindProperty("_globalDNSs");
+            SerializedProperty localProperty = serializedObject.FindProperty("_localDNSs");
             EditorGUI.BeginChangeCheck();
             EditorGUILayout.PropertyField(globalProperty, new GUIContent("Glogal DNS"), true);
             EditorGUILayout.PropertyField(localProperty, new GUIContent("Local DNS"), true);

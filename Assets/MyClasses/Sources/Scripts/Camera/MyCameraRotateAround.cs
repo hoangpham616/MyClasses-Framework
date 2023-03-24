@@ -2,12 +2,8 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyCameraRotateAround (version 1.0)
+ * Class:       MyCameraRotateAround (version 1.1)
  */
-
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 
 using UnityEngine;
 
@@ -18,19 +14,19 @@ namespace MyClasses
         #region ----- Variable -----
 
         [SerializeField]
-        private Transform mCamera;
+        private Transform _camera;
         [SerializeField]
-        private Transform mTarget;
+        private Transform _target;
 
         [SerializeField]
-        private Vector2 mLimitXAxis = new Vector2(int.MinValue, int.MaxValue);
+        private Vector2 _limitXAxis = new Vector2(int.MinValue, int.MaxValue);
         [SerializeField]
-        private Vector2 mLimitYAxis = new Vector2(int.MinValue, int.MaxValue);
+        private Vector2 _limitYAxis = new Vector2(int.MinValue, int.MaxValue);
 
         [SerializeField]
-        private Vector2 mCameraOriginalEulerAngles;
+        private Vector2 _cameraOriginalEulerAngles;
         [SerializeField]
-        private Vector2 mCameraOriginalOffset;
+        private Vector2 _cameraOriginalOffset;
 
         #endregion
 
@@ -38,32 +34,32 @@ namespace MyClasses
 
         public Transform Camera
         {
-            get { return mCamera; }
+            get { return _camera; }
         }
 
         public Transform Target
         {
-            get { return mTarget; }
+            get { return _target; }
         }
 
         public Vector2 LimitXAxis
         {
-            get { return mLimitXAxis; }
+            get { return _limitXAxis; }
         }
 
         public Vector2 LimitYAxis
         {
-            get { return mLimitYAxis; }
+            get { return _limitYAxis; }
         }
 
         public Vector2 CameraOriginalEulerAngles
         {
-            get { return mCameraOriginalEulerAngles; }
+            get { return _cameraOriginalEulerAngles; }
         }
 
         public Vector2 CameraOriginalOffset
         {
-            get { return mCameraOriginalOffset; }
+            get { return _cameraOriginalOffset; }
         }
 
         #endregion
@@ -75,10 +71,10 @@ namespace MyClasses
         /// </summary>
         public void Setup(Transform camera, Transform target, bool isKeepCameraOffset = true)
         {
-            mCamera = camera;
-            mTarget = target;
-            mCameraOriginalEulerAngles = mCamera.eulerAngles;
-            mCameraOriginalOffset = isKeepCameraOffset ? mCamera.position - mTarget.position : Vector3.zero;
+            _camera = camera;
+            _target = target;
+            _cameraOriginalEulerAngles = _camera.eulerAngles;
+            _cameraOriginalOffset = isKeepCameraOffset ? _camera.position - _target.position : Vector3.zero;
         }
 
         /// <summary>
@@ -86,8 +82,8 @@ namespace MyClasses
         /// </summary>
         public void SetVerticalAxisLimit(float min, float max)
         {
-            mLimitXAxis.x = min;
-            mLimitXAxis.y = max;
+            _limitXAxis.x = min;
+            _limitXAxis.y = max;
         }
 
         /// <summary>
@@ -95,8 +91,8 @@ namespace MyClasses
         /// </summary>
         public void SetHorizontalAxisLimit(float min, float max)
         {
-            mLimitYAxis.x = min;
-            mLimitYAxis.y = max;
+            _limitYAxis.x = min;
+            _limitYAxis.y = max;
         }
 
         /// <summary>
@@ -105,27 +101,27 @@ namespace MyClasses
         /// </summary>
         public void Rotate(float deltaX, float deltaY)
         {
-            Vector3 cameraPosition = mCamera.position;
-            cameraPosition.x -= mCameraOriginalOffset.x;
-            cameraPosition.y -= mCameraOriginalOffset.y;
-            float distance = Vector3.Magnitude(cameraPosition - mTarget.position);
+            Vector3 cameraPosition = _camera.position;
+            cameraPosition.x -= _cameraOriginalOffset.x;
+            cameraPosition.y -= _cameraOriginalOffset.y;
+            float distance = Vector3.Magnitude(cameraPosition - _target.position);
 
-            mCameraOriginalEulerAngles.x += deltaY;
-            mCameraOriginalEulerAngles.x = _ClampAngle(mCameraOriginalEulerAngles.x, mLimitXAxis.x, mLimitXAxis.y);
+            _cameraOriginalEulerAngles.x += deltaY;
+            _cameraOriginalEulerAngles.x = _ClampAngle(_cameraOriginalEulerAngles.x, _limitXAxis.x, _limitXAxis.y);
 
-            mCameraOriginalEulerAngles.y += deltaX;
-            mCameraOriginalEulerAngles.y = _ClampAngle(mCameraOriginalEulerAngles.y, mLimitYAxis.x, mLimitYAxis.y);
+            _cameraOriginalEulerAngles.y += deltaX;
+            _cameraOriginalEulerAngles.y = _ClampAngle(_cameraOriginalEulerAngles.y, _limitYAxis.x, _limitYAxis.y);
 
-            Quaternion rotation = Quaternion.Euler(mCameraOriginalEulerAngles.x, mCameraOriginalEulerAngles.y, 0);
+            Quaternion rotation = Quaternion.Euler(_cameraOriginalEulerAngles.x, _cameraOriginalEulerAngles.y, 0);
             Vector3 negativeDistance = Vector3.zero;
             negativeDistance.z = -distance;
 
             Vector3 position = rotation * negativeDistance;
-            position.x += mCameraOriginalOffset.x;
-            position.y += mCameraOriginalOffset.y;
+            position.x += _cameraOriginalOffset.x;
+            position.y += _cameraOriginalOffset.y;
 
-            mCamera.rotation = rotation;
-            mCamera.position = position;
+            _camera.rotation = rotation;
+            _camera.position = position;
         }
 
         #endregion
@@ -143,39 +139,4 @@ namespace MyClasses
             return Mathf.Clamp(angle, min, max);
         }
     }
-
-#if UNITY_EDITOR
-
-    [CustomEditor(typeof(MyCameraRotateAround))]
-    public class MyCameraRotateAroundEditor : Editor
-    {
-        private MyCameraRotateAround mScript;
-
-        /// <summary>
-        /// OnEnable.
-        /// </summary>
-        void OnEnable()
-        {
-            mScript = (MyCameraRotateAround)target;
-        }
-
-        /// <summary>
-        /// OnInspectorGUI.
-        /// </summary>
-        public override void OnInspectorGUI()
-        {
-            EditorGUILayout.ObjectField("Script", MonoScript.FromMonoBehaviour(mScript), typeof(MyCameraRotateAround), false);
-
-            EditorGUILayout.ObjectField("Camera", mScript.Camera, typeof(Transform), false);
-            EditorGUILayout.ObjectField("Target", mScript.Target, typeof(Transform), false);
-
-            EditorGUILayout.Vector2Field("X Axis Limit", mScript.LimitXAxis);
-            EditorGUILayout.Vector2Field("Y Axis Limit", mScript.LimitYAxis);
-
-            EditorGUILayout.Vector2Field("Original Euler Angels of Camera", mScript.CameraOriginalEulerAngles);
-            EditorGUILayout.Vector2Field("Original Offset of Camera", mScript.CameraOriginalOffset);
-        }
-    }
-
-#endif
 }

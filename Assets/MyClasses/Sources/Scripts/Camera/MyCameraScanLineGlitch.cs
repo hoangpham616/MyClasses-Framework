@@ -2,7 +2,8 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyCameraScanLineGlitch (version 1.0)
+ * Class:       MyCameraScanLineGlitch (version 1.1)
+ * Requirement: MyShaderImageScanLineGlitch.shader
  */
 
 using UnityEditor;
@@ -16,17 +17,17 @@ namespace MyClasses
     {
         #region ----- Define -----
 
-        private readonly string INTENSITY = "_Intensity";
+        private readonly string _INTENSITY = "_Intensity";
 
         #endregion
 
         #region ----- Variable -----
 
         [SerializeField, Range(0, 1)]
-        private float mIntensity = 0.3f;
+        private float _intensity = 0.3f;
 
-        private Material mMaterial;
-        private Shader mShader;
+        private Material _material;
+        private Shader _shader;
 
         #endregion
 
@@ -46,14 +47,14 @@ namespace MyClasses
         private void OnRenderImage(RenderTexture source, RenderTexture destination)
         {
 #if UNITY_EDITOR
-            if (mMaterial == null)
+            if (_material == null)
             {
                 _Initialize();
             }
 #endif
 
-            mMaterial.SetFloat(INTENSITY, mIntensity);
-            Graphics.Blit(source, destination, mMaterial);
+            _material.SetFloat(_INTENSITY, _intensity);
+            Graphics.Blit(source, destination, _material);
         }
 
         #endregion
@@ -66,13 +67,13 @@ namespace MyClasses
         private void _Initialize()
         {
 #if UNITY_EDITOR
-            if (mShader == null)
+            if (_shader == null)
             {
                 string[] paths = new string[] { "Assets/MyClasses", "Assets/Core/MyClasses", "Assets/Plugin/MyClasses", "Assets/Plugins/MyClasses", "Assets/Framework/MyClasses", "Assets/Frameworks/MyClasses" };
                 for (int i = 0; i < paths.Length; i++)
                 {
-                    mShader = AssetDatabase.LoadAssetAtPath<Shader>(paths[i] + "/Sources/Shaders/ImageEffect/MyShaderImageScanLineGlitch.shader");
-                    if (mShader != null)
+                    _shader = AssetDatabase.LoadAssetAtPath<Shader>(paths[i] + "/Sources/Shaders/ImageEffect/MyShaderImageScanLineGlitch.shader");
+                    if (_shader != null)
                     {
                         break;
                     }
@@ -80,8 +81,8 @@ namespace MyClasses
             }
 #endif
 
-            mMaterial = new Material(mShader);
-            mMaterial.hideFlags = HideFlags.DontSave;
+            _material = new Material(_shader);
+            _material.hideFlags = HideFlags.DontSave;
         }
 
         #endregion

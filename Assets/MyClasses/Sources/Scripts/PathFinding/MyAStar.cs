@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyAStar (version 1.0)
+ * Class:       MyAStar (version 1.1)
  */
 
 using UnityEngine;
@@ -14,10 +14,39 @@ namespace MyClasses
 {
     public class MyAStar
     {
+        #region ----- Enumeration -----
+
+        public enum ESearchOrder
+        {
+            LeftRightUpDown,
+            LeftRightDownUp,
+            RightLeftUpDown,
+            RightLeftDownUp,
+            UpDownLeftRight,
+            UpDownRightLeft,
+            DownUpLeftRight,
+            DownUpRightLeft
+        }
+
+        #endregion
+
+        #region ----- Internal Class -----
+
+        public class Node
+        {
+            public int X, Y;        // coordinate of this node
+            public int G;           // the length of the path from the start node to this node
+            public int H;           // the straight-line distance from this node to the end node
+            public int F;           // the total distance if taking this route
+            public Node Parent;     // the previous node of this node
+        }
+
+        #endregion
+        
         #region ----- Variable -----
 
-        private ESearchOrder mSearchOder;
-        private KeyValuePair<int, int>[] mMoveDirections = new KeyValuePair<int, int>[4];
+        private ESearchOrder _searchOder;
+        private KeyValuePair<int, int>[] _moveDirections = new KeyValuePair<int, int>[4];
 
         #endregion
 
@@ -25,7 +54,7 @@ namespace MyClasses
 
         public ESearchOrder SearchOrder
         {
-            get { return mSearchOder; }
+            get { return _searchOder; }
         }
 
         #endregion
@@ -116,7 +145,7 @@ namespace MyClasses
                 checkedNodes.Add(currentSmallestNode.Key, currentSmallestNode.Value);
 
                 // move to neighbour nodes
-                foreach (KeyValuePair<int, int> moveDirection in mMoveDirections)
+                foreach (KeyValuePair<int, int> moveDirection in _moveDirections)
                 {
                     // out of bounds
                     int curX = currentSmallestNode.Value.X + moveDirection.Key;
@@ -181,103 +210,74 @@ namespace MyClasses
             KeyValuePair<int, int> up = new KeyValuePair<int, int>(0, -1);
             KeyValuePair<int, int> down = new KeyValuePair<int, int>(0, 1);
 
-            mSearchOder = order;
+            _searchOder = order;
             switch (order)
             {
                 case ESearchOrder.LeftRightUpDown:
                     {
-                        mMoveDirections[0] = left;
-                        mMoveDirections[1] = right;
-                        mMoveDirections[2] = up;
-                        mMoveDirections[3] = down;
+                        _moveDirections[0] = left;
+                        _moveDirections[1] = right;
+                        _moveDirections[2] = up;
+                        _moveDirections[3] = down;
                     }
                     break;
                 case ESearchOrder.LeftRightDownUp:
                     {
-                        mMoveDirections[0] = left;
-                        mMoveDirections[1] = right;
-                        mMoveDirections[2] = down;
-                        mMoveDirections[3] = up;
+                        _moveDirections[0] = left;
+                        _moveDirections[1] = right;
+                        _moveDirections[2] = down;
+                        _moveDirections[3] = up;
                     }
                     break;
                 case ESearchOrder.RightLeftUpDown:
                     {
-                        mMoveDirections[0] = right;
-                        mMoveDirections[1] = left;
-                        mMoveDirections[2] = up;
-                        mMoveDirections[3] = down;
+                        _moveDirections[0] = right;
+                        _moveDirections[1] = left;
+                        _moveDirections[2] = up;
+                        _moveDirections[3] = down;
                     }
                     break;
                 case ESearchOrder.RightLeftDownUp:
                     {
-                        mMoveDirections[0] = right;
-                        mMoveDirections[1] = left;
-                        mMoveDirections[2] = down;
-                        mMoveDirections[3] = up;
+                        _moveDirections[0] = right;
+                        _moveDirections[1] = left;
+                        _moveDirections[2] = down;
+                        _moveDirections[3] = up;
                     }
                     break;
                 case ESearchOrder.UpDownLeftRight:
                     {
-                        mMoveDirections[0] = up;
-                        mMoveDirections[1] = down;
-                        mMoveDirections[2] = left;
-                        mMoveDirections[3] = right;
+                        _moveDirections[0] = up;
+                        _moveDirections[1] = down;
+                        _moveDirections[2] = left;
+                        _moveDirections[3] = right;
                     }
                     break;
                 case ESearchOrder.UpDownRightLeft:
                     {
-                        mMoveDirections[0] = up;
-                        mMoveDirections[1] = down;
-                        mMoveDirections[2] = right;
-                        mMoveDirections[3] = left;
+                        _moveDirections[0] = up;
+                        _moveDirections[1] = down;
+                        _moveDirections[2] = right;
+                        _moveDirections[3] = left;
                     }
                     break;
                 case ESearchOrder.DownUpLeftRight:
                     {
-                        mMoveDirections[0] = down;
-                        mMoveDirections[1] = up;
-                        mMoveDirections[2] = left;
-                        mMoveDirections[3] = right;
+                        _moveDirections[0] = down;
+                        _moveDirections[1] = up;
+                        _moveDirections[2] = left;
+                        _moveDirections[3] = right;
                     }
                     break;
                 case ESearchOrder.DownUpRightLeft:
                     {
-                        mMoveDirections[0] = down;
-                        mMoveDirections[1] = up;
-                        mMoveDirections[2] = right;
-                        mMoveDirections[3] = left;
+                        _moveDirections[0] = down;
+                        _moveDirections[1] = up;
+                        _moveDirections[2] = right;
+                        _moveDirections[3] = left;
                     }
                     break;
             }
-        }
-
-        #endregion
-
-        #region ----- Enumeration -----
-
-        public enum ESearchOrder
-        {
-            LeftRightUpDown,
-            LeftRightDownUp,
-            RightLeftUpDown,
-            RightLeftDownUp,
-            UpDownLeftRight,
-            UpDownRightLeft,
-            DownUpLeftRight,
-            DownUpRightLeft
-        }
-
-        #endregion
-
-        #region ----- Internal Class -----
-
-        public class Node
-        {
-            public int X, Y;        // coordinate of this node
-            public int G;           // the length of the path from the start node to this node
-            public int H;           // the straight-line distance from this node to the end node
-            public int F;           // the total distance if taking this route
-            public Node Parent;     // the previous node of this node
         }
 
         #endregion

@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyEncryptedNumber (version 1.2)
+ * Class:       MyEncryptedNumber (version 1.3)
  */
 
 using System;
@@ -14,7 +14,7 @@ namespace MyClasses
     {
         #region ----- Variable -----
 
-        private static int mSeed = 616;
+        private static int _seed = 616;
 
         #endregion
 
@@ -25,7 +25,7 @@ namespace MyClasses
         /// </summary>
         public static void SetSeed(int seed)
         {
-            mSeed = seed;
+            _seed = seed;
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace MyClasses
         /// </summary>
         public static int EncryptInt(int number)
         {
-            return ~(number ^ mSeed);
+            return ~(number ^ _seed);
         }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace MyClasses
         /// </summary>
         public static int DecryptInt(int number)
         {
-            return ~number ^ mSeed;
+            return ~number ^ _seed;
         }
 
         /// <summary>

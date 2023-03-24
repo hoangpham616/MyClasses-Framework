@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyImageStyleManager (version 1.0)
+ * Class:       MyImageStyleManager (version 1.1)
  */
 
 #pragma warning disable 0162
@@ -20,14 +20,18 @@ namespace MyClasses
 {
     public class MyImageStyleManager : MonoBehaviour
     {
-        #region ----- Variable -----
+        #region ----- Define -----
 
         public static string CONFIG_DIRECTORY = "Configs/";
 
+        #endregion
+
+        #region ----- Variable -----
+
         [SerializeField]
-        private MyImageStyleConfig mConfig;
+        private MyImageStyleConfig _config;
         [SerializeField]
-        private bool mIsAutoSaveOnChange = true;
+        private bool _isAutoSaveOnChange = true;
 
         #endregion
 
@@ -35,34 +39,34 @@ namespace MyClasses
         
         public MyImageStyleConfig Config
         {
-            get { return mConfig; }
+            get { return _config; }
         }
 
         public MyImageStyleInfo[] Infos
         {
-            get { return mConfig.Infos; }
+            get { return _config.Infos; }
         }
 
         #endregion
 
         #region ----- Singleton -----
 
-        private static object mSingletonLock = new object();
-        private static MyImageStyleManager mInstance;
+        private static object _singletonLock = new object();
+        private static MyImageStyleManager _instance;
 
         public static MyImageStyleManager Instance
         {
             get
             {
-                if (mInstance == null)
+                if (_instance == null)
                 {
-                    lock (mSingletonLock)
+                    lock (_singletonLock)
                     {
-                        mInstance = (MyImageStyleManager)FindObjectOfType(typeof(MyImageStyleManager));
-                        if (mInstance == null)
+                        _instance = (MyImageStyleManager)FindObjectOfType(typeof(MyImageStyleManager));
+                        if (_instance == null)
                         {
                             GameObject obj = new GameObject(typeof(MyImageStyleManager).Name);
-                            mInstance = obj.AddComponent<MyImageStyleManager>();
+                            _instance = obj.AddComponent<MyImageStyleManager>();
                             if (Application.isPlaying)
                             {
                                 DontDestroyOnLoad(obj);
@@ -70,12 +74,12 @@ namespace MyClasses
                         }
                         else if (Application.isPlaying)
                         {
-                            DontDestroyOnLoad(mInstance);
+                            DontDestroyOnLoad(_instance);
                         }
-                        mInstance.LoadConfig();
+                        _instance.LoadConfig();
                     }
                 }
-                return mInstance;
+                return _instance;
             }
         }
 
@@ -115,7 +119,7 @@ namespace MyClasses
         /// </summary>
         public void SaveConfig()
         {
-            EditorUtility.SetDirty(mConfig);
+            EditorUtility.SetDirty(_config);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
         }
@@ -127,7 +131,7 @@ namespace MyClasses
         /// </summary>
         public void LoadConfig()
         {
-            if (mConfig != null)
+            if (_config != null)
             {
                 return;
             }
@@ -140,102 +144,102 @@ namespace MyClasses
 #endif
 
             string filePath = MyImageStyleManager.CONFIG_DIRECTORY + typeof(MyImageStyleConfig).Name + ".asset";
-            mConfig = Resources.Load(filePath, typeof(MyImageStyleConfig)) as MyImageStyleConfig;
+            _config = Resources.Load(filePath, typeof(MyImageStyleConfig)) as MyImageStyleConfig;
 #if UNITY_EDITOR
-            if (mConfig == null)
+            if (_config == null)
             {
-                mConfig = ScriptableObject.CreateInstance<MyImageStyleConfig>();
-                mConfig.Infos = new MyImageStyleInfo[(int)EStyle.Length];
-                for (int i = 0; i < mConfig.Infos.Length; ++i)
+                _config = ScriptableObject.CreateInstance<MyImageStyleConfig>();
+                _config.Infos = new MyImageStyleInfo[(int)EStyle.Length];
+                for (int i = 0; i < _config.Infos.Length; ++i)
                 {
-                    mConfig.Infos[i] = new MyImageStyleInfo();
-                    mConfig.Infos[i].Style = (EStyle)i;
-                    switch (mConfig.Infos[i].Style)
+                    _config.Infos[i] = new MyImageStyleInfo();
+                    _config.Infos[i].Style = (EStyle)i;
+                    switch (_config.Infos[i].Style)
                     {
                         case EStyle.COLOR_AQUA:
-                            mConfig.Infos[i].Color = new Color(0, 255 / 255f, 255 / 255f);
+                            _config.Infos[i].Color = new Color(0, 255 / 255f, 255 / 255f);
                             break;
 
                         case EStyle.COLOR_BLACK:
-                            mConfig.Infos[i].Color = new Color(0, 0, 0);
+                            _config.Infos[i].Color = new Color(0, 0, 0);
                             break;
 
                         case EStyle.COLOR_BLUE:
                         case EStyle.CUSTOM_COLOR_BLUE:
-                            mConfig.Infos[i].Color = new Color(0, 0, 255 / 255f);
+                            _config.Infos[i].Color = new Color(0, 0, 255 / 255f);
                             break;
 
                         case EStyle.COLOR_BROWN:
                         case EStyle.CUSTOM_COLOR_BROWN:
-                            mConfig.Infos[i].Color = new Color(165 / 255f, 42 / 255f, 42 / 255f);
+                            _config.Infos[i].Color = new Color(165 / 255f, 42 / 255f, 42 / 255f);
                             break;
 
                         case EStyle.COLOR_FUCHSIA:
-                            mConfig.Infos[i].Color = new Color(255 / 255f, 0, 255 / 255f);
+                            _config.Infos[i].Color = new Color(255 / 255f, 0, 255 / 255f);
                             break;
 
                         case EStyle.COLOR_GRAY:
                         case EStyle.CUSTOM_COLOR_GRAY:
-                            mConfig.Infos[i].Color = new Color(128 / 255f, 128 / 255f, 128 / 255f);
+                            _config.Infos[i].Color = new Color(128 / 255f, 128 / 255f, 128 / 255f);
                             break;
 
                         case EStyle.COLOR_GOLD:
                         case EStyle.CUSTOM_COLOR_GOLD:
-                            mConfig.Infos[i].Color = new Color(255 / 255f, 215 / 255f, 0);
+                            _config.Infos[i].Color = new Color(255 / 255f, 215 / 255f, 0);
                             break;
 
                         case EStyle.COLOR_GREEN:
                         case EStyle.CUSTOM_COLOR_GREEN:
-                            mConfig.Infos[i].Color = new Color(0, 128 / 255f, 0);
+                            _config.Infos[i].Color = new Color(0, 128 / 255f, 0);
                             break;
 
                         case EStyle.COLOR_MAROON:
-                            mConfig.Infos[i].Color = new Color(128 / 255f, 0, 0);
+                            _config.Infos[i].Color = new Color(128 / 255f, 0, 0);
                             break;
 
                         case EStyle.COLOR_NAVY:
-                            mConfig.Infos[i].Color = new Color(0, 0, 128 / 255f);
+                            _config.Infos[i].Color = new Color(0, 0, 128 / 255f);
                             break;
 
                         case EStyle.COLOR_OLIVE:
-                            mConfig.Infos[i].Color = new Color(128 / 255f, 128 / 255f, 0);
+                            _config.Infos[i].Color = new Color(128 / 255f, 128 / 255f, 0);
                             break;
 
                         case EStyle.COLOR_ORANGE:
                         case EStyle.CUSTOM_COLOR_ORANGE:
-                            mConfig.Infos[i].Color = new Color(255 / 255f, 165 / 255f, 0);
+                            _config.Infos[i].Color = new Color(255 / 255f, 165 / 255f, 0);
                             break;
 
                         case EStyle.COLOR_PURPLE:
                         case EStyle.CUSTOM_COLOR_PURPLE:
-                            mConfig.Infos[i].Color = new Color(128 / 255f, 0, 128 / 255f);
+                            _config.Infos[i].Color = new Color(128 / 255f, 0, 128 / 255f);
                             break;
 
                         case EStyle.COLOR_RED:
                         case EStyle.CUSTOM_COLOR_RED:
-                            mConfig.Infos[i].Color = new Color(255 / 255f, 0, 0);
+                            _config.Infos[i].Color = new Color(255 / 255f, 0, 0);
                             break;
 
                         case EStyle.COLOR_SILVER:
                         case EStyle.CUSTOM_COLOR_SILVER:
-                            mConfig.Infos[i].Color = new Color(192 / 255f, 192 / 255f, 192 / 255f);
+                            _config.Infos[i].Color = new Color(192 / 255f, 192 / 255f, 192 / 255f);
                             break;
 
                         case EStyle.COLOR_TEAL:
-                            mConfig.Infos[i].Color = new Color(0, 128 / 255f, 128 / 255f);
+                            _config.Infos[i].Color = new Color(0, 128 / 255f, 128 / 255f);
                             break;
 
                         case EStyle.COLOR_YELLOW:
                         case EStyle.CUSTOM_COLOR_YELLOW:
-                            mConfig.Infos[i].Color = new Color(255 / 255f, 255 / 255f, 0);
+                            _config.Infos[i].Color = new Color(255 / 255f, 255 / 255f, 0);
                             break;
 
                         case EStyle.COLOR_WHITE:
-                            mConfig.Infos[i].Color = new Color(255 / 255f, 255 / 255f, 255 / 255f);
+                            _config.Infos[i].Color = new Color(255 / 255f, 255 / 255f, 255 / 255f);
                             break;
                     }
                 }
-                AssetDatabase.CreateAsset(mConfig, filePath);
+                AssetDatabase.CreateAsset(_config, filePath);
                 AssetDatabase.SaveAssets();
             }
 #endif
@@ -250,7 +254,7 @@ namespace MyClasses
             {
                 return null;
             }
-            return mConfig.Infos[(int)type];
+            return _config.Infos[(int)type];
         }
 
         #endregion
@@ -415,35 +419,33 @@ namespace MyClasses
     [CustomEditor(typeof(MyImageStyleManager))]
     public class MyImageStyleManagerEditor : Editor
     {
-        private MyImageStyleManager mScript;
-        private SerializedProperty mConfig;
-        private SerializedProperty mIsAutoSaveOnChange;
-        private SerializedProperty x;
-        private bool mIsColorsVisible = false;
-        private bool mIsCustomColorsVisible = false;
-        private bool mIsSceneBackgroundsVisible = false;
-        private bool mIsSceneHeadersVisible = false;
-        private bool mIsSceneButtonsVisible = false;
-        private bool mIsPopupBackgroundsVisible = false;
-        private bool mIsPopupHeadersVisible = false;
-        private bool mIsPopupButtonsVisible = false;
-        private bool mIsSmallButtonsVisible = false;
-        private bool mIsMediumButtonsVisible = false;
-        private bool mIsLargeButtonsVisible = false;
-        private bool mIsCustomButtonsVisible = false;
-        private bool mIsCustomsVisible = false;
+        private MyImageStyleManager _script;
+        private SerializedProperty _config;
+        private SerializedProperty _isAutoSaveOnChange;
+        private bool _isColorsVisible = false;
+        private bool _isCustomColorsVisible = false;
+        private bool _isSceneBackgroundsVisible = false;
+        private bool _isSceneHeadersVisible = false;
+        private bool _isSceneButtonsVisible = false;
+        private bool _isPopupBackgroundsVisible = false;
+        private bool _isPopupHeadersVisible = false;
+        private bool _isPopupButtonsVisible = false;
+        private bool _isSmallButtonsVisible = false;
+        private bool _isMediumButtonsVisible = false;
+        private bool _isLargeButtonsVisible = false;
+        private bool _isCustomButtonsVisible = false;
+        private bool _isCustomsVisible = false;
 
         /// <summary>
         /// OnEnable.
         /// </summary>
         void OnEnable()
         {
-            mScript = (MyImageStyleManager)target;
-            mConfig = serializedObject.FindProperty("mConfig");
-            mIsAutoSaveOnChange = serializedObject.FindProperty("mIsAutoSaveOnChange");
-            x = serializedObject.FindProperty("x");
+            _script = (MyImageStyleManager)target;
+            _config = serializedObject.FindProperty("_config");
+            _isAutoSaveOnChange = serializedObject.FindProperty("_isAutoSaveOnChange");
 
-            mScript.LoadConfig();
+            _script.LoadConfig();
         }
 
         /// <summary>
@@ -451,279 +453,279 @@ namespace MyClasses
         /// </summary>
         public override void OnInspectorGUI()
         {
-            EditorGUILayout.ObjectField("Script", MonoScript.FromMonoBehaviour(mScript), typeof(MyImageStyleManager), false);
+            EditorGUILayout.ObjectField("Script", MonoScript.FromMonoBehaviour(_script), typeof(MyImageStyleManager), false);
 
             serializedObject.Update();
 
-            EditorGUILayout.ObjectField(mConfig, new GUIContent("Config File"));
+            EditorGUILayout.ObjectField(_config, new GUIContent("Config File"));
 
             EditorGUI.BeginChangeCheck();
 
-            mIsAutoSaveOnChange.boolValue = EditorGUILayout.Toggle("Auto Save On Change", mIsAutoSaveOnChange.boolValue);
+            _isAutoSaveOnChange.boolValue = EditorGUILayout.Toggle("Auto Save On Change", _isAutoSaveOnChange.boolValue);
 
             EditorGUILayout.LabelField(string.Empty);
             EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Show All"))
             {
-                mIsColorsVisible = true;
-                mIsCustomColorsVisible = true;
-                mIsSceneBackgroundsVisible = true;
-                mIsSceneHeadersVisible = true;
-                mIsSceneButtonsVisible = true;
-                mIsPopupBackgroundsVisible = true;
-                mIsPopupHeadersVisible = true;
-                mIsPopupButtonsVisible = true;
-                mIsSmallButtonsVisible = true;
-                mIsMediumButtonsVisible = true;
-                mIsLargeButtonsVisible = true;
-                mIsCustomButtonsVisible = true;
-                mIsCustomsVisible = true;
+                _isColorsVisible = true;
+                _isCustomColorsVisible = true;
+                _isSceneBackgroundsVisible = true;
+                _isSceneHeadersVisible = true;
+                _isSceneButtonsVisible = true;
+                _isPopupBackgroundsVisible = true;
+                _isPopupHeadersVisible = true;
+                _isPopupButtonsVisible = true;
+                _isSmallButtonsVisible = true;
+                _isMediumButtonsVisible = true;
+                _isLargeButtonsVisible = true;
+                _isCustomButtonsVisible = true;
+                _isCustomsVisible = true;
             }
             if (GUILayout.Button("Hide All"))
             {
-                mIsColorsVisible = false;
-                mIsCustomColorsVisible = false;
-                mIsSceneBackgroundsVisible = false;
-                mIsSceneHeadersVisible = false;
-                mIsSceneButtonsVisible = false;
-                mIsPopupBackgroundsVisible = false;
-                mIsPopupHeadersVisible = false;
-                mIsPopupButtonsVisible = false;
-                mIsSmallButtonsVisible = false;
-                mIsMediumButtonsVisible = false;
-                mIsLargeButtonsVisible = false;
-                mIsCustomButtonsVisible = false;
-                mIsCustomsVisible = false;
+                _isColorsVisible = false;
+                _isCustomColorsVisible = false;
+                _isSceneBackgroundsVisible = false;
+                _isSceneHeadersVisible = false;
+                _isSceneButtonsVisible = false;
+                _isPopupBackgroundsVisible = false;
+                _isPopupHeadersVisible = false;
+                _isPopupButtonsVisible = false;
+                _isSmallButtonsVisible = false;
+                _isMediumButtonsVisible = false;
+                _isLargeButtonsVisible = false;
+                _isCustomButtonsVisible = false;
+                _isCustomsVisible = false;
             }
             EditorGUILayout.EndHorizontal();
             if (GUILayout.Button("Save"))
             {
-                mScript.SaveConfig();
+                _script.SaveConfig();
             }
 
             bool isVisible = false;
-            for (int i = 1; i < mScript.Infos.Length; ++i)
+            for (int i = 1; i < _script.Infos.Length; ++i)
             {
                 switch ((MyImageStyleManager.EStyle)i)
                 {
                     case MyImageStyleManager.EStyle.COLOR_AQUA:
                         {
                             EditorGUILayout.LabelField(string.Empty);
-                            mIsColorsVisible = EditorGUILayout.Foldout(mIsColorsVisible, "Standard Colors");
-                            if (mIsColorsVisible)
+                            _isColorsVisible = EditorGUILayout.Foldout(_isColorsVisible, "Standard Colors");
+                            if (_isColorsVisible)
                             {
                                 EditorGUI.indentLevel++;
                             }
-                            isVisible = mIsColorsVisible;
+                            isVisible = _isColorsVisible;
                         }
                         break;
                     case MyImageStyleManager.EStyle.CUSTOM_COLOR_RED:
                         {
-                            if (mIsColorsVisible)
+                            if (_isColorsVisible)
                             {
                                 EditorGUI.indentLevel--;
                             }
 
                             EditorGUILayout.LabelField(string.Empty);
-                            mIsCustomColorsVisible = EditorGUILayout.Foldout(mIsCustomColorsVisible, "Custom Colors");
-                            if (mIsCustomColorsVisible)
+                            _isCustomColorsVisible = EditorGUILayout.Foldout(_isCustomColorsVisible, "Custom Colors");
+                            if (_isCustomColorsVisible)
                             {
                                 EditorGUI.indentLevel++;
                             }
-                            isVisible = mIsCustomColorsVisible;
+                            isVisible = _isCustomColorsVisible;
                         }
                         break;
                     case MyImageStyleManager.EStyle.SCENE_BACKGROUND_1:
                         {
-                            if (mIsCustomColorsVisible)
+                            if (_isCustomColorsVisible)
                             {
                                 EditorGUI.indentLevel--;
                             }
 
                             EditorGUILayout.LabelField(string.Empty);
-                            mIsSceneBackgroundsVisible = EditorGUILayout.Foldout(mIsSceneBackgroundsVisible, "Scene Backgrounds");
-                            if (mIsSceneBackgroundsVisible)
+                            _isSceneBackgroundsVisible = EditorGUILayout.Foldout(_isSceneBackgroundsVisible, "Scene Backgrounds");
+                            if (_isSceneBackgroundsVisible)
                             {
                                 EditorGUI.indentLevel++;
                             }
-                            isVisible = mIsSceneBackgroundsVisible;
+                            isVisible = _isSceneBackgroundsVisible;
                         }
                         break;
                     case MyImageStyleManager.EStyle.SCENE_HEADER_1:
                         {
-                            if (mIsSceneBackgroundsVisible)
+                            if (_isSceneBackgroundsVisible)
                             {
                                 EditorGUI.indentLevel--;
                             }
 
                             EditorGUILayout.LabelField(string.Empty);
-                            mIsSceneHeadersVisible = EditorGUILayout.Foldout(mIsSceneHeadersVisible, "Scene Headers");
-                            if (mIsSceneHeadersVisible)
+                            _isSceneHeadersVisible = EditorGUILayout.Foldout(_isSceneHeadersVisible, "Scene Headers");
+                            if (_isSceneHeadersVisible)
                             {
                                 EditorGUI.indentLevel++;
                             }
-                            isVisible = mIsSceneHeadersVisible;
+                            isVisible = _isSceneHeadersVisible;
                         }
                         break;
                     case MyImageStyleManager.EStyle.SCENE_BUTTON_1:
                         {
-                            if (mIsSceneHeadersVisible)
+                            if (_isSceneHeadersVisible)
                             {
                                 EditorGUI.indentLevel--;
                             }
 
                             EditorGUILayout.LabelField(string.Empty);
-                            mIsSceneButtonsVisible = EditorGUILayout.Foldout(mIsSceneButtonsVisible, "Scene Buttons");
-                            if (mIsSceneButtonsVisible)
+                            _isSceneButtonsVisible = EditorGUILayout.Foldout(_isSceneButtonsVisible, "Scene Buttons");
+                            if (_isSceneButtonsVisible)
                             {
                                 EditorGUI.indentLevel++;
                             }
-                            isVisible = mIsSceneButtonsVisible;
+                            isVisible = _isSceneButtonsVisible;
                         }
                         break;
                     case MyImageStyleManager.EStyle.POPUP_BACKGROUND_1:
                         {
-                            if (mIsSceneButtonsVisible)
+                            if (_isSceneButtonsVisible)
                             {
                                 EditorGUI.indentLevel--;
                             }
 
                             EditorGUILayout.LabelField(string.Empty);
-                            mIsPopupBackgroundsVisible = EditorGUILayout.Foldout(mIsPopupBackgroundsVisible, "Popup Backgrounds");
-                            if (mIsPopupBackgroundsVisible)
+                            _isPopupBackgroundsVisible = EditorGUILayout.Foldout(_isPopupBackgroundsVisible, "Popup Backgrounds");
+                            if (_isPopupBackgroundsVisible)
                             {
                                 EditorGUI.indentLevel++;
                             }
-                            isVisible = mIsPopupBackgroundsVisible;
+                            isVisible = _isPopupBackgroundsVisible;
                         }
                         break;
                     case MyImageStyleManager.EStyle.POPUP_HEADER_1:
                         {
-                            if (mIsPopupBackgroundsVisible)
+                            if (_isPopupBackgroundsVisible)
                             {
                                 EditorGUI.indentLevel--;
                             }
 
                             EditorGUILayout.LabelField(string.Empty);
-                            mIsPopupHeadersVisible = EditorGUILayout.Foldout(mIsPopupHeadersVisible, "Popup Headers");
-                            if (mIsPopupHeadersVisible)
+                            _isPopupHeadersVisible = EditorGUILayout.Foldout(_isPopupHeadersVisible, "Popup Headers");
+                            if (_isPopupHeadersVisible)
                             {
                                 EditorGUI.indentLevel++;
                             }
-                            isVisible = mIsPopupHeadersVisible;
+                            isVisible = _isPopupHeadersVisible;
                         }
                         break;
                     case MyImageStyleManager.EStyle.POPUP_BUTTON_1:
                         {
-                            if (mIsPopupHeadersVisible)
+                            if (_isPopupHeadersVisible)
                             {
                                 EditorGUI.indentLevel--;
                             }
 
                             EditorGUILayout.LabelField(string.Empty);
-                            mIsPopupButtonsVisible = EditorGUILayout.Foldout(mIsPopupButtonsVisible, "Popup Buttons");
-                            if (mIsPopupButtonsVisible)
+                            _isPopupButtonsVisible = EditorGUILayout.Foldout(_isPopupButtonsVisible, "Popup Buttons");
+                            if (_isPopupButtonsVisible)
                             {
                                 EditorGUI.indentLevel++;
                             }
-                            isVisible = mIsPopupButtonsVisible;
+                            isVisible = _isPopupButtonsVisible;
                         }
                         break;
                     case MyImageStyleManager.EStyle.SMALL_BUTTON_1:
                         {
-                            if (mIsPopupButtonsVisible)
+                            if (_isPopupButtonsVisible)
                             {
                                 EditorGUI.indentLevel--;
                             }
 
                             EditorGUILayout.LabelField(string.Empty);
-                            mIsSmallButtonsVisible = EditorGUILayout.Foldout(mIsSmallButtonsVisible, "Small Buttons");
-                            if (mIsSmallButtonsVisible)
+                            _isSmallButtonsVisible = EditorGUILayout.Foldout(_isSmallButtonsVisible, "Small Buttons");
+                            if (_isSmallButtonsVisible)
                             {
                                 EditorGUI.indentLevel++;
                             }
-                            isVisible = mIsSmallButtonsVisible;
+                            isVisible = _isSmallButtonsVisible;
                         }
                         break;
                     case MyImageStyleManager.EStyle.MEDIUM_BUTTON_1:
                         {
-                            if (mIsSmallButtonsVisible)
+                            if (_isSmallButtonsVisible)
                             {
                                 EditorGUI.indentLevel--;
                             }
 
                             EditorGUILayout.LabelField(string.Empty);
-                            mIsMediumButtonsVisible = EditorGUILayout.Foldout(mIsMediumButtonsVisible, "Medium Buttons");
-                            if (mIsMediumButtonsVisible)
+                            _isMediumButtonsVisible = EditorGUILayout.Foldout(_isMediumButtonsVisible, "Medium Buttons");
+                            if (_isMediumButtonsVisible)
                             {
                                 EditorGUI.indentLevel++;
                             }
-                            isVisible = mIsMediumButtonsVisible;
+                            isVisible = _isMediumButtonsVisible;
                         }
                         break;
                     case MyImageStyleManager.EStyle.LARGE_BUTTON_1:
                         {
-                            if (mIsMediumButtonsVisible)
+                            if (_isMediumButtonsVisible)
                             {
                                 EditorGUI.indentLevel--;
                             }
 
                             EditorGUILayout.LabelField(string.Empty);
-                            mIsLargeButtonsVisible = EditorGUILayout.Foldout(mIsLargeButtonsVisible, "Large Buttons");
-                            if (mIsLargeButtonsVisible)
+                            _isLargeButtonsVisible = EditorGUILayout.Foldout(_isLargeButtonsVisible, "Large Buttons");
+                            if (_isLargeButtonsVisible)
                             {
                                 EditorGUI.indentLevel++;
                             }
-                            isVisible = mIsLargeButtonsVisible;
+                            isVisible = _isLargeButtonsVisible;
                         }
                         break;
                     case MyImageStyleManager.EStyle.CUSTOM_BUTTON_1:
                         {
-                            if (mIsLargeButtonsVisible)
+                            if (_isLargeButtonsVisible)
                             {
                                 EditorGUI.indentLevel--;
                             }
 
                             EditorGUILayout.LabelField(string.Empty);
-                            mIsCustomButtonsVisible = EditorGUILayout.Foldout(mIsCustomButtonsVisible, "Custom Buttons");
-                            if (mIsCustomButtonsVisible)
+                            _isCustomButtonsVisible = EditorGUILayout.Foldout(_isCustomButtonsVisible, "Custom Buttons");
+                            if (_isCustomButtonsVisible)
                             {
                                 EditorGUI.indentLevel++;
                             }
-                            isVisible = mIsCustomButtonsVisible;
+                            isVisible = _isCustomButtonsVisible;
                         }
                         break;
                     case MyImageStyleManager.EStyle.CUSTOM_1:
                         {
-                            if (mIsCustomButtonsVisible)
+                            if (_isCustomButtonsVisible)
                             {
                                 EditorGUI.indentLevel--;
                             }
 
                             EditorGUILayout.LabelField(string.Empty);
-                            mIsCustomsVisible = EditorGUILayout.Foldout(mIsCustomsVisible, "Customs");
-                            if (mIsCustomsVisible)
+                            _isCustomsVisible = EditorGUILayout.Foldout(_isCustomsVisible, "Customs");
+                            if (_isCustomsVisible)
                             {
                                 EditorGUI.indentLevel++;
                             }
-                            isVisible = mIsCustomsVisible;
+                            isVisible = _isCustomsVisible;
                         }
                         break;
                 }
                 if (isVisible)
                 {
-                    EditorGUILayout.LabelField(mScript.Infos[i].Style.ToString(), EditorStyles.foldoutHeader);
-                    mScript.Infos[i].Type = (MyImageStyleManager.EImageType)EditorGUILayout.EnumPopup("Type", mScript.Infos[i].Type);
-                    mScript.Infos[i].Image = (Sprite)EditorGUILayout.ObjectField("Image", mScript.Infos[i].Image, typeof(Sprite), false);
-                    mScript.Infos[i].Material = (Material)EditorGUILayout.ObjectField("Material", mScript.Infos[i].Material, typeof(Material), false);
-                    mScript.Infos[i].Color = EditorGUILayout.ColorField("Color", mScript.Infos[i].Color);
-                    mScript.Infos[i].Size = EditorGUILayout.Vector2Field("Size", mScript.Infos[i].Size);
-                    mScript.Infos[i].Note = EditorGUILayout.TextField("Your Note", mScript.Infos[i].Note);
+                    EditorGUILayout.LabelField(_script.Infos[i].Style.ToString(), EditorStyles.foldoutHeader);
+                    _script.Infos[i].Type = (MyImageStyleManager.EImageType)EditorGUILayout.EnumPopup("Type", _script.Infos[i].Type);
+                    _script.Infos[i].Image = (Sprite)EditorGUILayout.ObjectField("Image", _script.Infos[i].Image, typeof(Sprite), false);
+                    _script.Infos[i].Material = (Material)EditorGUILayout.ObjectField("Material", _script.Infos[i].Material, typeof(Material), false);
+                    _script.Infos[i].Color = EditorGUILayout.ColorField("Color", _script.Infos[i].Color);
+                    _script.Infos[i].Size = EditorGUILayout.Vector2Field("Size", _script.Infos[i].Size);
+                    _script.Infos[i].Note = EditorGUILayout.TextField("Your Note", _script.Infos[i].Note);
                     EditorGUILayout.LabelField(string.Empty);
                 }
-                if (i == mScript.Infos.Length - 1)
+                if (i == _script.Infos.Length - 1)
                 {
-                    if (mIsCustomsVisible)
+                    if (_isCustomsVisible)
                     {
                         EditorGUI.indentLevel--;
                     }
@@ -733,9 +735,9 @@ namespace MyClasses
             if (EditorGUI.EndChangeCheck())
             {
                 serializedObject.ApplyModifiedProperties();
-                if (mIsAutoSaveOnChange.boolValue)
+                if (_isAutoSaveOnChange.boolValue)
                 {
-                    mScript.SaveConfig();
+                    _script.SaveConfig();
                 }
             }
 
@@ -743,40 +745,40 @@ namespace MyClasses
             EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Show All"))
             {
-                mIsColorsVisible = true;
-                mIsCustomColorsVisible = true;
-                mIsSceneBackgroundsVisible = true;
-                mIsSceneHeadersVisible = true;
-                mIsSceneButtonsVisible = true;
-                mIsPopupBackgroundsVisible = true;
-                mIsPopupHeadersVisible = true;
-                mIsPopupButtonsVisible = true;
-                mIsSmallButtonsVisible = true;
-                mIsMediumButtonsVisible = true;
-                mIsLargeButtonsVisible = true;
-                mIsCustomButtonsVisible = true;
-                mIsCustomsVisible = true;
+                _isColorsVisible = true;
+                _isCustomColorsVisible = true;
+                _isSceneBackgroundsVisible = true;
+                _isSceneHeadersVisible = true;
+                _isSceneButtonsVisible = true;
+                _isPopupBackgroundsVisible = true;
+                _isPopupHeadersVisible = true;
+                _isPopupButtonsVisible = true;
+                _isSmallButtonsVisible = true;
+                _isMediumButtonsVisible = true;
+                _isLargeButtonsVisible = true;
+                _isCustomButtonsVisible = true;
+                _isCustomsVisible = true;
             }
             if (GUILayout.Button("Hide All"))
             {
-                mIsColorsVisible = false;
-                mIsCustomColorsVisible = false;
-                mIsSceneBackgroundsVisible = false;
-                mIsSceneHeadersVisible = false;
-                mIsSceneButtonsVisible = false;
-                mIsPopupBackgroundsVisible = false;
-                mIsPopupHeadersVisible = false;
-                mIsPopupButtonsVisible = false;
-                mIsSmallButtonsVisible = false;
-                mIsMediumButtonsVisible = false;
-                mIsLargeButtonsVisible = false;
-                mIsCustomButtonsVisible = false;
-                mIsCustomsVisible = false;
+                _isColorsVisible = false;
+                _isCustomColorsVisible = false;
+                _isSceneBackgroundsVisible = false;
+                _isSceneHeadersVisible = false;
+                _isSceneButtonsVisible = false;
+                _isPopupBackgroundsVisible = false;
+                _isPopupHeadersVisible = false;
+                _isPopupButtonsVisible = false;
+                _isSmallButtonsVisible = false;
+                _isMediumButtonsVisible = false;
+                _isLargeButtonsVisible = false;
+                _isCustomButtonsVisible = false;
+                _isCustomsVisible = false;
             }
             EditorGUILayout.EndHorizontal();
             if (GUILayout.Button("Save"))
             {
-                mScript.SaveConfig();
+                _script.SaveConfig();
             }
         }
     }

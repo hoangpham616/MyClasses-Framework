@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyBitSet8 (version 1.2)
+ * Class:       MyBitSet8 (version 1.3)
  */
 
 using System;
@@ -15,7 +15,7 @@ namespace MyClasses
 
         private const int NUM_BIT = 8;
 
-        private byte mValue = 0;
+        private byte _value = 0;
 
         #endregion
 
@@ -23,8 +23,8 @@ namespace MyClasses
 
         public byte Value
         {
-            get { return mValue; }
-            set { mValue = value; }
+            get { return _value; }
+            set { _value = value; }
         }
 
         #endregion
@@ -36,7 +36,7 @@ namespace MyClasses
         /// </summary>
         public void Reset()
         {
-            mValue = 0;
+            _value = 0;
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace MyClasses
 
             byte mask = 0x01;
             mask = (byte)(mask << index);
-            mValue = value ? (byte)(mValue | mask) : (byte)(mValue & (~mask));
+            _value = value ? (byte)(_value | mask) : (byte)(_value & (~mask));
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace MyClasses
 
             byte mask = 0x01;
             mask = (byte)(mask << index);
-            return (mValue & mask) != 0;
+            return (_value & mask) != 0;
         }
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace MyClasses
             {
                 SetValueOfBit(i, false);
             }
-            mValue = (byte)(mValue | (value << fromIndex));
+            _value = (byte)(_value | (value << fromIndex));
         }
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace MyClasses
             }
 
             byte length = (byte)(toIndex - fromIndex + 1);
-            byte result = (byte)(mValue << (NUM_BIT - length - fromIndex));
+            byte result = (byte)(_value << (NUM_BIT - length - fromIndex));
             return result = (byte)(result >> (NUM_BIT - length));
         }
 

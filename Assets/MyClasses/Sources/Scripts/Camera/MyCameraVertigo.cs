@@ -2,7 +2,8 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyCameraVertigo (version 1.0)
+ * Class:       MyCameraVertigo (version 1.1)
+ * Requirement: MyShaderImageVertigo.shader
  */
 
 using UnityEditor;
@@ -14,15 +15,22 @@ namespace MyClasses
     [RequireComponent(typeof(Camera))]
     public class MyCameraVertigo : MonoBehaviour
     {
+        #region ----- Define -----
+
+        private const string _WAVE = "_Wave";
+        private const string _INTENSITY = "_Intensity";
+
+        #endregion
+
         #region ----- Variable -----
 
         [SerializeField, Range(0, 1)]
         private float mWave = 0.01f;
         [SerializeField, Range(0, 1)]
-        private float mIntensity = 0.01f;
+        private float _intensity = 0.01f;
 
-        private Material mMaterial;
-        private Shader mShader;
+        private Material _material;
+        private Shader _shader;
 
         #endregion
 
@@ -42,15 +50,15 @@ namespace MyClasses
         private void OnRenderImage(RenderTexture source, RenderTexture destination)
         {
 #if UNITY_EDITOR
-            if (mMaterial == null)
+            if (_material == null)
             {
                 _Initialize();
             }
 #endif
 
-            mMaterial.SetFloat("_Wave", mWave);
-            mMaterial.SetFloat("_Intensity", mIntensity);
-            Graphics.Blit(source, destination, mMaterial);
+            _material.SetFloat(_WAVE, mWave);
+            _material.SetFloat(_INTENSITY, _intensity);
+            Graphics.Blit(source, destination, _material);
         }
 
         #endregion
@@ -63,13 +71,13 @@ namespace MyClasses
         private void _Initialize()
         {
 #if UNITY_EDITOR
-            if (mShader == null)
+            if (_shader == null)
             {
                 string[] paths = new string[] { "Assets/MyClasses", "Assets/Core/MyClasses", "Assets/Plugin/MyClasses", "Assets/Plugins/MyClasses", "Assets/Framework/MyClasses", "Assets/Frameworks/MyClasses" };
                 for (int i = 0; i < paths.Length; i++)
                 {
-                    mShader = AssetDatabase.LoadAssetAtPath<Shader>(paths[i] + "/Sources/Shaders/ImageEffect/MyShaderImageVertigo.shader");
-                    if (mShader != null)
+                    _shader = AssetDatabase.LoadAssetAtPath<Shader>(paths[i] + "/Sources/Shaders/ImageEffect/MyShaderImageVertigo.shader");
+                    if (_shader != null)
                     {
                         break;
                     }
@@ -77,8 +85,8 @@ namespace MyClasses
             }
 #endif
 
-            mMaterial = new Material(mShader);
-            mMaterial.hideFlags = HideFlags.DontSave;
+            _material = new Material(_shader);
+            _material.hideFlags = HideFlags.DontSave;
         }
 
         #endregion

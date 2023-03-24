@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyLocalTime (version 1.1)
+ * Class:       MyLocalTime (version 1.2)
  */
 
 using System;
@@ -13,7 +13,7 @@ namespace MyClasses
     {
         #region ----- Variable -----
 
-        private static readonly DateTime mEpochTime = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+        private static readonly DateTime _epochTime = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
         #endregion
 
@@ -24,7 +24,7 @@ namespace MyClasses
         /// </summary>
         public static DateTime EpochTime
         {
-            get { return mEpochTime; }
+            get { return _epochTime; }
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace MyClasses
         /// </summary>
         public static long CurrentUnixTime
         {
-            get { return (long)(DateTime.UtcNow - mEpochTime).TotalMilliseconds; }
+            get { return (long)(DateTime.UtcNow - _epochTime).TotalMilliseconds; }
         }
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace MyClasses
         /// <param name="milliseconds">number of milliseconds add into epoch time</param>
         public static DateTime GetTimeSinceUnixEpoch(long milliseconds)
         {
-            return mEpochTime.AddMilliseconds(milliseconds);
+            return _epochTime.AddMilliseconds(milliseconds);
         }
 
         /// <summary>
@@ -105,7 +105,7 @@ namespace MyClasses
         /// </summary>
         public static long ConvertDateTimeToUnixTime(DateTime date)
         {
-            return (long)(date - mEpochTime).TotalMilliseconds;
+            return (long)(date - _epochTime).TotalMilliseconds;
         }
 
         /// <summary>
@@ -113,7 +113,7 @@ namespace MyClasses
         /// </summary>
         public static long ConvertDateLocalTimeToUnixTime(DateTime date)
         {
-            return (long)(date - mEpochTime.ToLocalTime()).TotalMilliseconds;
+            return (long)(date - _epochTime.ToLocalTime()).TotalMilliseconds;
         }
 
         /// <summary>

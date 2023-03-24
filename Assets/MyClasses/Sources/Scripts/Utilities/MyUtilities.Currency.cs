@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyUtilities.Currency (version 1.5)
+ * Class:       MyUtilities.Currency (version 1.6)
  */
 
 using System.Globalization;
@@ -11,10 +11,33 @@ namespace MyClasses
 {
     public static partial class MyUtilities
     {
-        private static CultureInfo CULTURE_DOT = CultureInfo.GetCultureInfo("es-ES");
-        private static CultureInfo CULTURE_COMMA = CultureInfo.GetCultureInfo("en-US");
+        #region ----- Enumeration -----
 
-        #region ----- Public Method -----
+        public enum ESeparator
+        {
+            Dot,
+            Comma
+        }
+
+        public enum EUnitCurrency
+        {
+            Thousands,
+            Millions,
+            Billions,
+            Trillions,
+            Quadrillions
+        }
+
+        #endregion
+
+        #region ----- Define -----
+
+        private static readonly CultureInfo CULTURE_DOT = CultureInfo.GetCultureInfo("es-ES");
+        private static readonly CultureInfo CULTURE_COMMA = CultureInfo.GetCultureInfo("en-US");
+
+        #endregion
+
+        #region ----- Public Function -----
 
         /// <summary>
         /// Add commas into thousands places.
@@ -119,7 +142,7 @@ namespace MyClasses
 
         #endregion
 
-        #region ----- Private Method -----
+        #region ----- Private Function -----
 
         /// <summary>
         /// Convert number to currency string.
@@ -253,25 +276,6 @@ namespace MyClasses
             }
 
             return number.ToString();
-        }
-
-        #endregion
-
-        #region ----- Enumeration -----
-
-        public enum ESeparator
-        {
-            Dot,
-            Comma
-        }
-
-        public enum EUnitCurrency
-        {
-            Thousands,
-            Millions,
-            Billions,
-            Trillions,
-            Quadrillions
         }
 
         #endregion

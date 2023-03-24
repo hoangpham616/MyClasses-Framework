@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyImageStyle (version 1.0)
+ * Class:       MyImageStyle (version 1.1)
  */
 
 #if UNITY_EDITOR
@@ -20,12 +20,12 @@ namespace MyClasses
         #region ----- Variable -----
 
         [SerializeField]
-        private MyImageStyleManager.EStyle mStyle = MyImageStyleManager.EStyle.UNDEFINED;
+        private MyImageStyleManager.EStyle _style = MyImageStyleManager.EStyle.UNDEFINED;
         [SerializeField]
-        private MyImageStyleManager.MyImageStyleInfo mInfo;
+        private MyImageStyleManager.MyImageStyleInfo _info;
 
-        private Image mImage;
-        private RectTransform mRectTransform;
+        private RectTransform _rectTransform;
+        private Image _image;
 
         #endregion
 
@@ -33,10 +33,10 @@ namespace MyClasses
 
         public MyImageStyleManager.EStyle Style
         {
-            get { return mStyle; }
+            get { return _style; }
             set
             {
-                mStyle = value;
+                _style = value;
                 Refresh();
             }
         }
@@ -62,38 +62,38 @@ namespace MyClasses
         /// </summary>
         public void Refresh()
         {
-            MyImageStyleManager.MyImageStyleInfo info = MyImageStyleManager.Instance.GetInfo(mStyle);
+            MyImageStyleManager.MyImageStyleInfo info = MyImageStyleManager.Instance.GetInfo(_style);
             if (info == null)
             {
                 return;
             }
 
-            if (mImage == null)
+            if (_image == null)
             {
-                mImage = gameObject.GetComponent<Image>();
+                _image = gameObject.GetComponent<Image>();
             }
 
             if (info.Image != null)
             {
-                mImage.sprite = info.Image;
+                _image.sprite = info.Image;
             }
 
             if (info.Material != null)
             {
-                mImage.material = info.Material;
+                _image.material = info.Material;
             }
             
-            mImage.color = info.Color;
+            _image.color = info.Color;
 
             if (info.Size.x > 0 && info.Size.y > 0)
             {
-                if (mRectTransform == null)
+                if (_rectTransform == null)
                 {
-                    mRectTransform = gameObject.GetComponent<RectTransform>();
+                    _rectTransform = gameObject.GetComponent<RectTransform>();
                 }
-                if (mRectTransform != null)
+                if (_rectTransform != null)
                 {
-                    mRectTransform.sizeDelta = info.Size;
+                    _rectTransform.sizeDelta = info.Size;
                 }
             }
 
@@ -101,26 +101,26 @@ namespace MyClasses
             {
                 case MyImageStyleManager.EImageType.SIMPLE:
                     {
-                        mImage.type = Image.Type.Simple;
-                        mImage.preserveAspect = false;
+                        _image.type = Image.Type.Simple;
+                        _image.preserveAspect = false;
                     }
                     break;
                 case MyImageStyleManager.EImageType.SIMPLE_PRESERVE_ASPECT:
                     {
-                        mImage.type = Image.Type.Simple;
-                        mImage.preserveAspect = true;
+                        _image.type = Image.Type.Simple;
+                        _image.preserveAspect = true;
                     }
                     break;
                 case MyImageStyleManager.EImageType.SLICED:
                     {
-                        mImage.type = Image.Type.Sliced;
-                        mImage.fillCenter = false;
+                        _image.type = Image.Type.Sliced;
+                        _image.fillCenter = false;
                     }
                     break;
                 case MyImageStyleManager.EImageType.SLICED_FILL_CENTER:
                     {
-                        mImage.type = Image.Type.Sliced;
-                        mImage.fillCenter = true;
+                        _image.type = Image.Type.Sliced;
+                        _image.fillCenter = true;
                     }
                     break;
             }
@@ -134,16 +134,16 @@ namespace MyClasses
     [CustomEditor(typeof(MyImageStyle)), CanEditMultipleObjects]
     public class MyImageEditor : Editor
     {
-        private MyImageStyle mScript;
-        private SerializedProperty mStyle;
+        private MyImageStyle _script;
+        private SerializedProperty _style;
 
         /// <summary>
         /// OnEnable.
         /// </summary>
         void OnEnable()
         {
-            mScript = (MyImageStyle)target;
-            mStyle = serializedObject.FindProperty("mStyle");
+            _script = (MyImageStyle)target;
+            _style = serializedObject.FindProperty("_style");
         }
 
         /// <summary>
@@ -151,21 +151,21 @@ namespace MyClasses
         /// </summary>
         public override void OnInspectorGUI()
         {
-            EditorGUILayout.ObjectField("Script", MonoScript.FromMonoBehaviour(mScript), typeof(MyImageStyle), false);
+            EditorGUILayout.ObjectField("Script", MonoScript.FromMonoBehaviour(_script), typeof(MyImageStyle), false);
 
             serializedObject.Update();
 
             EditorGUI.BeginChangeCheck();
 
-            mStyle.enumValueIndex = (int)(MyImageStyleManager.EStyle)EditorGUILayout.EnumPopup("Style", (MyImageStyleManager.EStyle)mStyle.enumValueIndex);
+            _style.enumValueIndex = (int)(MyImageStyleManager.EStyle)EditorGUILayout.EnumPopup("Style", (MyImageStyleManager.EStyle)_style.enumValueIndex);
 
             if (EditorGUI.EndChangeCheck())
             {
                 serializedObject.ApplyModifiedProperties();
-                mScript.Refresh();
+                _script.Refresh();
             }
 
-            MyImageStyleManager.MyImageStyleInfo info = MyImageStyleManager.Instance.GetInfo((MyImageStyleManager.EStyle)mStyle.enumValueIndex);
+            MyImageStyleManager.MyImageStyleInfo info = MyImageStyleManager.Instance.GetInfo((MyImageStyleManager.EStyle)_style.enumValueIndex);
             EditorGUILayout.LabelField("Your Note", info != null ? info.Note : string.Empty);
         }
     }

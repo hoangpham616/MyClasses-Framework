@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyCameraFollow2D (version 1.1)
+ * Class:       MyCameraFollow2D (version 1.2)
  */
 
 #if UNITY_EDITOR
@@ -19,21 +19,21 @@ namespace MyClasses
         #region ----- Variable -----
 
         [SerializeField]
-        private Transform mTarget;
+        private Transform _target;
 
         [SerializeField]
-        private float mSmoothTimeX = 0.05f;
+        private float _smoothTimeX = 0.05f;
         [SerializeField]
-        private float mSmoothTimeY = 0.05f;
+        private float _smoothTimeY = 0.05f;
 
         [SerializeField]
-        private bool mIsBound = false;
+        private bool _isBound = false;
         [SerializeField]
-        private Vector2 mMinPosition = new Vector2(-10, -5);
+        private Vector2 _minPosition = new Vector2(-10, -5);
         [SerializeField]
-        private Vector2 mMaxPosition = new Vector2(10, 5);
+        private Vector2 _maxPosition = new Vector2(10, 5);
 
-        private Vector2 mVelocity;
+        private Vector2 _velocity;
 
         #endregion
 
@@ -41,45 +41,45 @@ namespace MyClasses
 
         public Vector2 Velocity
         {
-            get { return mVelocity; }
+            get { return _velocity; }
         }
 
 #if UNITY_EDITOR
 
         public Transform Target
         {
-            get { return mTarget; }
-            set { mTarget = value; }
+            get { return _target; }
+            set { _target = value; }
         }
 
         public float SmoothTimeX
         {
-            get { return mSmoothTimeX; }
-            set { mSmoothTimeX = value; }
+            get { return _smoothTimeX; }
+            set { _smoothTimeX = value; }
         }
 
         public float SmoothTimeY
         {
-            get { return mSmoothTimeY; }
-            set { mSmoothTimeY = value; }
+            get { return _smoothTimeY; }
+            set { _smoothTimeY = value; }
         }
 
         public bool IsBound
         {
-            get { return mIsBound; }
-            set { mIsBound = value; }
+            get { return _isBound; }
+            set { _isBound = value; }
         }
 
         public Vector2 MinPosition
         {
-            get { return mMinPosition; }
-            set { mMinPosition = value; }
+            get { return _minPosition; }
+            set { _minPosition = value; }
         }
 
         public Vector2 MaxPosition
         {
-            get { return mMaxPosition; }
-            set { mMaxPosition = value; }
+            get { return _maxPosition; }
+            set { _maxPosition = value; }
         }
 
 #endif
@@ -93,17 +93,17 @@ namespace MyClasses
         /// </summary>
         void LateUpdate()
         {
-            if (mTarget != null)
+            if (_target != null)
             {
                 Vector3 newPos = transform.position;
 
-                newPos.x = Mathf.SmoothDamp(transform.position.x, mTarget.transform.position.x, ref mVelocity.x, mSmoothTimeX);
-                newPos.y = Mathf.SmoothDamp(transform.position.y, mTarget.transform.position.y, ref mVelocity.y, mSmoothTimeY);
+                newPos.x = Mathf.SmoothDamp(transform.position.x, _target.transform.position.x, ref _velocity.x, _smoothTimeX);
+                newPos.y = Mathf.SmoothDamp(transform.position.y, _target.transform.position.y, ref _velocity.y, _smoothTimeY);
 
-                if (mIsBound)
+                if (_isBound)
                 {
-                    newPos.x = Mathf.Clamp(newPos.x, mMinPosition.x, mMaxPosition.x);
-                    newPos.y = Mathf.Clamp(newPos.y, mMinPosition.y, mMaxPosition.y);
+                    newPos.x = Mathf.Clamp(newPos.x, _minPosition.x, _maxPosition.x);
+                    newPos.y = Mathf.Clamp(newPos.y, _minPosition.y, _maxPosition.y);
                 }
 
                 transform.position = newPos;
@@ -118,14 +118,14 @@ namespace MyClasses
     [CustomEditor(typeof(MyCameraFollow2D))]
     public class MyCameraFollow2DEditor : Editor
     {
-        private MyCameraFollow2D mScript;
+        private MyCameraFollow2D _script;
 
         /// <summary>
         /// OnEnable.
         /// </summary>
         void OnEnable()
         {
-            mScript = (MyCameraFollow2D)target;
+            _script = (MyCameraFollow2D)target;
         }
 
         /// <summary>
@@ -133,35 +133,35 @@ namespace MyClasses
         /// </summary>
         public override void OnInspectorGUI()
         {
-            EditorGUILayout.ObjectField("Script", MonoScript.FromMonoBehaviour(mScript), typeof(MyCameraFollow2D), false);
+            EditorGUILayout.ObjectField("Script", MonoScript.FromMonoBehaviour(_script), typeof(MyCameraFollow2D), false);
 
-            mScript.Target = (Transform)EditorGUILayout.ObjectField("Target", mScript.Target, typeof(Transform), true);
+            _script.Target = (Transform)EditorGUILayout.ObjectField("Target", _script.Target, typeof(Transform), true);
 
-            mScript.SmoothTimeX = EditorGUILayout.FloatField("Smooth Time X", mScript.SmoothTimeX);
-            mScript.SmoothTimeY = EditorGUILayout.FloatField("Smooth Time Y", mScript.SmoothTimeY);
+            _script.SmoothTimeX = EditorGUILayout.FloatField("Smooth Time X", _script.SmoothTimeX);
+            _script.SmoothTimeY = EditorGUILayout.FloatField("Smooth Time Y", _script.SmoothTimeY);
 
-            mScript.IsBound = EditorGUILayout.Toggle("Is Bound", mScript.IsBound);
-            if (mScript.IsBound)
+            _script.IsBound = EditorGUILayout.Toggle("Is Bound", _script.IsBound);
+            if (_script.IsBound)
             {
                 EditorGUILayout.BeginHorizontal();
-                mScript.MinPosition = EditorGUILayout.Vector2Field("Min Position", mScript.MinPosition);
+                _script.MinPosition = EditorGUILayout.Vector2Field("Min Position", _script.MinPosition);
                 if (GUILayout.Button("Set Min Camera Position"))
                 {
-                    mScript.MinPosition = new Vector2(mScript.transform.position.x, mScript.transform.position.y);
+                    _script.MinPosition = new Vector2(_script.transform.position.x, _script.transform.position.y);
                 }
                 EditorGUILayout.EndHorizontal();
 
                 EditorGUILayout.BeginHorizontal();
-                mScript.MaxPosition = EditorGUILayout.Vector2Field("Max Position", mScript.MaxPosition);
+                _script.MaxPosition = EditorGUILayout.Vector2Field("Max Position", _script.MaxPosition);
                 if (GUILayout.Button("Set Max Camera Position"))
                 {
-                    mScript.MaxPosition = new Vector2(mScript.transform.position.x, mScript.transform.position.y);
+                    _script.MaxPosition = new Vector2(_script.transform.position.x, _script.transform.position.y);
                 }
                 EditorGUILayout.EndHorizontal();
             }
 
             EditorGUILayout.LabelField(string.Empty);
-            EditorGUILayout.LabelField("Velocity: (" + mScript.Velocity.x + ", " + mScript.Velocity.y + ")");
+            EditorGUILayout.LabelField("Velocity: (" + _script.Velocity.x + ", " + _script.Velocity.y + ")");
         }
     }
 

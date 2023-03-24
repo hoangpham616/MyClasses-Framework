@@ -11,7 +11,27 @@ namespace MyClasses
 {
     public static partial class MyUtilities
     {
-        #region ----- Public Method -----
+        #region ----- Enumeration -----
+
+        public enum ETimeFormat
+        {
+            Flexibility,
+            DD_HH_MM_SS,
+            HH_MM_SS,
+            MM_SS
+        }
+
+        public enum EUnitTime
+        {
+            Second,
+            Minute,
+            Hour,
+            Day
+        }
+
+        #endregion
+
+        #region ----- Public Function -----
 
         /// <summary>
         /// Convert seconds to time string.
@@ -304,26 +324,6 @@ namespace MyClasses
             }
 
             return time;
-        }
-
-        #endregion
-
-        #region ----- Enumeration -----
-
-        public enum ETimeFormat
-        {
-            Flexibility,
-            DD_HH_MM_SS,
-            HH_MM_SS,
-            MM_SS
-        }
-
-        public enum EUnitTime
-        {
-            Second,
-            Minute,
-            Hour,
-            Day
         }
 
         #endregion

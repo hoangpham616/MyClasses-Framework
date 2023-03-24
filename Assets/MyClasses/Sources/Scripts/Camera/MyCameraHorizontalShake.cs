@@ -2,7 +2,8 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyCameraHorizontalShake (version 1.0)
+ * Class:       MyCameraHorizontalShake (version 1.1)
+ * Requirement: MyShaderImageHorizontalShake.shader
  */
 
 using UnityEditor;
@@ -16,19 +17,19 @@ namespace MyClasses
     {
         #region ----- Define -----
 
-        private readonly string INTENSITY = "_Intensity";
-        private readonly string SHAKE_TIME = "_ShakeTime";
+        private readonly string _INTENSITY = "_Intensity";
+        private readonly string _SHAKE_TIME = "_ShakeTime";
 
         #endregion
 
         #region ----- Variable -----
 
         [SerializeField, Range(0, 1)]
-        private float mIntensity = 0.1f;
+        private float _intensity = 0.1f;
 
-        private Material mMaterial;
-        private Shader mShader;
-        private float mTime;
+        private Material _material;
+        private Shader _shader;
+        private float _time;
 
         #endregion
 
@@ -48,17 +49,17 @@ namespace MyClasses
         private void OnRenderImage(RenderTexture source, RenderTexture destination)
         {
 #if UNITY_EDITOR
-            if (mMaterial == null)
+            if (_material == null)
             {
                 _Initialize();
             }
 #endif
 
-            mTime += Time.deltaTime * mIntensity * 11.3f;
+            _time += Time.deltaTime * _intensity * 11.3f;
 
-            mMaterial.SetFloat(INTENSITY, mIntensity);
-            mMaterial.SetFloat(SHAKE_TIME, mTime);
-            Graphics.Blit(source, destination, mMaterial);
+            _material.SetFloat(_INTENSITY, _intensity);
+            _material.SetFloat(_SHAKE_TIME, _time);
+            Graphics.Blit(source, destination, _material);
         }
 
         #endregion
@@ -71,13 +72,13 @@ namespace MyClasses
         private void _Initialize()
         {
 #if UNITY_EDITOR
-            if (mShader == null)
+            if (_shader == null)
             {
                 string[] paths = new string[] { "Assets/MyClasses", "Assets/Core/MyClasses", "Assets/Plugin/MyClasses", "Assets/Plugins/MyClasses", "Assets/Framework/MyClasses", "Assets/Frameworks/MyClasses" };
                 for (int i = 0; i < paths.Length; i++)
                 {
-                    mShader = AssetDatabase.LoadAssetAtPath<Shader>(paths[i] + "/Sources/Shaders/ImageEffect/MyShaderImageHorizontalShake.shader");
-                    if (mShader != null)
+                    _shader = AssetDatabase.LoadAssetAtPath<Shader>(paths[i] + "/Sources/Shaders/ImageEffect/MyShaderImageHorizontalShake.shader");
+                    if (_shader != null)
                     {
                         break;
                     }
@@ -85,8 +86,8 @@ namespace MyClasses
             }
 #endif
 
-            mMaterial = new Material(mShader);
-            mMaterial.hideFlags = HideFlags.DontSave;
+            _material = new Material(_shader);
+            _material.hideFlags = HideFlags.DontSave;
         }
 
         #endregion

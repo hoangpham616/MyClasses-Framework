@@ -1,7 +1,7 @@
 ﻿/*
 * Copyright (c) 2016 Phạm Minh Hoàng
 * Framework:   MyClasses
-* Class:       MyReactionController (version 1.0)
+* Class:       MyReactionController (version 1.1)
 */
 
 #if UNITY_EDITOR
@@ -17,12 +17,12 @@ namespace MyClasses.CoReaction
     {
         #region ----- Variable -----
 
-        private Dictionary<int, MyReactionParameter> mDictionaryParameter = new Dictionary<int, MyReactionParameter>();
-        private List<MyReaction> mListReaction = new List<MyReaction>();
-        private int mCountParameter;
-        private int mCountReaction;
-        private bool mIsHasParameterChange;
-        private bool mIsHasTriggerParameterChange;
+        private Dictionary<int, MyReactionParameter> _dictionaryParameter = new Dictionary<int, MyReactionParameter>();
+        private List<MyReaction> _listReaction = new List<MyReaction>();
+        private int _countParameter;
+        private int _countReaction;
+        private bool _isHasParameterChange;
+        private bool _isHasTriggerParameterChange;
 
         #endregion
 
@@ -30,7 +30,7 @@ namespace MyClasses.CoReaction
 
         public Dictionary<int, MyReactionParameter> DictionaryParameter
         {
-            get { return mDictionaryParameter; }
+            get { return _dictionaryParameter; }
         }
 
         #endregion
@@ -42,19 +42,19 @@ namespace MyClasses.CoReaction
         /// </summary>
         void LateUpdate()
         {
-            if (mIsHasParameterChange)
+            if (_isHasParameterChange)
             {
                 _CheckConditionAndActiveReactions();
-                mIsHasParameterChange = false;
+                _isHasParameterChange = false;
             }
 
             _RunReactions();
 
-            if (mIsHasTriggerParameterChange)
+            if (_isHasTriggerParameterChange)
             {
                 _ResetAllTriggerPamameters();
-                mIsHasTriggerParameterChange = false;
-                mIsHasParameterChange = true;
+                _isHasTriggerParameterChange = false;
+                _isHasParameterChange = true;
             }
         }
 
@@ -67,7 +67,7 @@ namespace MyClasses.CoReaction
         /// </summary>
         public void AddParameter(int id, MyReactionParameter.EType type, string name = null, object defaultValue = null)
         {
-            if (mDictionaryParameter.ContainsKey(id))
+            if (_dictionaryParameter.ContainsKey(id))
             {
                 Debug.LogWarning("[" + typeof(MyReactionController).Name + "] AddParameter(): Duplicate parameterID=" + id + ".");
                 return;
@@ -98,8 +98,8 @@ namespace MyClasses.CoReaction
                     break;
             }
 
-            mDictionaryParameter.Add(id, parameter);
-            mCountParameter = mDictionaryParameter.Count;
+            _dictionaryParameter.Add(id, parameter);
+            _countParameter = _dictionaryParameter.Count;
         }
 
         /// <summary>
@@ -107,7 +107,7 @@ namespace MyClasses.CoReaction
         /// </summary>
         public void AddReaction(MyReaction reaction)
         {
-            if (mCountParameter == 0)
+            if (_countParameter == 0)
             {
                 Debug.LogWarning("[" + typeof(MyReactionController).Name + "] AddReaction(): You must setup parameters first.");
                 return;
@@ -121,16 +121,16 @@ namespace MyClasses.CoReaction
 
             foreach (MyReactionCondition condition in reaction.ListCondition)
             {
-                if (!mDictionaryParameter.ContainsKey(condition.ParameterID))
+                if (!_dictionaryParameter.ContainsKey(condition.ParameterID))
                 {
                     Debug.LogWarning("[" + typeof(MyReactionController).Name + "] AddReaction(): Could not find parameterID=" + condition.ParameterID);
                     continue;
                 }
-                condition.SetComparedFunction(mDictionaryParameter[condition.ParameterID].IsPass);
+                condition.SetComparedFunction(_dictionaryParameter[condition.ParameterID].IsPass);
             }
 
-            mListReaction.Add(reaction);
-            mCountReaction = mListReaction.Count;
+            _listReaction.Add(reaction);
+            _countReaction = _listReaction.Count;
         }
 
         /// <summary>
@@ -174,13 +174,13 @@ namespace MyClasses.CoReaction
         /// </summary>
         private void _SetParameterValue(int parameterID, object value)
         {
-            if (!mDictionaryParameter.ContainsKey(parameterID))
+            if (!_dictionaryParameter.ContainsKey(parameterID))
             {
                 Debug.LogWarning("[" + typeof(MyReactionController).Name + "] _SetParameterValue(): Could not find parameterID=" + parameterID);
                 return;
             }
 
-            var parameter = mDictionaryParameter[parameterID];
+            var parameter = _dictionaryParameter[parameterID];
             if (parameter.IsEqual(value))
             {
                 return;
@@ -188,10 +188,10 @@ namespace MyClasses.CoReaction
 
             parameter.SetValue(value);
 
-            mIsHasParameterChange = true;
+            _isHasParameterChange = true;
             if (parameter.Type == MyReactionParameter.EType.Trigger)
             {
-                mIsHasTriggerParameterChange = true;
+                _isHasTriggerParameterChange = true;
             }
         }
 
@@ -200,9 +200,9 @@ namespace MyClasses.CoReaction
         /// </summary>
         private void _RunReactions()
         {
-            for (int i = 0; i < mCountReaction; i++)
+            for (int i = 0; i < _countReaction; i++)
             {
-                mListReaction[i].Run();
+                _listReaction[i].Run();
             }
         }
 
@@ -211,9 +211,9 @@ namespace MyClasses.CoReaction
         /// </summary>
         private void _CheckConditionAndActiveReactions()
         {
-            for (int i = 0; i < mCountReaction; i++)
+            for (int i = 0; i < _countReaction; i++)
             {
-                mListReaction[i].CheckConditionsAndActive();
+                _listReaction[i].CheckConditionsAndActive();
             }
         }
 
@@ -222,7 +222,7 @@ namespace MyClasses.CoReaction
         /// </summary>
         private void _ResetAllTriggerPamameters()
         {
-            foreach (var item in mDictionaryParameter)
+            foreach (var item in _dictionaryParameter)
             {
                 var parameter = item.Value;
                 if (parameter.Type == MyReactionParameter.EType.Trigger)
@@ -240,14 +240,14 @@ namespace MyClasses.CoReaction
     [CustomEditor(typeof(MyReactionController))]
     public class MyReactionControllerEditor : Editor
     {
-        private MyReactionController mScript;
+        private MyReactionController _script;
 
         /// <summary>
         /// OnEnable.
         /// </summary>
         void OnEnable()
         {
-            mScript = (MyReactionController)target;
+            _script = (MyReactionController)target;
         }
 
         /// <summary>
@@ -255,9 +255,9 @@ namespace MyClasses.CoReaction
         /// </summary>
         public override void OnInspectorGUI()
         {
-            EditorGUILayout.ObjectField("Script", MonoScript.FromMonoBehaviour(mScript), typeof(MyReactionController), false);
+            EditorGUILayout.ObjectField("Script", MonoScript.FromMonoBehaviour(_script), typeof(MyReactionController), false);
 
-            foreach (var parameter in mScript.DictionaryParameter)
+            foreach (var parameter in _script.DictionaryParameter)
             {
                 GUILayout.Label(parameter.Value.Name + ": " + parameter.Value.Value);
             }

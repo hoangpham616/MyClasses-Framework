@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyAStarUnitTest (version 1.0)
+ * Class:       MyAStarUnitTest (version 1.1)
  */
 
 using UnityEngine;
@@ -16,7 +16,7 @@ namespace MyClasses
     {
         #region ----- Variable -----
 
-        private int[][] mRandomGrid = new int[512][];
+        private int[][] _randomGrid = new int[512][];
 
         #endregion
 
@@ -31,9 +31,9 @@ namespace MyClasses
             Debug.Log("Press key '0' to test on random grid");
             Debug.Log("Press key '1-6' to test on fixed grids");
 
-            for (int i = 0; i < mRandomGrid.Length; i++)
+            for (int i = 0; i < _randomGrid.Length; i++)
             {
-                mRandomGrid[i] = new int[mRandomGrid.Length];
+                _randomGrid[i] = new int[_randomGrid.Length];
             }
             _RandomGrid();
         }
@@ -62,8 +62,8 @@ namespace MyClasses
                 // 1 1 1 1 1 . 1 1 1 1 1
                 // 1 1 1 1 1 . 1 1 1 1 1
                 Vector2 startPoint = new Vector2(5, 5);
-                Vector2 endPoint = new Vector2(mRandomGrid.Length - 6, mRandomGrid.Length - 6);
-                StartCoroutine(_TestAStar(mRandomGrid, (int)startPoint.x, (int)startPoint.y, (int)endPoint.x, (int)endPoint.y, MyAStar.ESearchOrder.LeftRightUpDown));
+                Vector2 endPoint = new Vector2(_randomGrid.Length - 6, _randomGrid.Length - 6);
+                StartCoroutine(_TestAStar(_randomGrid, (int)startPoint.x, (int)startPoint.y, (int)endPoint.x, (int)endPoint.y, MyAStar.ESearchOrder.LeftRightUpDown));
             }
 
             if (Input.GetKeyUp(KeyCode.Alpha1))
@@ -190,35 +190,35 @@ namespace MyClasses
         /// </summary>
         private void _RandomGrid()
         {
-            for (int i = 0; i < mRandomGrid.Length; i++)
+            for (int i = 0; i < _randomGrid.Length; i++)
             {
                 int randomStartIndex = UnityEngine.Random.Range(6, 12);
                 int randomEndIndex = randomStartIndex + UnityEngine.Random.Range(12, 15);
-                for (int j = 0; j < mRandomGrid.Length / 2; j++)
+                for (int j = 0; j < _randomGrid.Length / 2; j++)
                 {
                     int index = j % 20;
                     if (randomStartIndex <= index && index <= randomEndIndex)
                     {
-                        mRandomGrid[i][j] = 0;
+                        _randomGrid[i][j] = 0;
                     }
                     else
                     {
-                        mRandomGrid[i][j] = 1;
+                        _randomGrid[i][j] = 1;
                     }
                 }
 
                 randomStartIndex = UnityEngine.Random.Range(1, 6);
                 randomEndIndex = randomStartIndex + UnityEngine.Random.Range(1, 3);
-                for (int j = mRandomGrid.Length / 2; j < mRandomGrid.Length; j++)
+                for (int j = _randomGrid.Length / 2; j < _randomGrid.Length; j++)
                 {
                     int index = j % 10;
                     if (randomStartIndex <= index && index <= randomEndIndex)
                     {
-                        mRandomGrid[i][j] = 0;
+                        _randomGrid[i][j] = 0;
                     }
                     else
                     {
-                        mRandomGrid[i][j] = 1;
+                        _randomGrid[i][j] = 1;
                     }
                 }
             }

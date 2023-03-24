@@ -12,8 +12,14 @@ namespace MyClasses
 {
     public static partial class MyUtilities
     {
-        private static StringBuilder mStringBuilderInput = new StringBuilder();
-        private static StringBuilder mStringBuilderMacroKey = new StringBuilder();
+        #region ----- Variable -----
+
+        private static readonly StringBuilder _stringBuilderInput = new StringBuilder();
+        private static readonly StringBuilder _stringBuilderMacroKey = new StringBuilder();
+
+        #endregion
+        
+        #region ----- Public Function -----
 
         /// <summary>
         /// A macro example.
@@ -43,18 +49,18 @@ namespace MyClasses
         /// <param name="charEndMacro">a char used for detecting the ending of a macro</param>
         public static string ReplaceTextMacros(string input, Dictionary<string, object> macro, char charBeginMacro = '{', char charEndMacro = '}')
         {
-            mStringBuilderInput.Length = 0;
-            mStringBuilderMacroKey.Length = 0;
+            _stringBuilderInput.Length = 0;
+            _stringBuilderMacroKey.Length = 0;
 
-            mStringBuilderInput.Append(input);
+            _stringBuilderInput.Append(input);
 
             int state = 0;
 
-            for (int i = 0; i < mStringBuilderInput.Length; i++)
+            for (int i = 0; i < _stringBuilderInput.Length; i++)
             {
                 if (state == 0)
                 {
-                    if (mStringBuilderInput[i] == charBeginMacro)
+                    if (_stringBuilderInput[i] == charBeginMacro)
                     {
                         state = 1;
                         continue;
@@ -62,45 +68,47 @@ namespace MyClasses
                 }
                 else if (state == 1)
                 {
-                    if (mStringBuilderInput[i] == charEndMacro)
+                    if (_stringBuilderInput[i] == charEndMacro)
                     {
                         state = 2;
                         continue;
                     }
-                    mStringBuilderMacroKey.Append(mStringBuilderInput[i]);
+                    _stringBuilderMacroKey.Append(_stringBuilderInput[i]);
                 }
                 else if (state == 2)
                 {
-                    string macro_key = mStringBuilderMacroKey.ToString();
+                    string macro_key = _stringBuilderMacroKey.ToString();
                     if (macro.ContainsKey(macro_key))
                     {
-                        mStringBuilderInput.Replace('{' + macro_key + '}', macro[macro_key].ToString());
+                        _stringBuilderInput.Replace('{' + macro_key + '}', macro[macro_key].ToString());
                     }
                     else
                     {
-                        mStringBuilderInput.Replace('{' + macro_key + '}', "[" + macro_key + "_missing]");
+                        _stringBuilderInput.Replace('{' + macro_key + '}', "[" + macro_key + "_missing]");
                     }
 
-                    mStringBuilderMacroKey.Length = 0;
+                    _stringBuilderMacroKey.Length = 0;
                     i = 0;
                     state = 0;
                 }
             }
             
-            if (mStringBuilderMacroKey.Length != 0)
+            if (_stringBuilderMacroKey.Length != 0)
             {
-                string macro_key = mStringBuilderMacroKey.ToString();
+                string macro_key = _stringBuilderMacroKey.ToString();
                 if (macro.ContainsKey(macro_key))
                 {
-                    mStringBuilderInput.Replace('{' + macro_key + '}', macro[macro_key].ToString());
+                    _stringBuilderInput.Replace('{' + macro_key + '}', macro[macro_key].ToString());
                 }
                 else
                 {
-                    mStringBuilderInput.Replace('{' + macro_key + '}', "[" + macro_key + "_missing]");
+                    _stringBuilderInput.Replace('{' + macro_key + '}', "[" + macro_key + "_missing]");
                 }
             }
 
-            return mStringBuilderInput.ToString();
+            return _stringBuilderInput.ToString();
         }
+
+        #endregion
     }
 }

@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyTimer (version 1.2)
+ * Class:       MyTimer (version 1.3)
  */
 
 namespace MyClasses
@@ -11,9 +11,9 @@ namespace MyClasses
     {
         #region ----- Variable -----
 
-        private float mTotalTime;
-        private float mCurTime;
-        private bool mIsJustDone;
+        private float _totalTime;
+        private float _curTime;
+        private bool _isJustDone;
 
         #endregion
 
@@ -21,7 +21,7 @@ namespace MyClasses
 
         public float TotalTime
         {
-            get { return mTotalTime; }
+            get { return _totalTime; }
         }
 
         #endregion
@@ -33,8 +33,8 @@ namespace MyClasses
         /// </summary>
         public MyTimer()
         {
-            mTotalTime = 0;
-            mCurTime = 0;
+            _totalTime = 0;
+            _curTime = 0;
         }
 
         /// <summary>
@@ -54,9 +54,9 @@ namespace MyClasses
         /// </summary>
         public void SetTime(float second)
         {
-            mTotalTime = second;
-            mCurTime = second;
-            mIsJustDone = false;
+            _totalTime = second;
+            _curTime = second;
+            _isJustDone = false;
         }
 
         /// <summary>
@@ -64,12 +64,12 @@ namespace MyClasses
         /// </summary>
         public void Update(float dt)
         {
-            if (mCurTime > 0)
+            if (_curTime > 0)
             {
-                mCurTime -= dt;
-                if (mCurTime < 0)
+                _curTime -= dt;
+                if (_curTime < 0)
                 {
-                    mCurTime = 0;
+                    _curTime = 0;
                 }
             }
         }
@@ -79,7 +79,7 @@ namespace MyClasses
         /// </summary>
         public float GetTargetTime()
         {
-            return mTotalTime;
+            return _totalTime;
         }
 
         /// <summary>
@@ -87,9 +87,9 @@ namespace MyClasses
         /// </summary>
         public float GetPercent()
         {
-            if (mTotalTime > 0)
+            if (_totalTime > 0)
             {
-                return 1f - (mCurTime / mTotalTime);
+                return 1f - (_curTime / _totalTime);
             }
 
             return 1f;
@@ -100,7 +100,7 @@ namespace MyClasses
         /// </summary>
         public bool IsDone()
         {
-            return mCurTime <= 0;
+            return _curTime <= 0;
         }
 
         /// <summary>
@@ -108,9 +108,9 @@ namespace MyClasses
         /// </summary>
         public bool IsJustDone()
         {
-            if (!mIsJustDone && IsDone())
+            if (!_isJustDone && IsDone())
             {
-                mIsJustDone = true;
+                _isJustDone = true;
                 return true;
             }
 

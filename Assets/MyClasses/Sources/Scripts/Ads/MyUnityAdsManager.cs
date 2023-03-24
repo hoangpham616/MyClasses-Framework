@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyUnityAdsManager (version 1.0)
+ * Class:       MyUnityAdsManager (version 1.1)
  */
 
 #pragma warning disable 0162
@@ -27,40 +27,40 @@ namespace MyClasses
         #region ----- Variable -----
 
         [SerializeField]
-        private string mAndroidGameId = string.Empty;
+        private string _androidGameId = string.Empty;
         [SerializeField]
-        private string mIosGameId = string.Empty;
+        private string _iosGameId = string.Empty;
         [SerializeField]
-        private bool mIsTestMode = true;
+        private bool _isTestMode = true;
 
-        private Dictionary<string, Action[]> mDictCallbacks = new Dictionary<string, Action[]>();
-        private bool mIsShowBanner = false;
+        private Dictionary<string, Action[]> _dictCallbacks = new Dictionary<string, Action[]>();
+        private bool _isShowBanner = false;
 
         #endregion
 
         #region ----- Singleton -----
 
-        private static object mSingletonLock = new object();
-        private static MyUnityAdsManager mInstance;
+        private static object _singletonLock = new object();
+        private static MyUnityAdsManager _instance;
 
         public static MyUnityAdsManager Instance
         {
             get
             {
-                if (mInstance == null)
+                if (_instance == null)
                 {
-                    lock (mSingletonLock)
+                    lock (_singletonLock)
                     {
-                        mInstance = (MyUnityAdsManager)FindObjectOfType(typeof(MyUnityAdsManager));
-                        if (mInstance == null)
+                        _instance = (MyUnityAdsManager)FindObjectOfType(typeof(MyUnityAdsManager));
+                        if (_instance == null)
                         {
                             GameObject obj = new GameObject(typeof(MyUnityAdsManager).Name);
-                            mInstance = obj.AddComponent<MyUnityAdsManager>();
+                            _instance = obj.AddComponent<MyUnityAdsManager>();
                         }
-                        DontDestroyOnLoad(mInstance);
+                        DontDestroyOnLoad(_instance);
                     }
                 }
-                return mInstance;
+                return _instance;
             }
         }
 
@@ -97,9 +97,9 @@ namespace MyClasses
             Debug.Log("[" + typeof(MyUnityAdsManager).Name + "] OnUnityAdsDidStart(): placementId=" + placementId);
 #endif
 
-            if (mDictCallbacks.ContainsKey(placementId) && mDictCallbacks[placementId][3] != null)
+            if (_dictCallbacks.ContainsKey(placementId) && _dictCallbacks[placementId][3] != null)
             {
-                mDictCallbacks[placementId][3]();
+                _dictCallbacks[placementId][3]();
             }
         }
 
@@ -116,35 +116,35 @@ namespace MyClasses
             {
                 case ShowResult.Failed:
                     {
-                        if (mDictCallbacks.ContainsKey(placementId) && mDictCallbacks[placementId][0] != null)
+                        if (_dictCallbacks.ContainsKey(placementId) && _dictCallbacks[placementId][0] != null)
                         {
-                            mDictCallbacks[placementId][0]();
+                            _dictCallbacks[placementId][0]();
                         }
                     }
                     break;
 
                 case ShowResult.Skipped:
                     {
-                        if (mDictCallbacks.ContainsKey(placementId) && mDictCallbacks[placementId][1] != null)
+                        if (_dictCallbacks.ContainsKey(placementId) && _dictCallbacks[placementId][1] != null)
                         {
-                            mDictCallbacks[placementId][1]();
+                            _dictCallbacks[placementId][1]();
                         }
                     }
                     break;
 
                 case ShowResult.Finished:
                     {
-                        if (mDictCallbacks.ContainsKey(placementId) && mDictCallbacks[placementId][2] != null)
+                        if (_dictCallbacks.ContainsKey(placementId) && _dictCallbacks[placementId][2] != null)
                         {
-                            mDictCallbacks[placementId][2]();
+                            _dictCallbacks[placementId][2]();
                         }
                     }
                     break;
             }
 
-            if (mDictCallbacks.ContainsKey(placementId))
+            if (_dictCallbacks.ContainsKey(placementId))
             {
-                mDictCallbacks.Remove(placementId);
+                _dictCallbacks.Remove(placementId);
             }
         }
 
@@ -158,15 +158,15 @@ namespace MyClasses
         public void Initialize()
         {
 #if DEBUG_MY_UNITY_ADS
-            Debug.Log("[" + typeof(MyUnityAdsManager).Name + "] Initialize(): mAndroidGameId=" + mAndroidGameId + " | mIosGameId=" + mIosGameId + " | mIsTestMode=" + mIsTestMode);
+            Debug.Log("[" + typeof(MyUnityAdsManager).Name + "] Initialize(): _androidGameId=" + _androidGameId + " | _iosGameId=" + _iosGameId + " | _isTestMode=" + _isTestMode);
 #endif
 
 #if UNITY_ANDROID
             Advertisement.AddListener(this);
-            Advertisement.Initialize(mAndroidGameId, mIsTestMode);
+            Advertisement.Initialize(_androidGameId, _isTestMode);
 #elif UNITY_IOS
             Advertisement.AddListener(this);
-            Advertisement.Initialize(mIosGameId, mIsTestMode);
+            Advertisement.Initialize(_iosGameId, _isTestMode);
 #endif
         }
 
@@ -240,7 +240,7 @@ namespace MyClasses
 #endif
 
 #if UNITY_ANDROID || UNITY_IOS
-            mIsShowBanner = true;
+            _isShowBanner = true;
             StartCoroutine(_DoShowBanner(position, placementId));
 #endif
         }
@@ -255,9 +255,9 @@ namespace MyClasses
 #endif
 
 #if UNITY_ANDROID || UNITY_IOS
-            if (mIsShowBanner)
+            if (_isShowBanner)
             {
-                mIsShowBanner = false;
+                _isShowBanner = false;
                 Advertisement.Banner.Hide();
             }
 #endif
@@ -275,15 +275,15 @@ namespace MyClasses
 #if UNITY_ANDROID || UNITY_IOS
             if (onStartedCallback != null || onFinishedCallback != null || onFailedCallback != null || onSkippedCallback != null)
             {
-                mDictCallbacks[placementId] = new Action[4];
-                mDictCallbacks[placementId][0] = onFailedCallback;
-                mDictCallbacks[placementId][1] = onSkippedCallback;
-                mDictCallbacks[placementId][2] = onFinishedCallback;
-                mDictCallbacks[placementId][3] = onStartedCallback;
+                _dictCallbacks[placementId] = new Action[4];
+                _dictCallbacks[placementId][0] = onFailedCallback;
+                _dictCallbacks[placementId][1] = onSkippedCallback;
+                _dictCallbacks[placementId][2] = onFinishedCallback;
+                _dictCallbacks[placementId][3] = onStartedCallback;
             }
-            else if (mDictCallbacks.ContainsKey(placementId))
+            else if (_dictCallbacks.ContainsKey(placementId))
             {
-                mDictCallbacks.Remove(placementId);
+                _dictCallbacks.Remove(placementId);
             }
 
             if (Advertisement.IsReady(placementId))
@@ -315,12 +315,12 @@ namespace MyClasses
         /// </summary>
         private IEnumerator _DoShowBanner(BannerPosition position, string placementId = "banner")
         {
-            while (!Advertisement.IsReady(placementId) && mIsShowBanner)
+            while (!Advertisement.IsReady(placementId) && _isShowBanner)
             {
                 yield return null;
             }
 
-            if (mIsShowBanner)
+            if (_isShowBanner)
             {
                 Advertisement.Banner.SetPosition(position);
                 Advertisement.Banner.Show(placementId);
@@ -335,20 +335,20 @@ namespace MyClasses
     [CustomEditor(typeof(MyUnityAdsManager))]
     public class MyUnityAdsManagerEditor : Editor
     {
-        private MyUnityAdsManager mScript;
-        private SerializedProperty mAndroidGameId;
-        private SerializedProperty mIosGameId;
-        private SerializedProperty mIsTestMode;
+        private MyUnityAdsManager _script;
+        private SerializedProperty _androidGameId;
+        private SerializedProperty _iosGameId;
+        private SerializedProperty _isTestMode;
 
         /// <summary>
         /// OnEnable.
         /// </summary>
         void OnEnable()
         {
-            mScript = (MyUnityAdsManager)target;
-            mAndroidGameId = serializedObject.FindProperty("mAndroidGameId");
-            mIosGameId = serializedObject.FindProperty("mIosGameId");
-            mIsTestMode = serializedObject.FindProperty("mIsTestMode");
+            _script = (MyUnityAdsManager)target;
+            _androidGameId = serializedObject.FindProperty("_androidGameId");
+            _iosGameId = serializedObject.FindProperty("_iosGameId");
+            _isTestMode = serializedObject.FindProperty("_isTestMode");
         }
 
         /// <summary>
@@ -356,13 +356,13 @@ namespace MyClasses
         /// </summary>
         public override void OnInspectorGUI()
         {
-            EditorGUILayout.ObjectField("Script", MonoScript.FromMonoBehaviour(mScript), typeof(MyUnityAdsManager), false);
+            EditorGUILayout.ObjectField("Script", MonoScript.FromMonoBehaviour(_script), typeof(MyUnityAdsManager), false);
 
             serializedObject.Update();
 
-            mIosGameId.stringValue = EditorGUILayout.TextField("IOS Game ID", mIosGameId.stringValue);
-            mAndroidGameId.stringValue = EditorGUILayout.TextField("Android Game ID", mAndroidGameId.stringValue);
-            mIsTestMode.boolValue = EditorGUILayout.Toggle("Enable Test Mode", mIsTestMode.boolValue);
+            _iosGameId.stringValue = EditorGUILayout.TextField("IOS Game ID", _iosGameId.stringValue);
+            _androidGameId.stringValue = EditorGUILayout.TextField("Android Game ID", _androidGameId.stringValue);
+            _isTestMode.boolValue = EditorGUILayout.Toggle("Enable Test Mode", _isTestMode.boolValue);
 
             serializedObject.ApplyModifiedProperties();
         }

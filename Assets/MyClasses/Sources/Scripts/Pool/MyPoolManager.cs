@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyPoolManager (version 2.12)
+ * Class:       MyPoolManager (version 2.13)
  */
 
 using UnityEngine;
@@ -21,33 +21,33 @@ namespace MyClasses
 
         #region ----- Variable -----
 
-        private Dictionary<string, MyPool> mDictPooler = new Dictionary<string, MyPool>();
+        private Dictionary<string, MyPool> _dictionaryPooler = new Dictionary<string, MyPool>();
 
         #endregion
 
         #region ----- Singleton -----
 
-        private static object mSingletonLock = new object();
-        private static MyPoolManager mInstance;
+        private static object _singletonLock = new object();
+        private static MyPoolManager _instance;
 
         public static MyPoolManager Instance
         {
             get
             {
-                if (mInstance == null)
+                if (_instance == null)
                 {
-                    lock (mSingletonLock)
+                    lock (_singletonLock)
                     {
-                        mInstance = (MyPoolManager)FindObjectOfType(typeof(MyPoolManager));
-                        if (mInstance == null)
+                        _instance = (MyPoolManager)FindObjectOfType(typeof(MyPoolManager));
+                        if (_instance == null)
                         {
                             GameObject obj = new GameObject(typeof(MyPoolManager).Name);
-                            mInstance = obj.AddComponent<MyPoolManager>();
+                            _instance = obj.AddComponent<MyPoolManager>();
                             DontDestroyOnLoad(obj);
                         }
                     }
                 }
-                return mInstance;
+                return _instance;
             }
         }
 
@@ -61,14 +61,14 @@ namespace MyClasses
         /// <param name="isForceCreate">always create new object</param>
         public GameObject Use(string path, bool isForceCreate = false)
         {
-            if (mDictPooler.ContainsKey(path))
+            if (_dictionaryPooler.ContainsKey(path))
             {
                 if (isForceCreate)
                 {
-                    return mDictPooler[path].Create();
+                    return _dictionaryPooler[path].Create();
                 }
 
-                return mDictPooler[path].Use();
+                return _dictionaryPooler[path].Use();
             }
 
             GameObject root = MyUtilities.FindObjectInFirstLayer(gameObject, path);
@@ -92,7 +92,7 @@ namespace MyClasses
                 rootOccupied.transform.SetParent(root.transform, false);
             }
 
-            mDictPooler.Add(path, new MyPool(path, rootFree, rootOccupied));
+            _dictionaryPooler.Add(path, new MyPool(path, rootFree, rootOccupied));
 
             return Use(path, isForceCreate);
         }
@@ -102,10 +102,10 @@ namespace MyClasses
         /// </summary>
         public GameObject Use(GameObject prefab)
         {
-            if (mDictPooler.ContainsKey(prefab.name))
+            if (_dictionaryPooler.ContainsKey(prefab.name))
             {
-                mDictPooler[prefab.name].SetTemplate(prefab);
-                return mDictPooler[prefab.name].Use();
+                _dictionaryPooler[prefab.name].SetTemplate(prefab);
+                return _dictionaryPooler[prefab.name].Use();
             }
 
             GameObject root = MyUtilities.FindObjectInFirstLayer(gameObject, prefab.name);
@@ -129,9 +129,9 @@ namespace MyClasses
                 rootOccupied.transform.SetParent(root.transform, false);
             }
 
-            mDictPooler.Add(prefab.name, new MyPool(prefab.name, rootFree, rootOccupied));
+            _dictionaryPooler.Add(prefab.name, new MyPool(prefab.name, rootFree, rootOccupied));
 
-            mDictPooler[prefab.name].SetTemplate(prefab);
+            _dictionaryPooler[prefab.name].SetTemplate(prefab);
             return Use(prefab.name, false);
         }
 
@@ -145,9 +145,9 @@ namespace MyClasses
                 MyPooledObject poolObject = obj.GetComponent<MyPooledObject>();
                 if (poolObject != null)
                 {
-                    if (mDictPooler.ContainsKey(poolObject.Pool))
+                    if (_dictionaryPooler.ContainsKey(poolObject.Pool))
                     {
-                        mDictPooler[poolObject.Pool].Return(obj);
+                        _dictionaryPooler[poolObject.Pool].Return(obj);
                     }
                 }
             }
@@ -160,13 +160,13 @@ namespace MyClasses
     {
         #region ----- Variable -----
 
-        private string mPath;
-        private string mObjectName;
-        private GameObject mTemplate;
-        private GameObject mFree;
-        private GameObject mOccupied;
-        private List<GameObject> mListFreeObject;
-        private List<GameObject> mListOccupiedObject;
+        private string _path;
+        private string _objectName;
+        private GameObject _template;
+        private GameObject _free;
+        private GameObject _occupied;
+        private List<GameObject> _listFreeObject;
+        private List<GameObject> _listOccupiedObject;
 
         #endregion
 
@@ -174,7 +174,7 @@ namespace MyClasses
 
         public string Name
         {
-            get { return mPath; }
+            get { return _path; }
         }
 
         #endregion
@@ -186,12 +186,12 @@ namespace MyClasses
         /// </summary>
         public MyPool(string path, GameObject rootFree, GameObject rootOccupied)
         {
-            mPath = path;
-            mObjectName = path.Substring(path.LastIndexOf("/") + 1);
-            mFree = rootFree;
-            mOccupied = rootOccupied;
-            mListFreeObject = new List<GameObject>();
-            mListOccupiedObject = new List<GameObject>();
+            _path = path;
+            _objectName = path.Substring(path.LastIndexOf("/") + 1);
+            _free = rootFree;
+            _occupied = rootOccupied;
+            _listFreeObject = new List<GameObject>();
+            _listOccupiedObject = new List<GameObject>();
         }
 
         #endregion
@@ -203,7 +203,7 @@ namespace MyClasses
         /// </summary>
         public void SetTemplate(GameObject template)
         {
-            mTemplate = template;
+            _template = template;
         }
 
         /// <summary>
@@ -211,25 +211,25 @@ namespace MyClasses
         /// </summary>
         public GameObject Use()
         {
-            if (mListFreeObject != null)
+            if (_listFreeObject != null)
             {
                 GameObject oldObj;
 
-                int count = mListFreeObject.Count;
+                int count = _listFreeObject.Count;
                 for (int i = 0; i < count; i++)
                 {
-                    oldObj = mListFreeObject[i];
+                    oldObj = _listFreeObject[i];
                     if (!oldObj.activeInHierarchy)
                     {
-                        oldObj.transform.SetParent(mOccupied.transform, false);
+                        oldObj.transform.SetParent(_occupied.transform, false);
                         oldObj.SetActive(true);
 
-                        if (!mListOccupiedObject.Contains(oldObj))
+                        if (!_listOccupiedObject.Contains(oldObj))
                         {
-                            mListOccupiedObject.Add(oldObj);
+                            _listOccupiedObject.Add(oldObj);
                         }
 
-                        mListFreeObject.Remove(oldObj);
+                        _listFreeObject.Remove(oldObj);
 
                         return oldObj;
                     }
@@ -246,15 +246,15 @@ namespace MyClasses
         {
             if (obj != null)
             {
-                obj.transform.SetParent(mFree.transform, false);
+                obj.transform.SetParent(_free.transform, false);
                 obj.SetActive(false);
 
-                if (!mListFreeObject.Contains(obj))
+                if (!_listFreeObject.Contains(obj))
                 {
-                    mListFreeObject.Add(obj);
+                    _listFreeObject.Add(obj);
                 }
 
-                mListOccupiedObject.Remove(obj);
+                _listOccupiedObject.Remove(obj);
             }
         }
 
@@ -263,29 +263,29 @@ namespace MyClasses
         /// </summary>
         public GameObject Create()
         {
-            if (mTemplate == null)
+            if (_template == null)
             {
-                mTemplate = Resources.Load(mPath) as GameObject;
-                if (mTemplate == null)
+                _template = Resources.Load(_path) as GameObject;
+                if (_template == null)
                 {
-                    Debug.LogError("[" + typeof(MyPool).Name + "] Create(): Could not find file \"" + mPath + "\"");
+                    Debug.LogError("[" + typeof(MyPool).Name + "] Create(): Could not find file \"" + _path + "\"");
                     return null;
                 }
             }
 
-            GameObject newObj = GameObject.Instantiate(mTemplate);
+            GameObject newObj = GameObject.Instantiate(_template);
             newObj.SetActive(true);
-            newObj.name = mObjectName;
-            newObj.transform.SetParent(mOccupied.transform, false);
+            newObj.name = _objectName;
+            newObj.transform.SetParent(_occupied.transform, false);
 
             MyPooledObject poolObject = newObj.GetComponent<MyPooledObject>();
             if (poolObject == null)
             {
                 poolObject = newObj.AddComponent<MyPooledObject>();
             }
-            poolObject.SetPool(mPath);
+            poolObject.SetPool(_path);
 
-            mListOccupiedObject.Add(newObj);
+            _listOccupiedObject.Add(newObj);
 
             return newObj;
         }
