@@ -45,7 +45,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Electricity_Mask:
-        m_Texture: {fileID: 2800000, guid: e3dd272781fd7d84c8428c697ea98864, type: 3}
+        m_Texture: {fileID: 2800000, guid: 588a1feb72ca0a14ca3e4ec291b7683f, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _EmissionMap:
@@ -166,7 +166,7 @@ Material:
     - _DstBlend: 0
     - _Electricity_Scale: 20
     - _Electricity_Speed: 0.1
-    - _Electricity_Width: 0.55
+    - _Electricity_Width: 0.6
     - _EnvironmentReflections: 1
     - _GlossMapScale: 0
     - _Glossiness: 0
@@ -200,7 +200,7 @@ Material:
     - _Color_2: {r: 1, g: 0.99607843, b: 0, a: 1}
     - _Color_3: {r: 1, g: 0.99607843, b: 0, a: 1}
     - _Color_4: {r: 0.99607843, g: 0, b: 0, a: 1}
-    - _Electricity_Color: {r: 1, g: 1, b: 0.5019608, a: 1}
+    - _Electricity_Color: {r: 766.9961, g: 766.9961, b: 156.61177, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Non_Tint_Color: {r: 1, g: 1, b: 1, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}

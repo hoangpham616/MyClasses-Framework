@@ -103,7 +103,7 @@ Material:
     - _DstBlend: 1
     - _Edge_Intensity: 0.5
     - _EnvironmentReflections: 1
-    - _Fill: 0.6
+    - _Fill: 0.5
     - _Fresnel_Power: 4.7
     - _GlossMapScale: 0
     - _Glossiness: 0
