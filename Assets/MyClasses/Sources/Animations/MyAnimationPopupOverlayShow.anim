@@ -5,7 +5,7 @@ AnimationClip:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: my_animation_popup_overlay_show
+  m_Name: MyAnimationPopupOverlayShow
   serializedVersion: 6
   m_Legacy: 0
   m_Compressed: 0

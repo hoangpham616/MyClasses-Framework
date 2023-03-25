@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyUGUIRunningMessage (version 2.22)
+ * Class:       MyUGUIRunningMessage (version 2.23)
  */
 
 #pragma warning disable 0114
@@ -18,9 +18,13 @@ namespace MyClasses.UI
 {
     public class MyUGUIRunningMessage
     {
-        #region ----- Variable -----
+        #region ----- Define -----
 
         public const string PREFAB_NAME = "RunningMessage";
+
+        #endregion
+
+        #region ----- Variable -----
 
         private Text mText;
 

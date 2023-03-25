@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyUGUIPopup0Button (version 2.13)
+ * Class:       MyUGUIPopup0Button (version 2.15)
  */
 
 #pragma warning disable 0114
@@ -256,12 +256,12 @@ namespace MyClasses.UI
             string[] paths = new string[] { "Assets/MyClasses", "Assets/Core/MyClasses", "Assets/Plugin/MyClasses", "Assets/Plugins/MyClasses", "Assets/Framework/MyClasses", "Assets/Frameworks/MyClasses" };
             for (int i = 0; i < paths.Length; i++)
             {
-                if (System.IO.File.Exists(paths[i] + "/Sources/Animations/my_animator_dialog.controller"))
+                if (System.IO.File.Exists(paths[i] + "/Sources/Animations/MyAnimatorDialog.controller"))
                 {
-                    root_animator.runtimeAnimatorController = (RuntimeAnimatorController)UnityEditor.AssetDatabase.LoadAssetAtPath(paths[i] + "/Sources/Animations/my_animator_dialog.controller", typeof(RuntimeAnimatorController));
-                    Debug.LogError("[" + typeof(MyUGUIPopup0Button).Name + "] CreateTemplate(): please setup \"my_animator_dialog\" controller.");
-                    Debug.LogError("[" + typeof(MyUGUIPopup0Button).Name + "] CreateTemplate(): mapping \"my_animation_dialog_show\" motion for \"Show\" state.");
-                    Debug.LogError("[" + typeof(MyUGUIPopup0Button).Name + "] CreateTemplate(): mapping \"my_animation_dialog_hide\" motion for \"Hide\" state.");
+                    root_animator.runtimeAnimatorController = (RuntimeAnimatorController)UnityEditor.AssetDatabase.LoadAssetAtPath(paths[i] + "/Sources/Animations/MyAnimatorDialog.controller", typeof(RuntimeAnimatorController));
+                    Debug.LogError("[" + typeof(MyUGUIPopup0Button).Name + "] CreateTemplate(): please setup \"MyAnimatorDialog\" controller.");
+                    Debug.LogError("[" + typeof(MyUGUIPopup0Button).Name + "] CreateTemplate(): mapping \"MyAnimationDialogShow\" motion for \"Show\" state.");
+                    Debug.LogError("[" + typeof(MyUGUIPopup0Button).Name + "] CreateTemplate(): mapping \"MyAnimationDialogHide\" motion for \"Hide\" state.");
                     break;
                 }
             }

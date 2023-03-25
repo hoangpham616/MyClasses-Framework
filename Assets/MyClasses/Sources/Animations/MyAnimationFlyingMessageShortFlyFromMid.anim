@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: my_animation_flying_message_short_fly_from_mid
+  m_Name: MyAnimationFlyingMessageShortFlyFromMid
   serializedVersion: 6
   m_Legacy: 0
   m_Compressed: 0

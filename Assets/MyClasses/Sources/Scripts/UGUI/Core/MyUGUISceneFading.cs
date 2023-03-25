@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyUGUISceneFading (version 2.9)
+ * Class:       MyUGUISceneFading (version 2.10)
  */
 
 #pragma warning disable 0114
@@ -18,9 +18,13 @@ namespace MyClasses.UI
 {
     public class MyUGUISceneFading
     {
-        #region ----- Variable -----
+        #region ----- Define -----
 
         public const string PREFAB_NAME = "SceneFading";
+
+        #endregion
+
+        #region ----- Variable -----
 
         private GameObject mGameObject;
         private Image mImage;

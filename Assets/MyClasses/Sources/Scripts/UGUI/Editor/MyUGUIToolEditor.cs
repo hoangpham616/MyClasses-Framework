@@ -435,9 +435,9 @@ namespace MyClasses.UI.Tool
             string[] paths = new string[] { "Assets/MyClasses", "Assets/Core/MyClasses", "Assets/Plugin/MyClasses", "Assets/Plugins/MyClasses", "Assets/Framework/MyClasses", "Assets/Frameworks/MyClasses" };
             for (int i = 0; i < paths.Length; i++)
             {
-                if (System.IO.File.Exists(paths[i] + "/Sources/Animations/my_animator_button_click_scale.controller"))
+                if (System.IO.File.Exists(paths[i] + "/Sources/Animations/MyAnimatorButtonClickScale.controller"))
                 {
-                    animator.runtimeAnimatorController = (RuntimeAnimatorController)UnityEditor.AssetDatabase.LoadAssetAtPath(paths[i] + "/Sources/Animations/my_animator_button_click_scale.controller", typeof(RuntimeAnimatorController));
+                    animator.runtimeAnimatorController = (RuntimeAnimatorController)UnityEditor.AssetDatabase.LoadAssetAtPath(paths[i] + "/Sources/Animations/MyAnimatorButtonClickScale.controller", typeof(RuntimeAnimatorController));
                     break;
                 }
             }

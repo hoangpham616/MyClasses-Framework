@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyUGUIParticleSystem (version 2.0)
+ * Class:       MyUGUIParticleSystem (version 2.1)
  */
 
 #pragma warning disable 0114
@@ -185,9 +185,9 @@ namespace MyClasses.UI
                         string[] paths = new string[] { "Assets/MyClasses", "Assets/Core/MyClasses", "Assets/Plugin/MyClasses", "Assets/Plugins/MyClasses", "Assets/Framework/MyClasses", "Assets/Frameworks/MyClasses" };
                         for (int j = 0; j < paths.Length; j++)
                         {
-                            if (System.IO.File.Exists(paths[j] + "/Sources/Images/my_circle_128.png"))
+                            if (System.IO.File.Exists(paths[j] + "/Sources/Images/MyImageCircle128.png"))
                             {
-                                mSprite = (Sprite)UnityEditor.AssetDatabase.LoadAssetAtPath(paths[j] + "/Sources/Images/my_circle_128.png", typeof(Sprite));
+                                mSprite = (Sprite)UnityEditor.AssetDatabase.LoadAssetAtPath(paths[j] + "/Sources/Images/MyImageCircle128.png", typeof(Sprite));
                                 break;
                             }
                         }
@@ -241,9 +241,9 @@ namespace MyClasses.UI
                         string[] paths = new string[] { "Assets/MyClasses", "Assets/Core/MyClasses", "Assets/Plugin/MyClasses", "Assets/Plugins/MyClasses", "Assets/Framework/MyClasses", "Assets/Frameworks/MyClasses" };
                         for (int j = 0; j < paths.Length; j++)
                         {
-                            if (System.IO.File.Exists(paths[j] + "/Sources/Images/my_circle_128.png"))
+                            if (System.IO.File.Exists(paths[j] + "/Sources/Images/MyImageCircle128.png"))
                             {
-                                mSprite = (Sprite)UnityEditor.AssetDatabase.LoadAssetAtPath(paths[j] + "/Sources/Images/my_circle_128.png", typeof(Sprite));
+                                mSprite = (Sprite)UnityEditor.AssetDatabase.LoadAssetAtPath(paths[j] + "/Sources/Images/MyImageCircle128.png", typeof(Sprite));
                                 break;
                             }
                         }
@@ -301,9 +301,9 @@ namespace MyClasses.UI
                         string[] paths = new string[] { "Assets/MyClasses", "Assets/Core/MyClasses", "Assets/Plugin/MyClasses", "Assets/Plugins/MyClasses", "Assets/Framework/MyClasses", "Assets/Frameworks/MyClasses" };
                         for (int j = 0; j < paths.Length; j++)
                         {
-                            if (System.IO.File.Exists(paths[j] + "/Sources/Images/my_circle_star_empty_128.png"))
+                            if (System.IO.File.Exists(paths[j] + "/Sources/Images/MyImageCircleStarEmpty128.png"))
                             {
-                                mSprite = (Sprite)UnityEditor.AssetDatabase.LoadAssetAtPath(paths[j] + "/Sources/Images/my_circle_star_empty_128.png", typeof(Sprite));
+                                mSprite = (Sprite)UnityEditor.AssetDatabase.LoadAssetAtPath(paths[j] + "/Sources/Images/MyImageCircleStarEmpty128.png", typeof(Sprite));
                                 break;
                             }
                         }
@@ -361,9 +361,9 @@ namespace MyClasses.UI
                         string[] paths = new string[] { "Assets/MyClasses", "Assets/Core/MyClasses", "Assets/Plugin/MyClasses", "Assets/Plugins/MyClasses", "Assets/Framework/MyClasses", "Assets/Frameworks/MyClasses" };
                         for (int j = 0; j < paths.Length; j++)
                         {
-                            if (System.IO.File.Exists(paths[j] + "/Sources/Images/my_blur_dot_128.png"))
+                            if (System.IO.File.Exists(paths[j] + "/Sources/Images/MyBlurDot128.png"))
                             {
-                                mSprite = (Sprite)UnityEditor.AssetDatabase.LoadAssetAtPath(paths[j] + "/Sources/Images/my_blur_dot_128.png", typeof(Sprite));
+                                mSprite = (Sprite)UnityEditor.AssetDatabase.LoadAssetAtPath(paths[j] + "/Sources/Images/MyBlurDot128.png", typeof(Sprite));
                                 break;
                             }
                         }
@@ -417,9 +417,9 @@ namespace MyClasses.UI
                         string[] paths = new string[] { "Assets/MyClasses", "Assets/Core/MyClasses", "Assets/Plugin/MyClasses", "Assets/Plugins/MyClasses", "Assets/Framework/MyClasses", "Assets/Frameworks/MyClasses" };
                         for (int j = 0; j < paths.Length; j++)
                         {
-                            if (System.IO.File.Exists(paths[j] + "/Sources/Images/my_blur_dot_128.png"))
+                            if (System.IO.File.Exists(paths[j] + "/Sources/Images/MyBlurDot128.png"))
                             {
-                                mSprite = (Sprite)UnityEditor.AssetDatabase.LoadAssetAtPath(paths[j] + "/Sources/Images/my_blur_dot_128.png", typeof(Sprite));
+                                mSprite = (Sprite)UnityEditor.AssetDatabase.LoadAssetAtPath(paths[j] + "/Sources/Images/MyBlurDot128.png", typeof(Sprite));
                                 break;
                             }
                         }

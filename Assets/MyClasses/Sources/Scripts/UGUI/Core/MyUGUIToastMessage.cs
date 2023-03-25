@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyUGUIToastMessage (version 2.12)
+ * Class:       MyUGUIToastMessage (version 2.13)
  */
 
 #pragma warning disable 0114
@@ -17,9 +17,13 @@ namespace MyClasses.UI
 {
     public class MyUGUIToastMessage
     {
-        #region ----- Variable -----
+        #region ----- Define -----
 
         public const string PREFAB_NAME = "ToastMessage";
+
+        #endregion
+
+        #region ----- Variable -----
 
         private Text mText;
 
@@ -184,13 +188,13 @@ namespace MyClasses.UI
             string[] paths = new string[] { "Assets/MyClasses", "Assets/Core/MyClasses", "Assets/Plugin/MyClasses", "Assets/Plugins/MyClasses", "Assets/Framework/MyClasses", "Assets/Frameworks/MyClasses" };
             for (int i = 0; i < paths.Length; i++)
             {
-                if (System.IO.File.Exists(paths[i] + "/Sources/Animations/my_animator_toast_message.controller"))
+                if (System.IO.File.Exists(paths[i] + "/Sources/Animations/MyAnimatorToastMessage.controller"))
                 {
-                    root_animator.runtimeAnimatorController = (RuntimeAnimatorController)UnityEditor.AssetDatabase.LoadAssetAtPath(paths[i] + "/Sources/Animations/my_animator_toast_message.controller", typeof(RuntimeAnimatorController));
+                    root_animator.runtimeAnimatorController = (RuntimeAnimatorController)UnityEditor.AssetDatabase.LoadAssetAtPath(paths[i] + "/Sources/Animations/MyAnimatorToastMessage.controller", typeof(RuntimeAnimatorController));
                     Debug.LogError("[" + typeof(MyUGUIToastMessage).Name + "] CreateTemplate(): please setup \"my_animator_toast\" controller.");
-                    Debug.LogError("[" + typeof(MyUGUIToastMessage).Name + "] CreateTemplate(): mapping \"my_animation_toast_message_show\" motion for \"Show\" state.");
-                    Debug.LogError("[" + typeof(MyUGUIToastMessage).Name + "] CreateTemplate(): mapping \"my_animation_toast_message_idle\" motion for \"Idle\" state.");
-                    Debug.LogError("[" + typeof(MyUGUIToastMessage).Name + "] CreateTemplate(): mapping \"my_animation_toast_message_hide\" motion for \"Hide\" state.");
+                    Debug.LogError("[" + typeof(MyUGUIToastMessage).Name + "] CreateTemplate(): mapping \"MyAnimationToastMessageShow\" motion for \"Show\" state.");
+                    Debug.LogError("[" + typeof(MyUGUIToastMessage).Name + "] CreateTemplate(): mapping \"MyAnimationToastMessageIdle\" motion for \"Idle\" state.");
+                    Debug.LogError("[" + typeof(MyUGUIToastMessage).Name + "] CreateTemplate(): mapping \"MyAnimationToastMessageHide\" motion for \"Hide\" state.");
                     break;
                 }
             }

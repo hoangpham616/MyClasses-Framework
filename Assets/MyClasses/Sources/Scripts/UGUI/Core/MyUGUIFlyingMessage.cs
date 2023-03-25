@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyUGUIFlyingMessage (version 2.1)
+ * Class:       MyUGUIFlyingMessage (version 2.2)
  */
 
 #pragma warning disable 0114
@@ -21,9 +21,13 @@ namespace MyClasses.UI
 {
     public class MyUGUIFlyingMessage
     {
-        #region ----- Variable -----
+        #region ----- Define -----
 
         public const string PREFAB_NAME = "FlyingMessage";
+
+        #endregion
+
+        #region ----- Variable -----
 
 #if USE_MY_UI_TMPRO
         private TextMeshProUGUI mTextTMPro;
@@ -154,14 +158,14 @@ namespace MyClasses.UI
             string[] paths = new string[] { "Assets/MyClasses", "Assets/Core/MyClasses", "Assets/Plugin/MyClasses", "Assets/Plugins/MyClasses", "Assets/Framework/MyClasses", "Assets/Frameworks/MyClasses" };
             for (int i = 0; i < paths.Length; i++)
             {
-                if (System.IO.File.Exists(paths[i] + "/Sources/Animations/my_animator_flying_message.controller"))
+                if (System.IO.File.Exists(paths[i] + "/Sources/Animations/MyAnimatorFlyingMessage.controller"))
                 {
-                    root_animator.runtimeAnimatorController = (RuntimeAnimatorController)UnityEditor.AssetDatabase.LoadAssetAtPath(paths[i] + "/Sources/Animations/my_animator_flying_message.controller", typeof(RuntimeAnimatorController));
-                    Debug.LogError("[" + typeof(MyUGUIFlyingMessage).Name + "] CreateTemplate(): please setup \"my_animator_flying_message\" controller.");
-                    Debug.LogError("[" + typeof(MyUGUIFlyingMessage).Name + "] CreateTemplate(): mapping \"my_animation_flying_message_short_fly_from_bot\" motion for \"ShortFlyFromBot\" state.");
-                    Debug.LogError("[" + typeof(MyUGUIFlyingMessage).Name + "] CreateTemplate(): mapping \"my_animation_flying_message_long_fly_from_bot\" motion for \"LongFlyFromBot\" state.");
-                    Debug.LogError("[" + typeof(MyUGUIFlyingMessage).Name + "] CreateTemplate(): mapping \"my_animation_flying_message_short_fly_from_mid\" motion for \"ShortFlyFromMid\" state.");
-                    Debug.LogError("[" + typeof(MyUGUIFlyingMessage).Name + "] CreateTemplate(): mapping \"my_animation_flying_message_long_fly_from_mid\" motion for \"LongFlyFromBot\" state.");
+                    root_animator.runtimeAnimatorController = (RuntimeAnimatorController)UnityEditor.AssetDatabase.LoadAssetAtPath(paths[i] + "/Sources/Animations/MyAnimatorFlyingMessage.controller", typeof(RuntimeAnimatorController));
+                    Debug.LogError("[" + typeof(MyUGUIFlyingMessage).Name + "] CreateTemplate(): please setup \"MyAnimatorFlyingMessage\" controller.");
+                    Debug.LogError("[" + typeof(MyUGUIFlyingMessage).Name + "] CreateTemplate(): mapping \"MyAnimationFlyingMessageShortFlyFromBot\" motion for \"ShortFlyFromBot\" state.");
+                    Debug.LogError("[" + typeof(MyUGUIFlyingMessage).Name + "] CreateTemplate(): mapping \"MyAnimationFlyingMessageLongFlyFromBot\" motion for \"LongFlyFromBot\" state.");
+                    Debug.LogError("[" + typeof(MyUGUIFlyingMessage).Name + "] CreateTemplate(): mapping \"MyAnimationFlyingMessageShortFlyFromMid\" motion for \"ShortFlyFromMid\" state.");
+                    Debug.LogError("[" + typeof(MyUGUIFlyingMessage).Name + "] CreateTemplate(): mapping \"MyAnimationFlyingMessageLongFlyFromMid\" motion for \"LongFlyFromBot\" state.");
                     break;
                 }
             }

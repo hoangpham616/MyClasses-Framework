@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyUGUILoadingIndicator (version 2.10)
+ * Class:       MyUGUILoadingIndicator (version 2.11)
 */
 
 #pragma warning disable 0114
@@ -21,9 +21,13 @@ namespace MyClasses.UI
 {
     public class MyUGUILoadingIndicator
     {
-        #region ----- Variable -----
+        #region ----- Define -----
 
         public const string PREFAB_NAME = "LoadingIndicator";
+
+        #endregion
+
+        #region ----- Variable -----
 
         private GameObject mGameObject;
         private Text mTips;
@@ -314,20 +318,20 @@ namespace MyClasses.UI
                     string[] paths = new string[] { "Assets/MyClasses", "Assets/Core/MyClasses", "Assets/Plugin/MyClasses", "Assets/Plugins/MyClasses", "Assets/Framework/MyClasses", "Assets/Frameworks/MyClasses" };
                     for (int j = 0; j < paths.Length; j++)
                     {
-                        if (System.IO.File.Exists(paths[j] + "/Sources/Animations/my_animator_loading_indicator_circle.controller"))
+                        if (System.IO.File.Exists(paths[j] + "/Sources/Animations/MyAnimatorLoadingIndicatorCircle.controller"))
                         {
                             Animator root_animator = child.AddComponent<Animator>();
-                            root_animator.runtimeAnimatorController = (RuntimeAnimatorController)UnityEditor.AssetDatabase.LoadAssetAtPath(paths[j] + "/Sources/Animations/my_animator_loading_indicator_circle.controller", typeof(RuntimeAnimatorController));
-                            if (System.IO.File.Exists(paths[j] + "/Sources/Images/my_loading_indicator_circle_bg.png"))
+                            root_animator.runtimeAnimatorController = (RuntimeAnimatorController)UnityEditor.AssetDatabase.LoadAssetAtPath(paths[j] + "/Sources/Animations/MyAnimatorLoadingIndicatorCircle.controller", typeof(RuntimeAnimatorController));
+                            if (System.IO.File.Exists(paths[j] + "/Sources/Images/MyImageLoadingIndicatorCircleBackground.png"))
                             {
-                                background_image.sprite = (Sprite)UnityEditor.AssetDatabase.LoadAssetAtPath(paths[j] + "/Sources/Images/my_loading_indicator_circle_bg.png", typeof(Sprite));
+                                background_image.sprite = (Sprite)UnityEditor.AssetDatabase.LoadAssetAtPath(paths[j] + "/Sources/Images/MyImageLoadingIndicatorCircleBackground.png", typeof(Sprite));
                             }
-                            if (System.IO.File.Exists(paths[j] + "/Sources/Images/my_loading_indicator_circle.png"))
+                            if (System.IO.File.Exists(paths[j] + "/Sources/Images/MyImageLoadingIndicatorCircle.png"))
                             {
-                                image_image.sprite = (Sprite)UnityEditor.AssetDatabase.LoadAssetAtPath(paths[j] + "/Sources/Images/my_loading_indicator_circle.png", typeof(Sprite));
+                                image_image.sprite = (Sprite)UnityEditor.AssetDatabase.LoadAssetAtPath(paths[j] + "/Sources/Images/MyImageLoadingIndicatorCircle.png", typeof(Sprite));
                             }
-                            Debug.LogError("[" + typeof(MyUGUILoadingIndicator).Name + "] CreateTemplate(): please setup \"my_animator_loading_indicator_circle\" controller.");
-                            Debug.LogError("[" + typeof(MyUGUILoadingIndicator).Name + "] CreateTemplate(): mapping \"my_animation_loading_indicator_circle\" motion for \"Circle\" state.");
+                            Debug.LogError("[" + typeof(MyUGUILoadingIndicator).Name + "] CreateTemplate(): please setup \"MyAnimatorLoadingIndicatorCircle\" controller.");
+                            Debug.LogError("[" + typeof(MyUGUILoadingIndicator).Name + "] CreateTemplate(): mapping \"MyAnimationLoadingIndicatorCircle\" motion for \"Circle\" state.");
                             break;
                         }
                     }
@@ -365,17 +369,17 @@ namespace MyClasses.UI
                     string[] paths = new string[] { "Assets/MyClasses", "Assets/Core/MyClasses", "Assets/Plugin/MyClasses", "Assets/Plugins/MyClasses", "Assets/Framework/MyClasses", "Assets/Frameworks/MyClasses" };
                     for (int j = 0; j < paths.Length; j++)
                     {
-                        if (System.IO.File.Exists(paths[j] + "/Animations/my_animator_loading_indicator_circle.controller"))
+                        if (System.IO.File.Exists(paths[j] + "/Animations/MyAnimatorLoadingIndicatorCircle.controller"))
                         {
                             Animator root_animator = loading.AddComponent<Animator>();
-                            root_animator.runtimeAnimatorController = (RuntimeAnimatorController)UnityEditor.AssetDatabase.LoadAssetAtPath(paths[j] + "/Animations/my_animator_loading_indicator_circle.controller", typeof(RuntimeAnimatorController));
-                            if (System.IO.File.Exists(paths[j] + "/Images/my_loading_indicator_circle_bg.png"))
+                            root_animator.runtimeAnimatorController = (RuntimeAnimatorController)UnityEditor.AssetDatabase.LoadAssetAtPath(paths[j] + "/Animations/MyAnimatorLoadingIndicatorCircle.controller", typeof(RuntimeAnimatorController));
+                            if (System.IO.File.Exists(paths[j] + "/Images/MyImageLoadingIndicatorCircleBackground.png"))
                             {
-                                background_image.sprite = (Sprite)UnityEditor.AssetDatabase.LoadAssetAtPath(paths[j] + "/Images/my_loading_indicator_circle_bg.png", typeof(Sprite));
+                                background_image.sprite = (Sprite)UnityEditor.AssetDatabase.LoadAssetAtPath(paths[j] + "/Images/MyImageLoadingIndicatorCircleBackground.png", typeof(Sprite));
                             }
-                            if (System.IO.File.Exists(paths[j] + "/Images/my_loading_indicator_circle.png"))
+                            if (System.IO.File.Exists(paths[j] + "/Images/MyImageLoadingIndicatorCircle.png"))
                             {
-                                image_image.sprite = (Sprite)UnityEditor.AssetDatabase.LoadAssetAtPath(paths[j] + "/Images/my_loading_indicator_circle.png", typeof(Sprite));
+                                image_image.sprite = (Sprite)UnityEditor.AssetDatabase.LoadAssetAtPath(paths[j] + "/Images/MyImageLoadingIndicatorCircle.png", typeof(Sprite));
                             }
                             break;
                         }
