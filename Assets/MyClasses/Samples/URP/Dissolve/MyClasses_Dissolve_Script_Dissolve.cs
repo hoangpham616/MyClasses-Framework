@@ -19,7 +19,7 @@ public class MyClasses_Dissolve_Script_Dissolve : MonoBehaviour
 
     #endregion
 
-    #region ----- Implement MonoBehaviour -----
+    #region ----- MonoBehaviour Implementation -----
 
     private void Start()
     {

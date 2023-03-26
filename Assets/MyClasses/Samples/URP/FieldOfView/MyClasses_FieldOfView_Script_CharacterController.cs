@@ -13,7 +13,7 @@ public class MyClasses_FieldOfView_Script_CharacterController : MonoBehaviour
 
     #endregion
 
-    #region ----- Implement MonoBehaviour -----
+    #region ----- MonoBehaviour Implementation -----
 
     private void Update()
     {

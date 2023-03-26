@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyUGUIManager (version 2.35)
+ * Class:       MyUGUIManager (version 2.36)
  */
 
 #pragma warning disable 0162
@@ -234,7 +234,7 @@ namespace MyClasses.UI
 
         #endregion
 
-        #region ----- Implement MonoBehaviour -----
+        #region ----- MonoBehaviour Implementation -----
 
         /// <summary>
         /// Awake.
@@ -859,7 +859,7 @@ namespace MyClasses.UI
                 foreach (MyUGUIConfigUnityScene unitySceneConfig in unityScenesConfig.ListUnityScene)
                 {
                     MyUGUIUnityScene unityScene = new MyUGUIUnityScene(unitySceneConfig.ID, unitySceneConfig.SceneName);
-                    if (!string.IsNullOrEmpty(unitySceneConfig.HUDScriptPath))
+                    if (!string.IsNullOrEmpty(unitySceneConfig.HUDScriptName))
                     {
                         if (string.IsNullOrEmpty(unitySceneConfig.HUDPrefabName))
                         {
