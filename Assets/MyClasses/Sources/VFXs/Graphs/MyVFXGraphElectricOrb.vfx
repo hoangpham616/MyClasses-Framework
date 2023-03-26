@@ -138,9 +138,9 @@ MonoBehaviour:
   uiBounds:
     serializedVersion: 2
     x: -323
-    y: -537
-    width: 5408
-    height: 3128
+    y: -256
+    width: 2579
+    height: 2161
 --- !u!114 &114350483966674976
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -272,7 +272,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEngine.Vector2, UnityEngine.CoreModule, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"x":0.10000000149011612,"y":0.25}'
+      m_SerializableObject: '{"x":0.10999999940395355,"y":0.2199999988079071}'
     min: -Infinity
     max: Infinity
     enumValues: []
@@ -286,7 +286,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEngine.Vector2, UnityEngine.CoreModule, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"x":25.0,"y":50.0}'
+      m_SerializableObject: '{"x":30.0,"y":60.0}'
     min: -Infinity
     max: Infinity
     enumValues: []
@@ -328,7 +328,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEngine.Vector2, UnityEngine.CoreModule, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"x":1.7999999523162842,"y":2.200000047683716}'
+      m_SerializableObject: '{"x":1.0,"y":2.0}'
     min: -Infinity
     max: Infinity
     enumValues: []
@@ -384,7 +384,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEngine.Vector2, UnityEngine.CoreModule, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"x":0.15000000596046449,"y":0.30000001192092898}'
+      m_SerializableObject: '{"x":0.10000000149011612,"y":0.20000000298023225}'
     min: -Infinity
     max: Infinity
     enumValues: []
@@ -398,7 +398,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEngine.Vector2, UnityEngine.CoreModule, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"x":0.10000000149011612,"y":0.5}'
+      m_SerializableObject: '{"x":0.10000000149011612,"y":0.30000001192092898}'
     min: -Infinity
     max: Infinity
     enumValues: []
@@ -7606,7 +7606,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEngine.Vector2, UnityEngine.CoreModule, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"x":1.7999999523162842,"y":2.200000047683716}'
+      m_SerializableObject: '{"x":1.0,"y":2.0}'
     m_Space: 2147483647
   m_Property:
     name: o
@@ -7840,7 +7840,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEngine.Vector2, UnityEngine.CoreModule, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"x":25.0,"y":50.0}'
+      m_SerializableObject: '{"x":30.0,"y":60.0}'
     m_Space: 2147483647
   m_Property:
     name: o
@@ -8252,7 +8252,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEngine.Vector2, UnityEngine.CoreModule, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"x":0.10000000149011612,"y":0.5}'
+      m_SerializableObject: '{"x":0.10000000149011612,"y":0.30000001192092898}'
     m_Space: 2147483647
   m_Property:
     name: o
@@ -8404,7 +8404,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEngine.Vector2, UnityEngine.CoreModule, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"x":0.15000000596046449,"y":0.30000001192092898}'
+      m_SerializableObject: '{"x":0.10000000149011612,"y":0.20000000298023225}'
     m_Space: 2147483647
   m_Property:
     name: o
@@ -8964,7 +8964,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEngine.Vector2, UnityEngine.CoreModule, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"x":0.10000000149011612,"y":0.25}'
+      m_SerializableObject: '{"x":0.10999999940395355,"y":0.2199999988079071}'
     m_Space: 2147483647
   m_Property:
     name: o

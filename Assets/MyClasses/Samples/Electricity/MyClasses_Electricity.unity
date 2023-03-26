@@ -531,13 +531,31 @@ VisualEffect:
       - m_Value: 48
         m_Name: Electric Spawn Rate
         m_Overridden: 0
+      - m_Value: 0.1
+        m_Name: Electric Speed
+        m_Overridden: 0
+      - m_Value: 5
+        m_Name: Spark Speed
+        m_Overridden: 0
     m_Vector2f:
       m_Array:
       - m_Value: {x: 1, y: 1.5}
         m_Name: Electric Size
         m_Overridden: 0
-      - m_Value: {x: 25, y: 50}
+      - m_Value: {x: 30, y: 60}
         m_Name: Electric Scale Random
+        m_Overridden: 0
+      - m_Value: {x: 1, y: 2}
+        m_Name: Electric Size Random
+        m_Overridden: 0
+      - m_Value: {x: 0.11, y: 0.22}
+        m_Name: Electric Lifetime Random
+        m_Overridden: 0
+      - m_Value: {x: 0.1, y: 0.3}
+        m_Name: Spark Size Random
+        m_Overridden: 0
+      - m_Value: {x: 0.1, y: 0.2}
+        m_Name: Spark Lifetime Random
         m_Overridden: 0
     m_Vector3f:
       m_Array: []

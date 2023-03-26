@@ -2,7 +2,7 @@
 
 #pragma warning disable 0649
 
-public class MyClasses_FieldOfView_CharacterController : MonoBehaviour
+public class MyClasses_FieldOfView_Script_CharacterController : MonoBehaviour
 {
     #region ----- Variable -----
 

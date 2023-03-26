@@ -7,9 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: MyClasses_FadingGlow_Mat_FadingGlow1
-  m_Shader: {fileID: -6465566751694194690, guid: 12a5acddec7b2fc41b9d93c3ccc7b9cd,
-    type: 3}
+  m_Name: MyClasses_FadingGlow_Material_FadingGlow_C
+  m_Shader: {fileID: -6465566751694194690, guid: 12a5acddec7b2fc41b9d93c3ccc7b9cd, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
@@ -102,7 +101,7 @@ Material:
     - _QueueOffset: 0
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
-    - _Speed: 1
+    - _Speed: 3
     - _SrcBlend: 1
     - _UVSec: 0
     - _ZWrite: 1
@@ -110,8 +109,8 @@ Material:
     - _Color: {r: 0, g: 0, b: 0, a: 1}
     - _Color1: {r: 1, g: 0, b: 0, a: 1}
     - _Color2: {r: 0, g: 0, b: 1, a: 1}
-    - _Color_1: {r: 1, g: 1, b: 0.19999999, a: 0}
-    - _Color_2: {r: 1, g: 0, b: 0, a: 0}
+    - _Color_1: {r: 0, g: 2, b: 2, a: 1}
+    - _Color_2: {r: 0, g: 2, b: 0, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []
 --- !u!114 &3721793837303559039
