@@ -326,7 +326,7 @@ MonoBehaviour:
   m_IsGlobal: 1
   priority: 0
   blendDistance: 0
-  weight: 1
+  weight: 0.1
   sharedProfile: {fileID: 11400000, guid: 9da481e0fe36ffa4794c4bcfcbd2569c, type: 2}
 --- !u!4 &918278962
 Transform:
@@ -439,7 +439,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b0788053a3b68949981fca08c0b02a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _duration: 2
+  _duration: 4
 --- !u!1 &1244850239
 GameObject:
   m_ObjectHideFlags: 0
@@ -536,7 +536,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b0788053a3b68949981fca08c0b02a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _duration: 2
+  _duration: 4
 --- !u!1 &1253922883
 GameObject:
   m_ObjectHideFlags: 0
