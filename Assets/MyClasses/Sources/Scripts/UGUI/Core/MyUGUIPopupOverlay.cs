@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyUGUIPopupOverlay (version 2.13)
+ * Class:       MyUGUIPopupOverlay (version 2.14)
  */
 
 #pragma warning disable 0114
@@ -26,9 +26,9 @@ namespace MyClasses.UI
 
         #region ----- Variable -----
 
-        private GameObject mGameObject;
-        private Animator mAnimator;
-        private MyUGUIButton mButton;
+        private GameObject _gameObject;
+        private Animator _animator;
+        private MyUGUIButton _button;
 
         #endregion
 
@@ -36,13 +36,13 @@ namespace MyClasses.UI
 
         public GameObject GameObject
         {
-            get { return mGameObject; }
-            set { mGameObject = value; }
+            get { return _gameObject; }
+            set { _gameObject = value; }
         }
 
         public Transform Transform
         {
-            get { return mGameObject != null ? mGameObject.transform : null; }
+            get { return _gameObject != null ? _gameObject.transform : null; }
         }
 
         #endregion
@@ -97,29 +97,29 @@ namespace MyClasses.UI
         /// </summary>
         public void Show()
         {
-            if (mGameObject != null)
+            if (_gameObject != null)
             {
-                mGameObject.SetActive(true);
+                _gameObject.SetActive(true);
 
-                if (mAnimator == null)
+                if (_animator == null)
                 {
-                    mAnimator = mGameObject.GetComponent<Animator>();
+                    _animator = _gameObject.GetComponent<Animator>();
                 }
-                if (mAnimator != null)
+                if (_animator != null)
                 {
-                    mAnimator.Play("Show");
+                    _animator.Play("Show");
                 }
 
-                if (mButton == null)
+                if (_button == null)
                 {
-                    mButton = mGameObject.GetComponent<MyUGUIButton>();
-                    if (mButton == null)
+                    _button = _gameObject.GetComponent<MyUGUIButton>();
+                    if (_button == null)
                     {
-                        mButton = mGameObject.AddComponent<MyUGUIButton>();
+                        _button = _gameObject.AddComponent<MyUGUIButton>();
                     }
                 }
-                mButton.OnEventPointerClick.RemoveAllListeners();
-                mButton.OnEventPointerClick.AddListener(_OnClickClose);
+                _button.OnEventPointerClick.RemoveAllListeners();
+                _button.OnEventPointerClick.AddListener(_OnClickClose);
             }
         }
 
@@ -128,19 +128,19 @@ namespace MyClasses.UI
         /// </summary>
         public void Hide()
         {
-            if (mGameObject != null)
+            if (_gameObject != null)
             {
-                if (mAnimator == null)
+                if (_animator == null)
                 {
-                    mAnimator = mGameObject.GetComponent<Animator>();
+                    _animator = _gameObject.GetComponent<Animator>();
                 }
-                if (mAnimator != null)
+                if (_animator != null)
                 {
-                    mAnimator.Play("Hide");
+                    _animator.Play("Hide");
                     return;
                 }
 
-                mGameObject.SetActive(false);
+                _gameObject.SetActive(false);
             }
         }
 

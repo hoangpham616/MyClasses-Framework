@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyUGUIHUD (version 2.5)
+ * Class:       MyUGUIHUD (version 2.6)
  */
 
 using UnityEngine;
@@ -17,7 +17,15 @@ namespace MyClasses.UI
         /// Constructor.
         /// </summary>
         public MyUGUIHUD(string prefabName)
-            : base(prefabName)
+            : base(prefabName, null)
+        {
+        }
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        public MyUGUIHUD(string prefabName, string prefabName3D)
+            : base(prefabName, prefabName3D)
         {
         }
 
@@ -40,6 +48,20 @@ namespace MyClasses.UI
                 GameObject.transform.SetParent(MyUGUIManager.Instance.CanvasOnTopHUD.transform, false);
             }
             GameObject.SetActive(false);
+            
+            if (PrefabName3D.Length > 0)
+            {
+                GameObject3D = MyUtilities.FindObjectInRoot(PrefabName3D);
+                if (GameObject3D == null)
+                {
+                    GameObject3D = GameObject.Instantiate(Resources.Load(MyUGUIManager.HUD_DIRECTORY + PrefabName3D), Vector3.zero, Quaternion.identity) as GameObject;
+                    GameObject3D.name = PrefabName3D;
+                }
+                if (GameObject3D != null)
+                {
+                    GameObject3D.SetActive(false);
+                }
+            }
         }
 
         /// <summary>

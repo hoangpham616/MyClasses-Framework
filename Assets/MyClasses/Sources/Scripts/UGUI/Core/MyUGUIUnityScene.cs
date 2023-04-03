@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyUGUIUnityScene (version 2.0)
+ * Class:       MyUGUIUnityScene (version 2.1)
  */
 
 using System.Collections.Generic;
@@ -13,11 +13,11 @@ namespace MyClasses.UI
     {
         #region ----- Variable -----
 
-        private EUnitySceneID mID;
-        private EUnitySceneState mState;
-        private MyUGUIHUD mHUD;
-        private List<MyUGUIScene> mListScene;
-        private string mName;
+        private EUnitySceneID _id;
+        private EUnitySceneState _state;
+        private MyUGUIHUD _hud;
+        private List<MyUGUIScene> _listScene;
+        private string _name;
         
         #endregion
 
@@ -25,28 +25,28 @@ namespace MyClasses.UI
 
         public EUnitySceneID ID
         {
-            get { return mID; }
+            get { return _id; }
         }
 
         public EUnitySceneState State
         {
-            get { return mState; }
-            set { mState = value; }
+            get { return _state; }
+            set { _state = value; }
         }
 
         public MyUGUIHUD HUD
         {
-            get { return mHUD; }
+            get { return _hud; }
         }
 
         public List<MyUGUIScene> ListScene
         {
-            get { return mListScene; }
+            get { return _listScene; }
         }
 
         public string Name
         {
-            get { return mName; }
+            get { return _name; }
         }
 
         #endregion
@@ -58,11 +58,11 @@ namespace MyClasses.UI
         /// </summary>
         public MyUGUIUnityScene(EUnitySceneID sceneID, string unitySceneName)
         {
-            mID = sceneID;
-            mState = EUnitySceneState.Idle;
-            mName = unitySceneName;
-            mHUD = null;
-            mListScene = new List<MyUGUIScene>();
+            _id = sceneID;
+            _state = EUnitySceneState.Idle;
+            _name = unitySceneName;
+            _hud = null;
+            _listScene = new List<MyUGUIScene>();
         }
 
         #endregion
@@ -74,7 +74,7 @@ namespace MyClasses.UI
         /// </summary>
         public void SetHUD(MyUGUIHUD hud)
         {
-            mHUD = hud;
+            _hud = hud;
         }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace MyClasses.UI
         {
             if (scene != null)
             {
-                mListScene.Add(scene);
+                _listScene.Add(scene);
             }
         }
 

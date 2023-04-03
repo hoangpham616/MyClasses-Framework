@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyUGUISceneFading (version 2.10)
+ * Class:       MyUGUISceneFading (version 2.11)
  */
 
 #pragma warning disable 0114
@@ -26,12 +26,12 @@ namespace MyClasses.UI
 
         #region ----- Variable -----
 
-        private GameObject mGameObject;
-        private Image mImage;
-        private EState mState;
-        private float mBeginTime;
-        private float mEndTime;
-        private float mDuration;
+        private GameObject _gameObject;
+        private Image _image;
+        private EState _state;
+        private float _beginTime;
+        private float _endTime;
+        private float _duration;
 
         #endregion
 
@@ -39,18 +39,18 @@ namespace MyClasses.UI
 
         public GameObject GameObject
         {
-            get { return mGameObject; }
-            set { mGameObject = value; }
+            get { return _gameObject; }
+            set { _gameObject = value; }
         }
 
         public Transform Transform
         {
-            get { return mGameObject != null ? mGameObject.transform : null; }
+            get { return _gameObject != null ? _gameObject.transform : null; }
         }
 
         public bool IsFading
         {
-            get { return mState != EState.Idle; }
+            get { return _state != EState.Idle; }
         }
 
         #endregion
@@ -96,15 +96,15 @@ namespace MyClasses.UI
 
             if (duration > 0)
             {
-                mBeginTime = Time.time;
-                mEndTime = mBeginTime + duration;
-                mDuration = duration;
-                mState = EState.FadeIn;
+                _beginTime = Time.time;
+                _endTime = _beginTime + duration;
+                _duration = duration;
+                _state = EState.FadeIn;
             }
             else
             {
-                mImage.enabled = false;
-                mState = EState.Idle;
+                _image.enabled = false;
+                _state = EState.Idle;
             }
         }
 
@@ -120,15 +120,15 @@ namespace MyClasses.UI
 
             if (duration > 0)
             {
-                mBeginTime = Time.time;
-                mEndTime = mBeginTime + duration;
-                mDuration = duration;
-                mState = EState.FadeOut;
+                _beginTime = Time.time;
+                _endTime = _beginTime + duration;
+                _duration = duration;
+                _state = EState.FadeOut;
             }
             else
             {
-                mImage.enabled = false;
-                mState = EState.Idle;
+                _image.enabled = false;
+                _state = EState.Idle;
             }
         }
 
@@ -162,18 +162,18 @@ namespace MyClasses.UI
         /// </summary>
         private IEnumerator _DoFading()
         {
-            if (mImage == null)
+            if (_image == null)
             {
-                mImage = mGameObject.GetComponent<Image>();
+                _image = _gameObject.GetComponent<Image>();
             }
-            mImage.raycastTarget = true;
-            mImage.enabled = false;
+            _image.raycastTarget = true;
+            _image.enabled = false;
 
-            Color color = mImage.color;
+            Color color = _image.color;
 
             while (true)
             {
-                switch (mState)
+                switch (_state)
                 {
                     case EState.Idle:
                         {
@@ -181,26 +181,26 @@ namespace MyClasses.UI
                         break;
                     case EState.FadeIn:
                         {
-                            color.a = (mEndTime - Time.time) / mDuration;
-                            mImage.color = color;
-                            mImage.enabled = true;
+                            color.a = (_endTime - Time.time) / _duration;
+                            _image.color = color;
+                            _image.enabled = true;
 
                             if (color.a <= 0)
                             {
-                                mImage.enabled = false;
-                                mState = EState.Idle;
+                                _image.enabled = false;
+                                _state = EState.Idle;
                             }
                         }
                         break;
                     case EState.FadeOut:
                         {
-                            color.a = (Time.time - mBeginTime) / mDuration;
-                            mImage.color = color;
-                            mImage.enabled = true;
+                            color.a = (Time.time - _beginTime) / _duration;
+                            _image.color = color;
+                            _image.enabled = true;
 
                             if (color.a >= 1)
                             {
-                                mState = EState.Idle;
+                                _state = EState.Idle;
                             }
                         }
                         break;

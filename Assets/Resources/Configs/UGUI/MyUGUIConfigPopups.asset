@@ -16,64 +16,78 @@ MonoBehaviour:
   ListPopup:
   - IsFoldOut: 1
     ID: 0
-    ScriptPathIndex: 107
+    ScriptPathIndex: 102
     ScriptPath: Assets/MyClasses/Sources/Scripts/UGUI/Core/MyUGUIPopup0Button.cs
     ScriptName: MyUGUIPopup0Button
     PrefabNameIndex: 0
+    PrefabNameIndex3D: -1
     PrefabName: Dialog0ButtonPopup
+    PrefabName3D: 
     AssetBundleURL: 
     AssetBundleVersion: 0
   - IsFoldOut: 1
     ID: 1
-    ScriptPathIndex: 108
+    ScriptPathIndex: 103
     ScriptPath: Assets/MyClasses/Sources/Scripts/UGUI/Core/MyUGUIPopup1Button.cs
     ScriptName: MyUGUIPopup1Button
     PrefabNameIndex: 0
+    PrefabNameIndex3D: -1
     PrefabName: Dialog1ButtonPopup
+    PrefabName3D: 
     AssetBundleURL: 
     AssetBundleVersion: 0
   - IsFoldOut: 1
     ID: 2
-    ScriptPathIndex: 109
+    ScriptPathIndex: 104
     ScriptPath: Assets/MyClasses/Sources/Scripts/UGUI/Core/MyUGUIPopup2Buttons.cs
     ScriptName: MyUGUIPopup2Buttons
     PrefabNameIndex: 0
+    PrefabNameIndex3D: -1
     PrefabName: Dialog2ButtonsPopup
+    PrefabName3D: 
     AssetBundleURL: 
     AssetBundleVersion: 0
   - IsFoldOut: 1
     ID: 3
-    ScriptPathIndex: 150
+    ScriptPathIndex: 147
     ScriptPath: Assets/_MyAssets/Scripts/Scenes/MainUnityScene/MainMenuScene/PoolPopup.cs
     ScriptName: PoolPopup
     PrefabNameIndex: 2
+    PrefabNameIndex3D: 4
     PrefabName: PoolPopup
+    PrefabName3D: 
     AssetBundleURL: 
     AssetBundleVersion: 0
   - IsFoldOut: 1
     ID: 4
-    ScriptPathIndex: 148
+    ScriptPathIndex: 145
     ScriptPath: Assets/_MyAssets/Scripts/Scenes/MainUnityScene/MainMenuScene/LocalizationPopup.cs
     ScriptName: LocalizationPopup
     PrefabNameIndex: 1
+    PrefabNameIndex3D: 4
     PrefabName: LocalizationPopup
+    PrefabName3D: 
     AssetBundleURL: 
     AssetBundleVersion: 0
   - IsFoldOut: 1
     ID: 5
-    ScriptPathIndex: 147
+    ScriptPathIndex: 144
     ScriptPath: Assets/_MyAssets/Scripts/Scenes/MainUnityScene/MainMenuScene/AdMobPopup.cs
     ScriptName: AdMobPopup
     PrefabNameIndex: 0
+    PrefabNameIndex3D: 4
     PrefabName: AdMobPopup
+    PrefabName3D: 
     AssetBundleURL: 
     AssetBundleVersion: 0
   - IsFoldOut: 1
     ID: 6
-    ScriptPathIndex: 151
+    ScriptPathIndex: 149
     ScriptPath: Assets/_MyAssets/Scripts/Scenes/MainUnityScene/MainMenuScene/ResusableListViewPopup/ReusableListViewPopup.cs
     ScriptName: ReusableListViewPopup
     PrefabNameIndex: 3
+    PrefabNameIndex3D: 4
     PrefabName: ReusableListViewPopup
+    PrefabName3D: 
     AssetBundleURL: 
     AssetBundleVersion: 0

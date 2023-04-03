@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyUGUIPopup0Button (version 2.15)
+ * Class:       MyUGUIPopup0Button (version 2.16)
  */
 
 #pragma warning disable 0114
@@ -26,14 +26,14 @@ namespace MyClasses.UI
         #region ----- Variable -----
 
 #if USE_MY_UI_TMPRO
-        private TextMeshProUGUI mTitleTMPro;
-        private TextMeshProUGUI mBodyTMPro;
+        private TextMeshProUGUI _textTitleTMPro;
+        private TextMeshProUGUI _textBodyTMPro;
 #endif
 
-        private Text mTitle;
-        private Text mBody;
-        private MyUGUIButton mButtonClose;
-        private Action<object> mActionClose;
+        private Text _textTitle;
+        private Text _textBody;
+        private MyUGUIButton _buttonClose;
+        private Action<object> _onClickCloseCallback;
 
         #endregion
 
@@ -69,11 +69,11 @@ namespace MyClasses.UI
             GameObject title = MyUtilities.FindObjectInFirstLayer(container, "Title");
             if (title != null)
             {
-                mTitle = title.GetComponent<Text>();
+                _textTitle = title.GetComponent<Text>();
 #if USE_MY_UI_TMPRO
                 if (mTitle == null)
                 {
-                    mTitleTMPro = title.GetComponent<TextMeshProUGUI>();
+                    _textTitleTMPro = title.GetComponent<TextMeshProUGUI>();
                 }
 #endif
             }
@@ -81,11 +81,11 @@ namespace MyClasses.UI
             GameObject body = MyUtilities.FindObjectInFirstLayer(container, "Body");
             if (body != null)
             {
-                mBody = body.GetComponent<Text>();
+                _textBody = body.GetComponent<Text>();
 #if USE_MY_UI_TMPRO
                 if (mBody == null)
                 {
-                    mBodyTMPro = body.GetComponent<TextMeshProUGUI>();
+                    _textBodyTMPro = body.GetComponent<TextMeshProUGUI>();
                 }
 #endif
             }
@@ -93,7 +93,7 @@ namespace MyClasses.UI
             GameObject close = MyUtilities.FindObjectInFirstLayer(container, "ButtonClose");
             if (close != null)
             {
-                mButtonClose = close.GetComponent<MyUGUIButton>();
+                _buttonClose = close.GetComponent<MyUGUIButton>();
             }
         }
 
@@ -104,9 +104,9 @@ namespace MyClasses.UI
         {
             base.OnUGUIEnter();
 
-            if (mButtonClose != null)
+            if (_buttonClose != null)
             {
-                mButtonClose.OnEventPointerClick.AddListener(_OnClickClose);
+                _buttonClose.OnEventPointerClick.AddListener(_OnClickClose);
             }
         }
 
@@ -125,12 +125,12 @@ namespace MyClasses.UI
         {
             base.OnUGUIExit();
 
-            if (mButtonClose != null)
+            if (_buttonClose != null)
             {
-                mButtonClose.OnEventPointerClick.RemoveAllListeners();
+                _buttonClose.OnEventPointerClick.RemoveAllListeners();
             }
 
-            mActionClose = null;
+            _onClickCloseCallback = null;
         }
 
         /// <summary>
@@ -150,9 +150,9 @@ namespace MyClasses.UI
         /// </summary>
         private void _OnClickClose(PointerEventData arg0)
         {
-            if (mActionClose != null)
+            if (_onClickCloseCallback != null)
             {
-                mActionClose(AttachedData);
+                _onClickCloseCallback(AttachedData);
             }
 
             Hide();
@@ -203,33 +203,33 @@ namespace MyClasses.UI
         /// </summary>
         private void _SetData(string title, string body, bool isShowCloseButton, Action<object> actionClose)
         {
-            if (mTitle != null)
+            if (_textTitle != null)
             {
-                mTitle.text = title;
+                _textTitle.text = title;
             }
 #if USE_MY_UI_TMPRO
-            else if (mTitleTMPro != null)
+            else if (_textTitleTMPro != null)
             {
-                mTitleTMPro.text = title;
+                _textTitleTMPro.text = title;
             }
 #endif
 
-            if (mBody != null)
+            if (_textBody != null)
             {
-                mBody.text = body;
+                _textBody.text = body;
             }
 #if USE_MY_UI_TMPRO
-            else if (mBodyTMPro != null)
+            else if (_textBodyTMPro != null)
             {
-                mBodyTMPro.text = body;
+                _textBodyTMPro.text = body;
             }
 #endif
 
-            if (mButtonClose != null)
+            if (_buttonClose != null)
             {
-                mButtonClose.SetActive(isShowCloseButton);
+                _buttonClose.SetActive(isShowCloseButton);
             }
-            mActionClose = actionClose;
+            _onClickCloseCallback = actionClose;
         }
 
 #if UNITY_EDITOR

@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyUGUIConfigIDEditor (version 2.8)
+ * Class:       MyUGUIConfigIDEditor (version 2.9)
  */
 
 using UnityEngine;
@@ -16,8 +16,8 @@ namespace MyClasses.UI.Tool
     {
         #region ----- Variable -----
 
-        private MyUGUIConfigGroups mGroups;
-        private Vector2 mScrollPosition;
+        private MyUGUIConfigGroups _groups;
+        private Vector2 _scrollPosition;
 
         #endregion
 
@@ -59,10 +59,10 @@ namespace MyClasses.UI.Tool
         /// </summary>
         void OnGUI()
         {
-            mScrollPosition = EditorGUILayout.BeginScrollView(mScrollPosition, new GUILayoutOption[0]);
-            for (int i = 0, countI = mGroups.ListGroup.Count; i < countI; i++)
+            _scrollPosition = EditorGUILayout.BeginScrollView(_scrollPosition, new GUILayoutOption[0]);
+            for (int i = 0, countI = _groups.ListGroup.Count; i < countI; i++)
             {
-                MyUGUIConfigGroup group = mGroups.ListGroup[i];
+                MyUGUIConfigGroup group = _groups.ListGroup[i];
 
                 EditorGUILayout.BeginHorizontal();
                 group.IsFoldOut = EditorGUILayout.Foldout(group.IsFoldOut, group.Name + " (" + group.ListID.Count + ")");
@@ -107,7 +107,7 @@ namespace MyClasses.UI.Tool
             }
             EditorGUILayout.EndScrollView();
 
-            EditorUtility.SetDirty(mGroups);
+            EditorUtility.SetDirty(_groups);
 
             EditorGUILayout.LabelField(string.Empty);
             if (GUILayout.Button("Apply", GUILayout.Width(100)))
@@ -125,39 +125,39 @@ namespace MyClasses.UI.Tool
         /// </summary>
         private void _LoadAssetFile()
         {
-            if (mGroups != null)
+            if (_groups != null)
             {
                 return;
             }
 
             string filePath = "Assets/Resources/" + MyUGUIManager.CONFIG_DIRECTORY + typeof(MyUGUIConfigGroups).Name + ".asset";
-            mGroups = AssetDatabase.LoadAssetAtPath(filePath, typeof(MyUGUIConfigGroups)) as MyUGUIConfigGroups;
-            if (mGroups == null)
+            _groups = AssetDatabase.LoadAssetAtPath(filePath, typeof(MyUGUIConfigGroups)) as MyUGUIConfigGroups;
+            if (_groups == null)
             {
-                mGroups = ScriptableObject.CreateInstance<MyUGUIConfigGroups>();
-                mGroups.ListGroup = new List<MyUGUIConfigGroup>();
-                mGroups.ListGroup.Add(new MyUGUIConfigGroup()
+                _groups = ScriptableObject.CreateInstance<MyUGUIConfigGroups>();
+                _groups.ListGroup = new List<MyUGUIConfigGroup>();
+                _groups.ListGroup.Add(new MyUGUIConfigGroup()
                 {
                     IsFoldOut = true,
                     Name = "EUnitySceneID",
                     NumDefault = 0,
                     ListID = new List<string>() { "StartupUnityScene", "MainUnityScene", "GameUnityScene" }
                 });
-                mGroups.ListGroup.Add(new MyUGUIConfigGroup()
+                _groups.ListGroup.Add(new MyUGUIConfigGroup()
                 {
                     IsFoldOut = true,
                     Name = "ESceneID",
                     NumDefault = 0,
                     ListID = new List<string>()
                 });
-                mGroups.ListGroup.Add(new MyUGUIConfigGroup()
+                _groups.ListGroup.Add(new MyUGUIConfigGroup()
                 {
                     IsFoldOut = true,
                     Name = "EPopupID",
                     NumDefault = 3,
                     ListID = new List<string>() { "Dialog0ButtonPopup", "Dialog1ButtonPopup", "Dialog2ButtonsPopup" }
                 });
-                AssetDatabase.CreateAsset(mGroups, filePath);
+                AssetDatabase.CreateAsset(_groups, filePath);
                 AssetDatabase.SaveAssets();
             }
         }
@@ -167,26 +167,26 @@ namespace MyClasses.UI.Tool
         /// </summary>
         private void _GenerateScript()
         {
-            if (mGroups == null)
+            if (_groups == null)
             {
                 return;
             }
 
             string scriptName = typeof(MyUGUIConfigIDEditorWindow).Name;
             string unityScenes = string.Empty;
-            for (int i = 0, countI = mGroups.ListGroup[0].ListID.Count; i < countI; i++)
+            for (int i = 0, countI = _groups.ListGroup[0].ListID.Count; i < countI; i++)
             {
-                unityScenes += "\n\t\t" + mGroups.ListGroup[0].ListID[i] + ",";
+                unityScenes += "\n\t\t" + _groups.ListGroup[0].ListID[i] + ",";
             }
             string scenes = string.Empty;
-            for (int i = 0, countI = mGroups.ListGroup[1].ListID.Count; i < countI; i++)
+            for (int i = 0, countI = _groups.ListGroup[1].ListID.Count; i < countI; i++)
             {
-                scenes += "\n\t\t" + mGroups.ListGroup[1].ListID[i] + ",";
+                scenes += "\n\t\t" + _groups.ListGroup[1].ListID[i] + ",";
             }
             string popups = string.Empty;
-            for (int i = 0, countI = mGroups.ListGroup[2].ListID.Count; i < countI; i++)
+            for (int i = 0, countI = _groups.ListGroup[2].ListID.Count; i < countI; i++)
             {
-                popups += "\n\t\t" + mGroups.ListGroup[2].ListID[i] + ",";
+                popups += "\n\t\t" + _groups.ListGroup[2].ListID[i] + ",";
             }
             string content = "/*\n * Copyright (c) 2016 Phạm Minh Hoàng\n * Email:\t\thoangpham61691@gmail.com\n * Framework:\tMyClasses\n * Description:\tThis script is generated by " + scriptName + "\n */\n\nnamespace MyClasses.UI\n{\n\tpublic enum EUnitySceneID\n\t{" + unityScenes + "\n\t}\n\n\tpublic enum ESceneID\n\t{" + scenes + "\n\t}\n\n\tpublic enum EPopupID\n\t{" + popups + "\n\t}\n}";
 

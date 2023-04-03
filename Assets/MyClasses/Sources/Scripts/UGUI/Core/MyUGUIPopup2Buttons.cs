@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyUGUIPopup2Buttons (version 2.14)
+ * Class:       MyUGUIPopup2Buttons (version 2.15)
  */
 
 #pragma warning disable 0114
@@ -26,20 +26,20 @@ namespace MyClasses.UI
         #region ----- Variable -----
 
 #if USE_MY_UI_TMPRO
-        private TextMeshProUGUI mTitleTMPro;
-        private TextMeshProUGUI mBodyTMPro;
+        private TextMeshProUGUI _textTitleTMPro;
+        private TextMeshProUGUI _textBodyTMPro;
 #endif
 
-        private Text mTitle;
-        private Text mBody;
-        private MyUGUIButton mButtonClose;
-        private MyUGUIButton mButtonLeft;
-        private MyUGUIButton mButtonRight;
-        private Action<object> mActionClose;
-        private Action<object> mActionLeft;
-        private Action<object> mActionRight;
+        private Text _textTitle;
+        private Text _textBody;
+        private MyUGUIButton _buttonClose;
+        private MyUGUIButton _buttonLeft;
+        private MyUGUIButton _buttonRight;
+        private Action<object> _onClickCloseCallback;
+        private Action<object> _onClickLeftCallback;
+        private Action<object> _onClickRightCallback;
 
-        private bool mIsAutoHideWhenClickButton;
+        private bool _isAutoHideWhenClickButton;
 
         #endregion
 
@@ -58,7 +58,7 @@ namespace MyClasses.UI
             }
 #endif
 
-            mIsAutoHideWhenClickButton = true;
+            _isAutoHideWhenClickButton = true;
         }
 
         #endregion
@@ -73,17 +73,17 @@ namespace MyClasses.UI
             base.OnUGUIInit();
 
             GameObject container = MyUtilities.FindObjectInAllLayers(GameObject, "Container");
-            mButtonLeft = MyUtilities.FindObjectInFirstLayer(container, "ButtonLeft").GetComponent<MyUGUIButton>();
-            mButtonRight = MyUtilities.FindObjectInFirstLayer(container, "ButtonRight").GetComponent<MyUGUIButton>();
+            _buttonLeft = MyUtilities.FindObjectInFirstLayer(container, "ButtonLeft").GetComponent<MyUGUIButton>();
+            _buttonRight = MyUtilities.FindObjectInFirstLayer(container, "ButtonRight").GetComponent<MyUGUIButton>();
 
             GameObject title = MyUtilities.FindObjectInFirstLayer(container, "Title");
             if (title != null)
             {
-                mTitle = title.GetComponent<Text>();
+                _textTitle = title.GetComponent<Text>();
 #if USE_MY_UI_TMPRO
-                if (mTitle == null)
+                if (_textTitle == null)
                 {
-                    mTitleTMPro = title.GetComponent<TextMeshProUGUI>();
+                    _textTitleTMPro = title.GetComponent<TextMeshProUGUI>();
                 }
 #endif
             }
@@ -91,11 +91,11 @@ namespace MyClasses.UI
             GameObject body = MyUtilities.FindObjectInFirstLayer(container, "Body");
             if (body != null)
             {
-                mBody = body.GetComponent<Text>();
+                _textBody = body.GetComponent<Text>();
 #if USE_MY_UI_TMPRO
-                if (mBody == null)
+                if (_textBody == null)
                 {
-                    mBodyTMPro = body.GetComponent<TextMeshProUGUI>();
+                    _textBodyTMPro = body.GetComponent<TextMeshProUGUI>();
                 }
 #endif
             }
@@ -103,7 +103,7 @@ namespace MyClasses.UI
             GameObject close = MyUtilities.FindObjectInFirstLayer(container, "ButtonClose");
             if (close != null)
             {
-                mButtonClose = close.GetComponent<MyUGUIButton>();
+                _buttonClose = close.GetComponent<MyUGUIButton>();
             }
         }
 
@@ -114,12 +114,12 @@ namespace MyClasses.UI
         {
             base.OnUGUIEnter();
 
-            if (mButtonClose != null)
+            if (_buttonClose != null)
             {
-                mButtonClose.OnEventPointerClick.AddListener(_OnClickClose);
+                _buttonClose.OnEventPointerClick.AddListener(_OnClickClose);
             }
-            mButtonLeft.OnEventPointerClick.AddListener(_OnClickLeft);
-            mButtonRight.OnEventPointerClick.AddListener(_OnClickRight);
+            _buttonLeft.OnEventPointerClick.AddListener(_OnClickLeft);
+            _buttonRight.OnEventPointerClick.AddListener(_OnClickRight);
         }
 
         /// <summary>
@@ -145,16 +145,16 @@ namespace MyClasses.UI
         {
             base.OnUGUIExit();
 
-            if (mButtonClose != null)
+            if (_buttonClose != null)
             {
-                mButtonClose.OnEventPointerClick.RemoveAllListeners();
+                _buttonClose.OnEventPointerClick.RemoveAllListeners();
             }
-            mButtonLeft.OnEventPointerClick.RemoveAllListeners();
-            mButtonRight.OnEventPointerClick.RemoveAllListeners();
+            _buttonLeft.OnEventPointerClick.RemoveAllListeners();
+            _buttonRight.OnEventPointerClick.RemoveAllListeners();
 
-            mActionClose = null;
-            mActionLeft = null;
-            mActionRight = null;
+            _onClickCloseCallback = null;
+            _onClickLeftCallback = null;
+            _onClickRightCallback = null;
         }
 
         /// <summary>
@@ -174,9 +174,9 @@ namespace MyClasses.UI
         /// </summary>
         private void _OnClickClose(PointerEventData arg0)
         {
-            if (mActionClose != null)
+            if (_onClickCloseCallback != null)
             {
-                mActionClose(AttachedData);
+                _onClickCloseCallback(AttachedData);
             }
 
             Hide();
@@ -187,12 +187,12 @@ namespace MyClasses.UI
         /// </summary>
         private void _OnClickLeft(PointerEventData arg0)
         {
-            if (mActionLeft != null)
+            if (_onClickLeftCallback != null)
             {
-                mActionLeft(AttachedData);
+                _onClickLeftCallback(AttachedData);
             }
 
-            if (mIsAutoHideWhenClickButton)
+            if (_isAutoHideWhenClickButton)
             {
                 Hide();
             }
@@ -203,12 +203,12 @@ namespace MyClasses.UI
         /// </summary>
         private void _OnClickRight(PointerEventData arg0)
         {
-            if (mActionRight != null)
+            if (_onClickRightCallback != null)
             {
-                mActionRight(AttachedData);
+                _onClickRightCallback(AttachedData);
             }
 
-            if (mIsAutoHideWhenClickButton)
+            if (_isAutoHideWhenClickButton)
             {
                 Hide();
             }
@@ -283,41 +283,41 @@ namespace MyClasses.UI
         /// </summary>
         private void _SetData(string title, string body, string buttonLeft, Action<object> actionLeft, string buttonRight, Action<object> actionRight, bool isShowButtonClose, Action<object> actionClose, bool isAutoHideWhenClickButton)
         {
-            if (mTitle != null)
+            if (_textTitle != null)
             {
-                mTitle.text = title;
+                _textTitle.text = title;
             }
 #if USE_MY_UI_TMPRO
-            else if (mTitleTMPro != null)
+            else if (_textTitleTMPro != null)
             {
-                mTitleTMPro.text = title;
+                _textTitleTMPro.text = title;
             }
 #endif
 
-            if (mBody != null)
+            if (_textBody != null)
             {
-                mBody.text = body;
+                _textBody.text = body;
             }
 #if USE_MY_UI_TMPRO
-            else if (mBodyTMPro != null)
+            else if (_textBodyTMPro != null)
             {
-                mBodyTMPro.text = body;
+                _textBodyTMPro.text = body;
             }
 #endif
 
-            if (mButtonClose != null)
+            if (_buttonClose != null)
             {
-                mButtonClose.SetActive(isShowButtonClose);
+                _buttonClose.SetActive(isShowButtonClose);
             }
-            mActionClose = actionClose;
+            _onClickCloseCallback = actionClose;
 
-            mButtonLeft.SetText(buttonLeft);
-            mActionLeft = actionLeft;
+            _buttonLeft.SetText(buttonLeft);
+            _onClickLeftCallback = actionLeft;
 
-            mButtonRight.SetText(buttonRight);
-            mActionRight = actionRight;
+            _buttonRight.SetText(buttonRight);
+            _onClickRightCallback = actionRight;
 
-            mIsAutoHideWhenClickButton = isAutoHideWhenClickButton;
+            _isAutoHideWhenClickButton = isAutoHideWhenClickButton;
         }
 
 #if UNITY_EDITOR

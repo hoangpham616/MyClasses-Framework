@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyUGUIConfigPopupEditorWindow (version 2.8)
+ * Class:       MyUGUIConfigPopupEditorWindow (version 2.9)
  */
 
 using UnityEngine;
@@ -17,11 +17,11 @@ namespace MyClasses.UI.Tool
     {
         #region ----- Variable -----
 
-        private MyUGUIConfigPopups mPopups;
-        private Vector2 mScrollPosition;
+        private MyUGUIConfigPopups _popups;
+        private Vector2 _scrollPosition;
 
-        private string[] mScriptPaths;
-        private string[] mPrefabNames;
+        private string[] _scriptPaths;
+        private string[] _prefabNames;
 
         #endregion
 
@@ -73,26 +73,27 @@ namespace MyClasses.UI.Tool
         /// </summary>
         void OnGUI()
         {
-            mScrollPosition = EditorGUILayout.BeginScrollView(mScrollPosition, new GUILayoutOption[0]);
-            for (int i = 0, countI = mPopups.ListPopup.Count; i < countI; i++)
+            _scrollPosition = EditorGUILayout.BeginScrollView(_scrollPosition, new GUILayoutOption[0]);
+            for (int i = 0, countI = _popups.ListPopup.Count; i < countI; i++)
             {
-                MyUGUIConfigPopup popup = mPopups.ListPopup[i];
+                MyUGUIConfigPopup popup = _popups.ListPopup[i];
 
                 popup.IsFoldOut = EditorGUILayout.Foldout(popup.IsFoldOut, popup.ID.ToString());
                 if (popup.IsFoldOut)
                 {
                     EditorGUI.indentLevel++;
-                    if (i < mPopups.NumDefault)
+                    if (i < _popups.NumDefault)
                     {
-                        EditorGUI.BeginDisabledGroup(i < mPopups.NumDefault);
+                        EditorGUI.BeginDisabledGroup(i < _popups.NumDefault);
                         EditorGUILayout.TextField("Script", popup.ScriptPath + ".cs", GUILayout.Width(400));
-                        EditorGUILayout.TextField("Prefab", popup.PrefabName + ".prefab", GUILayout.Width(400));
+                        EditorGUILayout.TextField("Prefab Canvas", popup.PrefabName + ".prefab", GUILayout.Width(400));
+                        EditorGUILayout.TextField("Prefab 3D", popup.PrefabName3D + ".prefab", GUILayout.Width(400));
                         EditorGUI.EndDisabledGroup();
                     }
                     else
                     {
-                        popup.ScriptPathIndex = EditorGUILayout.Popup("Script", popup.ScriptPathIndex, mScriptPaths);
-                        popup.ScriptPath = mScriptPaths[popup.ScriptPathIndex];
+                        popup.ScriptPathIndex = EditorGUILayout.Popup("Script", popup.ScriptPathIndex, _scriptPaths);
+                        popup.ScriptPath = _scriptPaths[popup.ScriptPathIndex];
                         if (popup.ScriptPathIndex > 0)
                         {
                             popup.ScriptName = popup.ScriptPath.Substring(popup.ScriptPath.LastIndexOf('/') + 1);
@@ -103,9 +104,13 @@ namespace MyClasses.UI.Tool
                             popup.ScriptName = string.Empty;
                         }
 
-                        popup.PrefabNameIndex = EditorGUILayout.Popup("Prefab", popup.PrefabNameIndex, mPrefabNames);
-                        popup.PrefabName = mPrefabNames[popup.PrefabNameIndex];
+                        popup.PrefabNameIndex = EditorGUILayout.Popup("Prefab Canvas", popup.PrefabNameIndex, _prefabNames);
+                        popup.PrefabName = _prefabNames[popup.PrefabNameIndex];
                         popup.PrefabName = popup.PrefabName.Equals("<null>") ? string.Empty : popup.PrefabName.Substring(0, popup.PrefabName.Length - 7);
+
+                        popup.PrefabNameIndex3D = EditorGUILayout.Popup("Prefab 3D", popup.PrefabNameIndex3D, _prefabNames);
+                        popup.PrefabName3D = _prefabNames[popup.PrefabNameIndex3D];
+                        popup.PrefabName3D = popup.PrefabName3D.Equals("<null>") ? string.Empty : popup.PrefabName3D.Substring(0, popup.PrefabName3D.Length - 7);
                     }
                     EditorGUI.indentLevel--;
                 }
@@ -117,7 +122,7 @@ namespace MyClasses.UI.Tool
             }
             EditorGUILayout.EndScrollView();
 
-            EditorUtility.SetDirty(mPopups);
+            EditorUtility.SetDirty(_popups);
 
             EditorGUILayout.LabelField(string.Empty);
             if (GUILayout.Button("Reset", GUILayout.Width(100)))
@@ -145,7 +150,7 @@ namespace MyClasses.UI.Tool
                 AssetDatabase.DeleteAsset(filePath);
             }
 
-            mPopups = null;
+            _popups = null;
         }
 
         /// <summary>
@@ -153,7 +158,7 @@ namespace MyClasses.UI.Tool
         /// </summary>
         private void _LoadAssetFile()
         {
-            if (mPopups != null)
+            if (_popups != null)
             {
                 return;
             }
@@ -170,12 +175,12 @@ namespace MyClasses.UI.Tool
             }
 
             string filePath = "Assets/Resources/" + MyUGUIManager.CONFIG_DIRECTORY + typeof(MyUGUIConfigPopups).Name + ".asset";
-            mPopups = AssetDatabase.LoadAssetAtPath(filePath, typeof(MyUGUIConfigPopups)) as MyUGUIConfigPopups;
-            if (mPopups == null)
+            _popups = AssetDatabase.LoadAssetAtPath(filePath, typeof(MyUGUIConfigPopups)) as MyUGUIConfigPopups;
+            if (_popups == null)
             {
-                mPopups = ScriptableObject.CreateInstance<MyUGUIConfigPopups>();
-                mPopups.ListPopup = new List<MyUGUIConfigPopup>();
-                mPopups.ListPopup.Add(new MyUGUIConfigPopup()
+                _popups = ScriptableObject.CreateInstance<MyUGUIConfigPopups>();
+                _popups.ListPopup = new List<MyUGUIConfigPopup>();
+                _popups.ListPopup.Add(new MyUGUIConfigPopup()
                 {
                     IsFoldOut = true,
                     ID = EPopupID.Dialog0ButtonPopup,
@@ -183,7 +188,7 @@ namespace MyClasses.UI.Tool
                     ScriptName = typeof(MyUGUIPopup0Button).Name,
                     PrefabName = EPopupID.Dialog0ButtonPopup.ToString()
                 });
-                mPopups.ListPopup.Add(new MyUGUIConfigPopup()
+                _popups.ListPopup.Add(new MyUGUIConfigPopup()
                 {
                     IsFoldOut = true,
                     ID = EPopupID.Dialog1ButtonPopup,
@@ -191,7 +196,7 @@ namespace MyClasses.UI.Tool
                     ScriptName = typeof(MyUGUIPopup1Button).Name,
                     PrefabName = EPopupID.Dialog1ButtonPopup.ToString()
                 });
-                mPopups.ListPopup.Add(new MyUGUIConfigPopup()
+                _popups.ListPopup.Add(new MyUGUIConfigPopup()
                 {
                     IsFoldOut = true,
                     ID = EPopupID.Dialog2ButtonsPopup,
@@ -199,8 +204,8 @@ namespace MyClasses.UI.Tool
                     ScriptName = typeof(MyUGUIPopup2Buttons).Name,
                     PrefabName = EPopupID.Dialog2ButtonsPopup.ToString()
                 });
-                mPopups.NumDefault = mPopups.ListPopup.Count;
-                AssetDatabase.CreateAsset(mPopups, filePath);
+                _popups.NumDefault = _popups.ListPopup.Count;
+                AssetDatabase.CreateAsset(_popups, filePath);
                 AssetDatabase.SaveAssets();
             }
         }
@@ -210,7 +215,7 @@ namespace MyClasses.UI.Tool
         /// </summary>
         private void _UpdateNewPopups()
         {
-            if (mPopups == null)
+            if (_popups == null)
             {
                 return;
             }
@@ -223,9 +228,9 @@ namespace MyClasses.UI.Tool
                 }
 
                 bool isNewPopup = true;
-                for (int i = 0, countI = mPopups.ListPopup.Count; i < countI; i++)
+                for (int i = 0, countI = _popups.ListPopup.Count; i < countI; i++)
                 {
-                    if (mPopups.ListPopup[i].ID == item)
+                    if (_popups.ListPopup[i].ID == item)
                     {
                         isNewPopup = false;
                         break;
@@ -233,7 +238,7 @@ namespace MyClasses.UI.Tool
                 }
                 if (isNewPopup)
                 {
-                    mPopups.ListPopup.Add(new MyUGUIConfigPopup()
+                    _popups.ListPopup.Add(new MyUGUIConfigPopup()
                     {
                         IsFoldOut = true,
                         ID = item,
@@ -249,19 +254,19 @@ namespace MyClasses.UI.Tool
         /// </summary>
         private void _CorrectValues()
         {
-            mScriptPaths = _GetPopupScriptPaths();
-            mPrefabNames = _GetPopupPrefabNames();
+            _scriptPaths = _GetPopupScriptPaths();
+            _prefabNames = _GetPopupPrefabNames();
 
-            for (int i = 0, countI = mPopups.ListPopup.Count; i < countI; i++)
+            for (int i = 0, countI = _popups.ListPopup.Count; i < countI; i++)
             {
-                MyUGUIConfigPopup popup = mPopups.ListPopup[i];
+                MyUGUIConfigPopup popup = _popups.ListPopup[i];
 
-                if (popup.ScriptPathIndex >= mScriptPaths.Length || !popup.ScriptPath.Equals(mScriptPaths[popup.ScriptPathIndex]))
+                if (popup.ScriptPathIndex >= _scriptPaths.Length || !popup.ScriptPath.Equals(_scriptPaths[popup.ScriptPathIndex]))
                 {
                     popup.ScriptPathIndex = 0;
-                    for (int j = 0; j < mScriptPaths.Length; j++)
+                    for (int j = 0; j < _scriptPaths.Length; j++)
                     {
-                        if (popup.ScriptPath.Equals(mScriptPaths[j]))
+                        if (popup.ScriptPath.Equals(_scriptPaths[j]))
                         {
                             popup.ScriptPathIndex = j;
                             break;
@@ -269,7 +274,7 @@ namespace MyClasses.UI.Tool
                     }
                     if (popup.ScriptPathIndex > 0)
                     {
-                        popup.ScriptPath = mScriptPaths[popup.ScriptPathIndex];
+                        popup.ScriptPath = _scriptPaths[popup.ScriptPathIndex];
                         popup.ScriptName = popup.ScriptPath.Substring(popup.ScriptPath.LastIndexOf('/') + 1);
                         popup.ScriptName = popup.ScriptName.Replace(".cs", string.Empty);
                     }
@@ -279,17 +284,49 @@ namespace MyClasses.UI.Tool
                     }
                 }
 
-                if (popup.PrefabNameIndex >= mPrefabNames.Length || !popup.PrefabName.Equals(mPrefabNames[popup.PrefabNameIndex]))
+                if (popup.PrefabNameIndex >= _prefabNames.Length || (popup.PrefabNameIndex3D >= 0 && !popup.PrefabName.Equals(_prefabNames[popup.PrefabNameIndex])))
                 {
                     string prefabName = popup.PrefabName + ".prefab";
-                    popup.PrefabNameIndex = 0;
-                    for (int j = 0; j < mPrefabNames.Length; j++)
+                    popup.PrefabNameIndex = -1;
+                    for (int j = 0; j < _prefabNames.Length; j++)
                     {
-                        if (prefabName.Equals(mPrefabNames[j]))
+                        if (prefabName.Equals(_prefabNames[j]))
                         {
                             popup.PrefabNameIndex = j;
                             break;
                         }
+                    }
+                    if (popup.PrefabNameIndex == -1)
+                    {
+                        popup.PrefabNameIndex = _prefabNames.Length - 1;
+                    }
+                    if (popup.PrefabNameIndex >= 0)
+                    {
+                        popup.PrefabName = _prefabNames[popup.PrefabNameIndex];
+                        popup.PrefabName = popup.PrefabName.Equals("<null>") ? string.Empty : popup.PrefabName.Substring(0, popup.PrefabName.Length - 7);
+                    }
+                }
+
+                if (popup.PrefabNameIndex3D >= _prefabNames.Length || (popup.PrefabNameIndex3D >= 0 && !popup.PrefabName3D.Equals(_prefabNames[popup.PrefabNameIndex3D])))
+                {
+                    string prefabName = popup.PrefabName3D + ".prefab";
+                    popup.PrefabNameIndex3D = -1;
+                    for (int j = 0; j < _prefabNames.Length; j++)
+                    {
+                        if (prefabName.Equals(_prefabNames[j]))
+                        {
+                            popup.PrefabNameIndex3D = j;
+                            break;
+                        }
+                    }
+                    if (popup.PrefabNameIndex3D == -1)
+                    {
+                        popup.PrefabNameIndex3D = _prefabNames.Length - 1;
+                    }
+                    if (popup.PrefabNameIndex3D >= 0)
+                    {
+                        popup.PrefabName3D = _prefabNames[popup.PrefabNameIndex3D];
+                        popup.PrefabName3D = popup.PrefabName3D.Equals("<null>") ? string.Empty : popup.PrefabName3D.Substring(0, popup.PrefabName3D.Length - 7);
                     }
                 }
             }
@@ -349,10 +386,7 @@ namespace MyClasses.UI.Tool
             listPrefabNames.Remove(EPopupID.Dialog1ButtonPopup.ToString() + ".prefab");
             listPrefabNames.Remove(EPopupID.Dialog2ButtonsPopup.ToString() + ".prefab");
 
-            if (listPrefabNames.Count == 0)
-            {
-                listPrefabNames.Add("<null>");
-            }
+            listPrefabNames.Add("<null>");
 
             return listPrefabNames.ToArray();
         }

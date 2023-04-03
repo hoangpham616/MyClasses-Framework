@@ -17,13 +17,13 @@ namespace MyClasses.UI.Tool
     {
         #region ----- Variable -----
 
-        private MyUGUIConfigUnityScenes mUnityScenes;
-        private Vector2 mScrollPosition;
+        private MyUGUIConfigUnityScenes _unityScenes;
+        private Vector2 _scrollPosition;
 
-        private string[] mScriptPaths;
-        private string[] mUnitySceneNames;
-        private string[] mScenePrefabNames;
-        private string[] mHUDPrefabNames;
+        private string[] _scriptPaths;
+        private string[] _unitySceneNames;
+        private string[] _scenePrefabNames;
+        private string[] _hudPrefabNames;
 
         #endregion
 
@@ -75,10 +75,10 @@ namespace MyClasses.UI.Tool
         /// </summary>
         void OnGUI()
         {
-            mScrollPosition = EditorGUILayout.BeginScrollView(mScrollPosition, new GUILayoutOption[0]);
-            for (int i = 0, countI = mUnityScenes.ListUnityScene.Count; i < countI; i++)
+            _scrollPosition = EditorGUILayout.BeginScrollView(_scrollPosition, new GUILayoutOption[0]);
+            for (int i = 0, countI = _unityScenes.ListUnityScene.Count; i < countI; i++)
             {
-                MyUGUIConfigUnityScene unityScene = mUnityScenes.ListUnityScene[i];
+                MyUGUIConfigUnityScene unityScene = _unityScenes.ListUnityScene[i];
 
                 EditorGUILayout.BeginHorizontal();
                 unityScene.IsFoldOut = EditorGUILayout.Foldout(unityScene.IsFoldOut, unityScene.ID.ToString());
@@ -108,12 +108,12 @@ namespace MyClasses.UI.Tool
                 {
                     EditorGUI.indentLevel++;
 
-                    unityScene.SceneNameIndex = EditorGUILayout.Popup("Unity Scene", unityScene.SceneNameIndex, mUnitySceneNames);
-                    unityScene.SceneName = mUnitySceneNames[unityScene.SceneNameIndex];
+                    unityScene.SceneNameIndex = EditorGUILayout.Popup("Unity Scene", unityScene.SceneNameIndex, _unitySceneNames);
+                    unityScene.SceneName = _unitySceneNames[unityScene.SceneNameIndex];
                     unityScene.SceneName = unityScene.SceneName.Equals("<null>") ? string.Empty : unityScene.SceneName.Substring(0, unityScene.SceneName.Length - 6);
 
-                    unityScene.HUDScriptPathIndex = EditorGUILayout.Popup("HUD Script (Nullable)", unityScene.HUDScriptPathIndex, mScriptPaths);
-                    unityScene.HUDScriptPath = mScriptPaths[unityScene.HUDScriptPathIndex];
+                    unityScene.HUDScriptPathIndex = EditorGUILayout.Popup("HUD Script (Nullable)", unityScene.HUDScriptPathIndex, _scriptPaths);
+                    unityScene.HUDScriptPath = _scriptPaths[unityScene.HUDScriptPathIndex];
                     if (unityScene.HUDScriptPathIndex > 0)
                     {
                         unityScene.HUDScriptName = unityScene.HUDScriptPath.Substring(unityScene.HUDScriptPath.LastIndexOf('/') + 1);
@@ -124,9 +124,13 @@ namespace MyClasses.UI.Tool
                         unityScene.HUDScriptName = string.Empty;
                     }
 
-                    unityScene.HUDPrefabNameIndex = EditorGUILayout.Popup("HUD Prefab (Nullable)", unityScene.HUDPrefabNameIndex, mHUDPrefabNames);
-                    unityScene.HUDPrefabName = mHUDPrefabNames[unityScene.HUDPrefabNameIndex];
+                    unityScene.HUDPrefabNameIndex = EditorGUILayout.Popup("HUD Prefab Canvas (Nullable)", unityScene.HUDPrefabNameIndex, _hudPrefabNames);
+                    unityScene.HUDPrefabName = _hudPrefabNames[unityScene.HUDPrefabNameIndex];
                     unityScene.HUDPrefabName = unityScene.HUDPrefabName.Equals("<null>") ? string.Empty : unityScene.HUDPrefabName.Substring(0, unityScene.HUDPrefabName.Length - 7);
+
+                    unityScene.HUDPrefabNameIndex3D = EditorGUILayout.Popup("HUD Prefab 3D (Nullable)", unityScene.HUDPrefabNameIndex3D, _hudPrefabNames);
+                    unityScene.HUDPrefabName3D = _hudPrefabNames[unityScene.HUDPrefabNameIndex3D];
+                    unityScene.HUDPrefabName3D = unityScene.HUDPrefabName3D.Equals("<null>") ? string.Empty : unityScene.HUDPrefabName3D.Substring(0, unityScene.HUDPrefabName3D.Length - 7);
 
                     for (int j = 0, countJ = unityScene.ListScene.Count; j < countJ; j++)
                     {
@@ -139,8 +143,8 @@ namespace MyClasses.UI.Tool
 
                             scene.ID = (ESceneID)EditorGUILayout.EnumPopup("ID", scene.ID);
 
-                            scene.ScriptPathIndex = EditorGUILayout.Popup("Script", scene.ScriptPathIndex, mScriptPaths);
-                            scene.ScriptPath = mScriptPaths[scene.ScriptPathIndex];
+                            scene.ScriptPathIndex = EditorGUILayout.Popup("Script", scene.ScriptPathIndex, _scriptPaths);
+                            scene.ScriptPath = _scriptPaths[scene.ScriptPathIndex];
                             if (scene.ScriptPathIndex > 0)
                             {
                                 scene.ScriptName = scene.ScriptPath.Substring(scene.ScriptPath.LastIndexOf('/') + 1);
@@ -151,9 +155,13 @@ namespace MyClasses.UI.Tool
                                 scene.ScriptName = string.Empty;
                             }
                             
-                            scene.PrefabNameIndex = EditorGUILayout.Popup("Prefab", scene.PrefabNameIndex, mScenePrefabNames);
-                            scene.PrefabName = mScenePrefabNames[scene.PrefabNameIndex];
+                            scene.PrefabNameIndex = EditorGUILayout.Popup("Prefab Canvas", scene.PrefabNameIndex, _scenePrefabNames);
+                            scene.PrefabName = _scenePrefabNames[scene.PrefabNameIndex];
                             scene.PrefabName = scene.PrefabName.Equals("<null>") ? string.Empty : scene.PrefabName.Substring(0, scene.PrefabName.Length - 7);
+                            
+                            scene.PrefabNameIndex3D = EditorGUILayout.Popup("Prefab 3D", scene.PrefabNameIndex3D, _scenePrefabNames);
+                            scene.PrefabName3D = _scenePrefabNames[scene.PrefabNameIndex3D];
+                            scene.PrefabName3D = scene.PrefabName3D.Equals("<null>") ? string.Empty : scene.PrefabName3D.Substring(0, scene.PrefabName3D.Length - 7);
 
                             scene.IsInitWhenLoadUnityScene = EditorGUILayout.Toggle("Is Init When Load Unity Scene", scene.IsInitWhenLoadUnityScene);
                             scene.IsHideHUD = EditorGUILayout.Toggle("Is Hide HUD", scene.IsHideHUD);
@@ -174,7 +182,7 @@ namespace MyClasses.UI.Tool
             }
             EditorGUILayout.EndScrollView();
 
-            EditorUtility.SetDirty(mUnityScenes);
+            EditorUtility.SetDirty(_unityScenes);
 
             EditorGUILayout.LabelField(string.Empty);
             if (GUILayout.Button("Reset", GUILayout.Width(100)))
@@ -202,7 +210,7 @@ namespace MyClasses.UI.Tool
                 AssetDatabase.DeleteAsset(filePath);
             }
 
-            mUnityScenes = null;
+            _unityScenes = null;
         }
 
         /// <summary>
@@ -210,17 +218,17 @@ namespace MyClasses.UI.Tool
         /// </summary>
         private void _LoadAssetFile()
         {
-            if (mUnityScenes != null)
+            if (_unityScenes != null)
             {
                 return;
             }
 
             string filePath = "Assets/Resources/" + MyUGUIManager.CONFIG_DIRECTORY + typeof(MyUGUIConfigUnityScenes).Name + ".asset";
-            mUnityScenes = AssetDatabase.LoadAssetAtPath(filePath, typeof(MyUGUIConfigUnityScenes)) as MyUGUIConfigUnityScenes;
-            if (mUnityScenes == null)
+            _unityScenes = AssetDatabase.LoadAssetAtPath(filePath, typeof(MyUGUIConfigUnityScenes)) as MyUGUIConfigUnityScenes;
+            if (_unityScenes == null)
             {
-                mUnityScenes = ScriptableObject.CreateInstance<MyUGUIConfigUnityScenes>();
-                AssetDatabase.CreateAsset(mUnityScenes, filePath);
+                _unityScenes = ScriptableObject.CreateInstance<MyUGUIConfigUnityScenes>();
+                AssetDatabase.CreateAsset(_unityScenes, filePath);
                 AssetDatabase.SaveAssets();
             }
         }
@@ -230,7 +238,7 @@ namespace MyClasses.UI.Tool
         /// </summary>
         private void _AddNewUnityScenes()
         {
-            if (mUnityScenes == null)
+            if (_unityScenes == null)
             {
                 return;
             }
@@ -238,9 +246,9 @@ namespace MyClasses.UI.Tool
             foreach (EUnitySceneID id in Enum.GetValues(typeof(EUnitySceneID)))
             {
                 bool isNewUnityScene = true;
-                for (int i = 0, countI = mUnityScenes.ListUnityScene.Count; i < countI; i++)
+                for (int i = 0, countI = _unityScenes.ListUnityScene.Count; i < countI; i++)
                 {
-                    if (mUnityScenes.ListUnityScene[i].ID == id)
+                    if (_unityScenes.ListUnityScene[i].ID == id)
                     {
                         isNewUnityScene = false;
                         break;
@@ -248,7 +256,7 @@ namespace MyClasses.UI.Tool
                 }
                 if (isNewUnityScene)
                 {
-                    mUnityScenes.ListUnityScene.Add(new MyUGUIConfigUnityScene()
+                    _unityScenes.ListUnityScene.Add(new MyUGUIConfigUnityScene()
                     {
                         IsFoldOut = true,
                         ID = id,
@@ -263,23 +271,23 @@ namespace MyClasses.UI.Tool
         /// </summary>
         private void _CorrectValues()
         {
-            mScriptPaths = _GetScriptPaths();
-            mUnitySceneNames = _GetUnitySceneNames();
-            mScenePrefabNames = _GetPrefabNames(MyUGUIManager.SCENE_DIRECTORY);
-            mHUDPrefabNames = _GetPrefabNames(MyUGUIManager.HUD_DIRECTORY);
+            _scriptPaths = _GetScriptPaths();
+            _unitySceneNames = _GetUnitySceneNames();
+            _scenePrefabNames = _GetPrefabNames(MyUGUIManager.SCENE_DIRECTORY);
+            _hudPrefabNames = _GetPrefabNames(MyUGUIManager.HUD_DIRECTORY);
 
-            for (int i = 0, countI = mUnityScenes.ListUnityScene.Count; i < countI; i++)
+            for (int i = 0, countI = _unityScenes.ListUnityScene.Count; i < countI; i++)
             {
-                MyUGUIConfigUnityScene unityScene = mUnityScenes.ListUnityScene[i];
+                MyUGUIConfigUnityScene unityScene = _unityScenes.ListUnityScene[i];
 
-                if (!string.IsNullOrEmpty(unityScene.SceneName) && (unityScene.SceneNameIndex >= mUnitySceneNames.Length || !unityScene.SceneName.Equals(mUnitySceneNames[unityScene.SceneNameIndex])))
+                if (!string.IsNullOrEmpty(unityScene.SceneName) && (unityScene.SceneNameIndex >= _unitySceneNames.Length || !unityScene.SceneName.Equals(_unitySceneNames[unityScene.SceneNameIndex])))
                 {
                     string unitySceneName = unityScene.SceneName + ".unity";
                     unityScene.SceneName = string.Empty;
                     unityScene.SceneNameIndex = 0;
-                    for (int j = 0; j < mUnitySceneNames.Length; j++)
+                    for (int j = 0; j < _unitySceneNames.Length; j++)
                     {
-                        if (unitySceneName.Equals(mUnitySceneNames[j]))
+                        if (unitySceneName.Equals(_unitySceneNames[j]))
                         {
                             unityScene.SceneNameIndex = j;
                             break;
@@ -287,17 +295,17 @@ namespace MyClasses.UI.Tool
                     }
                     if (unityScene.SceneNameIndex > 0)
                     {
-                        unityScene.SceneName = mUnitySceneNames[unityScene.SceneNameIndex];
+                        unityScene.SceneName = _unitySceneNames[unityScene.SceneNameIndex];
                         unityScene.SceneName = unityScene.SceneName.Equals("<null>") ? string.Empty : unityScene.SceneName.Substring(0, unityScene.SceneName.Length - 6);
                     }
                 }
 
-                if (!string.IsNullOrEmpty(unityScene.HUDScriptPath) && (unityScene.HUDScriptPathIndex >= mScriptPaths.Length || !unityScene.HUDScriptPath.Equals(mScriptPaths[unityScene.HUDScriptPathIndex])))
+                if (!string.IsNullOrEmpty(unityScene.HUDScriptPath) && (unityScene.HUDScriptPathIndex >= _scriptPaths.Length || !unityScene.HUDScriptPath.Equals(_scriptPaths[unityScene.HUDScriptPathIndex])))
                 {
                     unityScene.HUDScriptPathIndex = 0;
-                    for (int j = 0; j < mScriptPaths.Length; j++)
+                    for (int j = 0; j < _scriptPaths.Length; j++)
                     {
-                        if (unityScene.HUDScriptPath.Equals(mScriptPaths[j]))
+                        if (unityScene.HUDScriptPath.Equals(_scriptPaths[j]))
                         {
                             unityScene.HUDScriptPathIndex = j;
                             break;
@@ -305,7 +313,7 @@ namespace MyClasses.UI.Tool
                     }
                     if (unityScene.HUDScriptPathIndex > 0)
                     {
-                        unityScene.HUDScriptPath = mScriptPaths[unityScene.HUDScriptPathIndex];
+                        unityScene.HUDScriptPath = _scriptPaths[unityScene.HUDScriptPathIndex];
                         unityScene.HUDScriptName = unityScene.HUDScriptPath.Substring(unityScene.HUDScriptPath.LastIndexOf('/') + 1);
                         unityScene.HUDScriptName = unityScene.HUDScriptName.Replace(".cs", string.Empty);
                     }
@@ -315,14 +323,14 @@ namespace MyClasses.UI.Tool
                     }
                 }
 
-                if (!string.IsNullOrEmpty(unityScene.HUDPrefabName) && (unityScene.HUDPrefabNameIndex >= mHUDPrefabNames.Length || !unityScene.HUDPrefabName.Equals(mHUDPrefabNames[unityScene.HUDPrefabNameIndex])))
+                if (!string.IsNullOrEmpty(unityScene.HUDPrefabName) && (unityScene.HUDPrefabNameIndex >= _hudPrefabNames.Length || !unityScene.HUDPrefabName.Equals(_hudPrefabNames[unityScene.HUDPrefabNameIndex])))
                 {
                     string hudPrefabName = unityScene.HUDPrefabName + ".prefab";
                     unityScene.HUDPrefabName = string.Empty;
                     unityScene.HUDPrefabNameIndex = 0;
-                    for (int j = 0; j < mHUDPrefabNames.Length; j++)
+                    for (int j = 0; j < _hudPrefabNames.Length; j++)
                     {
-                        if (hudPrefabName.Equals(mHUDPrefabNames[j]))
+                        if (hudPrefabName.Equals(_hudPrefabNames[j]))
                         {
                             unityScene.HUDPrefabNameIndex = j;
                             break;
@@ -330,8 +338,28 @@ namespace MyClasses.UI.Tool
                     }
                     if (unityScene.HUDPrefabNameIndex > 0)
                     {
-                        unityScene.HUDPrefabName = mHUDPrefabNames[unityScene.HUDPrefabNameIndex];
+                        unityScene.HUDPrefabName = _hudPrefabNames[unityScene.HUDPrefabNameIndex];
                         unityScene.HUDPrefabName = unityScene.HUDPrefabName.Equals("<null>") ? string.Empty : unityScene.HUDPrefabName.Substring(0, unityScene.HUDPrefabName.Length - 7);
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(unityScene.HUDPrefabName3D) && (unityScene.HUDPrefabNameIndex3D >= _hudPrefabNames.Length || !unityScene.HUDPrefabName3D.Equals(_hudPrefabNames[unityScene.HUDPrefabNameIndex3D])))
+                {
+                    string hudPrefabName = unityScene.HUDPrefabName + ".prefab";
+                    unityScene.HUDPrefabName3D = string.Empty;
+                    unityScene.HUDPrefabNameIndex3D = 0;
+                    for (int j = 0; j < _hudPrefabNames.Length; j++)
+                    {
+                        if (hudPrefabName.Equals(_hudPrefabNames[j]))
+                        {
+                            unityScene.HUDPrefabNameIndex3D = j;
+                            break;
+                        }
+                    }
+                    if (unityScene.HUDPrefabNameIndex3D > 0)
+                    {
+                        unityScene.HUDPrefabName3D = _hudPrefabNames[unityScene.HUDPrefabNameIndex3D];
+                        unityScene.HUDPrefabName3D = unityScene.HUDPrefabName3D.Equals("<null>") ? string.Empty : unityScene.HUDPrefabName3D.Substring(0, unityScene.HUDPrefabName3D.Length - 7);
                     }
                 }
 
@@ -339,12 +367,12 @@ namespace MyClasses.UI.Tool
                 {
                     MyUGUIConfigScene scene = unityScene.ListScene[j];
 
-                    if (scene.ScriptPathIndex >= mScriptPaths.Length || !scene.ScriptPath.Equals(mScriptPaths[scene.ScriptPathIndex]))
+                    if (scene.ScriptPathIndex >= _scriptPaths.Length || !scene.ScriptPath.Equals(_scriptPaths[scene.ScriptPathIndex]))
                     {
                         scene.ScriptPathIndex = 0;
-                        for (int k = 0; k < mScriptPaths.Length; k++)
+                        for (int k = 0; k < _scriptPaths.Length; k++)
                         {
-                            if (scene.ScriptPath.Equals(mScriptPaths[k]))
+                            if (scene.ScriptPath.Equals(_scriptPaths[k]))
                             {
                                 scene.ScriptPathIndex = k;
                                 break;
@@ -352,7 +380,7 @@ namespace MyClasses.UI.Tool
                         }
                         if (scene.ScriptPathIndex > 0)
                         {
-                            scene.ScriptPath = mScriptPaths[scene.ScriptPathIndex];
+                            scene.ScriptPath = _scriptPaths[scene.ScriptPathIndex];
                             scene.ScriptName = scene.ScriptPath.Substring(scene.ScriptPath.LastIndexOf('/') + 1);
                             scene.ScriptName = scene.ScriptName.Replace(".cs", string.Empty);
                         }
@@ -363,14 +391,14 @@ namespace MyClasses.UI.Tool
                         }
                     }
 
-                    if (scene.PrefabNameIndex >= mScenePrefabNames.Length || !scene.PrefabName.Equals(mScenePrefabNames[scene.PrefabNameIndex]))
+                    if (scene.PrefabNameIndex >= _scenePrefabNames.Length || !scene.PrefabName.Equals(_scenePrefabNames[scene.PrefabNameIndex]))
                     {
                         string prefabName = scene.PrefabName + ".prefab";
                         scene.PrefabName = string.Empty;
                         scene.PrefabNameIndex = 0;
-                        for (int k = 0; k < mScenePrefabNames.Length; k++)
+                        for (int k = 0; k < _scenePrefabNames.Length; k++)
                         {
-                            if (prefabName.Equals(mScenePrefabNames[k]))
+                            if (prefabName.Equals(_scenePrefabNames[k]))
                             {
                                 scene.PrefabNameIndex = k;
                                 break;
@@ -378,8 +406,28 @@ namespace MyClasses.UI.Tool
                         }
                         if (scene.PrefabNameIndex > 0)
                         {
-                            scene.PrefabName = mScenePrefabNames[scene.PrefabNameIndex];
+                            scene.PrefabName = _scenePrefabNames[scene.PrefabNameIndex];
                             scene.PrefabName = scene.PrefabName.Equals("<null>") ? string.Empty : scene.PrefabName.Substring(0, scene.PrefabName.Length - 7);
+                        }
+                    }
+
+                    if (scene.PrefabNameIndex3D >= _scenePrefabNames.Length || !scene.PrefabName3D.Equals(_scenePrefabNames[scene.PrefabNameIndex3D]))
+                    {
+                        string prefabName = scene.PrefabName3D + ".prefab";
+                        scene.PrefabName3D = string.Empty;
+                        scene.PrefabNameIndex3D = 0;
+                        for (int k = 0; k < _scenePrefabNames.Length; k++)
+                        {
+                            if (prefabName.Equals(_scenePrefabNames[k]))
+                            {
+                                scene.PrefabNameIndex3D = k;
+                                break;
+                            }
+                        }
+                        if (scene.PrefabNameIndex3D > 0)
+                        {
+                            scene.PrefabName3D = _scenePrefabNames[scene.PrefabNameIndex3D];
+                            scene.PrefabName3D = scene.PrefabName3D.Equals("<null>") ? string.Empty : scene.PrefabName3D.Substring(0, scene.PrefabName3D.Length - 7);
                         }
                     }
                 }
@@ -449,9 +497,7 @@ namespace MyClasses.UI.Tool
         /// </summary>
         private string[] _GetPrefabNames(string directory)
         {
-            List<string> listPrefabNames = new List<string>();
-
-            listPrefabNames.Add("<null>");
+            List<string> listPrefabNames = new List<string> { "<null>" };
 
             string[] prefabNames = Directory.GetFiles("Assets/Resources/" + directory, "*.prefab");
             if (prefabNames != null && prefabNames.Length > 0)

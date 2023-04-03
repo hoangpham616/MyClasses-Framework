@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyUGUIRunningMessage (version 2.23)
+ * Class:       MyUGUIRunningMessage (version 2.24)
  */
 
 #pragma warning disable 0114
@@ -26,23 +26,23 @@ namespace MyClasses.UI
 
         #region ----- Variable -----
 
-        private Text mText;
+        private Text _text;
 
-        private Animator mAnimator;
-        private GameObject mGameObject;
-        private GameObject mContainer;
-        private RectTransform mMask;
-        private Vector3 mCurPos;
-        private EState mState;
-        private EType mType;
-        private Color mTextOriginalColor;
-        private float mSpeed;
-        private float mMinSpeed;
-        private float mMaxSpeed;
-        private float mEndX;
+        private Animator _animator;
+        private GameObject _gameObject;
+        private GameObject _container;
+        private RectTransform _mask;
+        private Vector3 _currentPosition;
+        private EState _state;
+        private EType _type;
+        private Color _colorText;
+        private float _speed;
+        private float _minSpeed;
+        private float _maxSpeed;
+        private float _endX;
 
-        private List<string> mContents = new List<string>();
-        private int mMaxContentQueue = 3;
+        private List<string> _listContent = new List<string>();
+        private int _maxContentQueue = 3;
 
         #endregion
 
@@ -50,23 +50,23 @@ namespace MyClasses.UI
 
         public GameObject GameObject
         {
-            get { return mGameObject; }
-            set { mGameObject = value; }
+            get { return _gameObject; }
+            set { _gameObject = value; }
         }
 
         public Transform Transform
         {
-            get { return mGameObject != null ? mGameObject.transform : null; }
+            get { return _gameObject != null ? _gameObject.transform : null; }
         }
 
         public bool IsShow
         {
-            get { return mGameObject != null && mGameObject.activeSelf; }
+            get { return _gameObject != null && _gameObject.activeSelf; }
         }
 
         public EType Type
         {
-            get { return mType; }
+            get { return _type; }
         }
 
         #endregion
@@ -78,11 +78,11 @@ namespace MyClasses.UI
         /// </summary>
         public MyUGUIRunningMessage(EType type)
         {
-            mType = type;
+            _type = type;
 #if UNITY_EDITOR
-            if (!_CheckPrefab(mType))
+            if (!_CheckPrefab(_type))
             {
-                _CreatePrefab(mType);
+                _CreatePrefab(_type);
             }
 #endif
         }
@@ -100,7 +100,7 @@ namespace MyClasses.UI
             {
                 maxQueue = 999;
             }
-            mMaxContentQueue = maxQueue;
+            _maxContentQueue = maxQueue;
         }
 
         /// <summary>
@@ -108,22 +108,22 @@ namespace MyClasses.UI
         /// </summary>
         public void Show(string content, float minSpeed, float maxSpeed)
         {
-            if (mGameObject != null)
+            if (_gameObject != null)
             {
-                mContents.Add(content);
-                if (mContents.Count > mMaxContentQueue)
+                _listContent.Add(content);
+                if (_listContent.Count > _maxContentQueue)
                 {
-                    mContents.RemoveAt(0);
+                    _listContent.RemoveAt(0);
                 }
 
-                mMinSpeed = minSpeed;
-                mMaxSpeed = maxSpeed;
+                _minSpeed = minSpeed;
+                _maxSpeed = maxSpeed;
 
-                if (!mGameObject.activeSelf)
+                if (!_gameObject.activeSelf)
                 {
                     _Init();
 
-                    mState = EState.PreShow;
+                    _state = EState.PreShow;
                 }
             }
         }
@@ -133,13 +133,13 @@ namespace MyClasses.UI
         /// </summary>
         public void Hide()
         {
-            if (mGameObject != null)
+            if (_gameObject != null)
             {
                 _Init();
 
-                mContents.Clear();
+                _listContent.Clear();
 
-                mState = EState.Hide;
+                _state = EState.Hide;
             }
         }
 
@@ -148,14 +148,14 @@ namespace MyClasses.UI
         /// </summary>
         public void HideImmedialy()
         {
-            if (mGameObject != null)
+            if (_gameObject != null)
             {
                 _Init();
 
-                mContents.Clear();
-                mAnimator = null;
+                _listContent.Clear();
+                _animator = null;
 
-                mState = EState.Hide;
+                _state = EState.Hide;
 
                 Update(Time.deltaTime);
             }
@@ -166,100 +166,100 @@ namespace MyClasses.UI
         /// </summary>
         public void Update(float dt)
         {
-            if (mText == null)
+            if (_text == null)
             {
                 return;
             }
 
-            switch (mState)
+            switch (_state)
             {
                 case EState.PreShow:
                     {
-                        if (mContents.Count < 0)
+                        if (_listContent.Count < 0)
                         {
                             return;
                         }
 
-                        Color colorAlpha0 = mText.color;
+                        Color colorAlpha0 = _text.color;
                         colorAlpha0.a = 0;
-                        mText.color = colorAlpha0;
-                        mText.text = mContents[0];
-                        mContents.RemoveAt(0);
+                        _text.color = colorAlpha0;
+                        _text.text = _listContent[0];
+                        _listContent.RemoveAt(0);
 
-                        mGameObject.SetActive(true);
-                        mAnimator = mGameObject.GetComponent<Animator>();
-                        if (mAnimator != null)
+                        _gameObject.SetActive(true);
+                        _animator = _gameObject.GetComponent<Animator>();
+                        if (_animator != null)
                         {
-                            mAnimator.Play("Show");
+                            _animator.Play("Show");
                         }
 
-                        mState = EState.Show;
+                        _state = EState.Show;
                     }
                     break;
                 case EState.Show:
                     {
-                        mSpeed = mMinSpeed * (mText.rectTransform.rect.width / mMask.rect.width);
-                        mSpeed = Mathf.Clamp(mSpeed, mMinSpeed, mMaxSpeed);
+                        _speed = _minSpeed * (_text.rectTransform.rect.width / _mask.rect.width);
+                        _speed = Mathf.Clamp(_speed, _minSpeed, _maxSpeed);
 
-                        float halfWidth = mText.rectTransform.rect.width / 2;
-                        float beginX = (mMask.rect.width / 2) + halfWidth;
-                        mEndX = mMask.rect.x - halfWidth;
+                        float halfWidth = _text.rectTransform.rect.width / 2;
+                        float beginX = (_mask.rect.width / 2) + halfWidth;
+                        _endX = _mask.rect.x - halfWidth;
 
-                        mCurPos = Vector3.zero;
-                        mCurPos.x = beginX + (mSpeed / 2);
-                        mText.color = mTextOriginalColor;
-                        mText.rectTransform.localPosition = mCurPos;
+                        _currentPosition = Vector3.zero;
+                        _currentPosition.x = beginX + (_speed / 2);
+                        _text.color = _colorText;
+                        _text.rectTransform.localPosition = _currentPosition;
 
-                        mState = EState.Update;
+                        _state = EState.Update;
                     }
                     break;
                 case EState.Update:
                     {
-                        mCurPos.x -= mSpeed * dt;
-                        mText.rectTransform.localPosition = mCurPos;
+                        _currentPosition.x -= _speed * dt;
+                        _text.rectTransform.localPosition = _currentPosition;
 
-                        if (mCurPos.x < mEndX)
+                        if (_currentPosition.x < _endX)
                         {
-                            if (mContents.Count > 0)
+                            if (_listContent.Count > 0)
                             {
-                                mText.text = mContents[0];
-                                mContents.RemoveAt(0);
+                                _text.text = _listContent[0];
+                                _listContent.RemoveAt(0);
 
-                                mState = EState.Show;
+                                _state = EState.Show;
                             }
                             else
                             {
-                                mAnimator = mGameObject.GetComponent<Animator>();
+                                _animator = _gameObject.GetComponent<Animator>();
 
-                                mState = EState.Hide;
+                                _state = EState.Hide;
                             }
                         }
                     }
                     break;
                 case EState.Hide:
                     {
-                        mCurPos.x = (mMask.rect.width / 2) + mText.rectTransform.rect.width;
-                        mText.rectTransform.localPosition = mCurPos;
+                        _currentPosition.x = (_mask.rect.width / 2) + _text.rectTransform.rect.width;
+                        _text.rectTransform.localPosition = _currentPosition;
 
-                        if (mAnimator != null)
+                        if (_animator != null)
                         {
-                            mAnimator.Play("Hide");
-                            mState = EState.Hiding;
+                            _animator.Play("Hide");
+                            _state = EState.Hiding;
                         }
                         else
                         {
-                            mGameObject.SetActive(false);
-                            mState = EState.Idle;
+                            _gameObject.SetActive(false);
+                            _state = EState.Idle;
                         }
 
                     }
                     break;
                 case EState.Hiding:
                     {
-                        if (mAnimator == null || mAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
+                        if (_animator == null || _animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1)
                         {
-                            mGameObject.SetActive(false);
-                            mState = EState.Idle;
+                            _gameObject.SetActive(false);
+                            _state = EState.Idle;
                         }
                     }
                     break;
@@ -340,18 +340,18 @@ namespace MyClasses.UI
         /// </summary>
         private void _Init()
         {
-            if (mGameObject != null)
+            if (_gameObject != null)
             {
-                if (mContainer == null || mMask == null || mText == null)
+                if (_container == null || _mask == null || _text == null)
                 {
-                    mGameObject.SetActive(false);
+                    _gameObject.SetActive(false);
 
-                    mContainer = MyUtilities.FindObjectInFirstLayer(mGameObject, "Container");
-                    mMask = MyUtilities.FindObjectInFirstLayer(mContainer.gameObject, "Mask").GetComponent<RectTransform>();
-                    mText = MyUtilities.FindObjectInFirstLayer(mMask.gameObject, "Text").GetComponent<Text>();
-                    mTextOriginalColor = mText.color;
+                    _container = MyUtilities.FindObjectInFirstLayer(_gameObject, "Container");
+                    _mask = MyUtilities.FindObjectInFirstLayer(_container.gameObject, "Mask").GetComponent<RectTransform>();
+                    _text = MyUtilities.FindObjectInFirstLayer(_mask.gameObject, "Text").GetComponent<Text>();
+                    _colorText = _text.color;
 
-                    mState = EState.Idle;
+                    _state = EState.Idle;
                 }
             }
         }

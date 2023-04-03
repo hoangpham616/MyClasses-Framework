@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyUGUIPopup (version 2.22)
+ * Class:       MyUGUIPopup (version 2.23)
  */
 
 using UnityEngine;
@@ -14,13 +14,13 @@ namespace MyClasses.UI
     {
         #region ----- Variable -----
 
-        private EPopupID mID;
-        private Animator mAnimator;
-        private bool mIsFloat;
-        private bool mIsRepeatable;
-        private bool mIsRetainable;
-        private object mAttachedData;
-        private Action mOnCloseCallback;
+        private EPopupID _id;
+        private Animator _animator;
+        private bool _isFloat;
+        private bool _isRepeatable;
+        private bool _isRetainable;
+        private object _attachedData;
+        private Action _onCloseCallback;
 
         #endregion
 
@@ -28,28 +28,28 @@ namespace MyClasses.UI
 
         public EPopupID ID
         {
-            get { return mID; }
+            get { return _id; }
         }
 
         public object AttachedData
         {
-            get { return mAttachedData; }
-            set { mAttachedData = value; }
+            get { return _attachedData; }
+            set { _attachedData = value; }
         }
 
         public bool IsFloat
         {
-            get { return mIsFloat; }
+            get { return _isFloat; }
         }
 
         public bool IsRepeatable
         {
-            get { return mIsRepeatable; }
+            get { return _isRepeatable; }
         }
 
         public bool IsRetainable
         {
-            get { return mIsRetainable; }
+            get { return _isRetainable; }
         }
 
         public bool IsShowing
@@ -59,7 +59,7 @@ namespace MyClasses.UI
 
         public Action OnCloseCallback
         {
-            set { mOnCloseCallback = value; }
+            set { _onCloseCallback = value; }
         }
 
         #endregion
@@ -71,12 +71,25 @@ namespace MyClasses.UI
         /// </summary>
         /// <param name="isRepeatable">show multiple popups at the same time</param>
         public MyUGUIPopup(EPopupID id, string prefabName, bool isFloat = false, bool isRepeatable = false)
-            : base(prefabName)
+            : base(prefabName, null)
         {
-            mID = id;
-            mIsFloat = isFloat;
-            mIsRepeatable = isRepeatable;
-            mIsRetainable = !isRepeatable;
+            _id = id;
+            _isFloat = isFloat;
+            _isRepeatable = isRepeatable;
+            _isRetainable = !isRepeatable;
+        }
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="isRepeatable">show multiple popups at the same time</param>
+        public MyUGUIPopup(EPopupID id, string prefabName, string prefabName3D, bool isFloat = false, bool isRepeatable = false)
+            : base(prefabName, prefabName3D)
+        {
+            _id = id;
+            _isFloat = isFloat;
+            _isRepeatable = isRepeatable;
+            _isRetainable = !isRepeatable;
         }
 
         #endregion
@@ -90,9 +103,9 @@ namespace MyClasses.UI
         {
             base.OnUGUIInit();
 
-            GameObject parent = mIsFloat ? MyUGUIManager.Instance.CanvasOnTopFloatPopup : MyUGUIManager.Instance.CanvasOnTopPopup;
+            GameObject parent = _isFloat ? MyUGUIManager.Instance.CanvasOnTopFloatPopup : MyUGUIManager.Instance.CanvasOnTopPopup;
 
-            if (mIsRepeatable)
+            if (_isRepeatable)
             {
                 if (IsUseAssetBundle)
                 {
@@ -103,13 +116,26 @@ namespace MyClasses.UI
                     else
                     {
                         GameObject = GameObject.Instantiate(Bundle.LoadAsset(PrefabName) as GameObject);
+                        if (PrefabName3D.Length > 0)
+                        {
+                            GameObject3D = GameObject.Instantiate(Bundle.LoadAsset(PrefabName3D) as GameObject);
+                        }
                     }
                 }
                 else
                 {
                     GameObject = GameObject.Instantiate(Resources.Load(MyUGUIManager.POPUP_DIRECTORY + PrefabName), Vector3.zero, Quaternion.identity) as GameObject;
+                    if (PrefabName3D.Length > 0)
+                    {
+                        GameObject3D = GameObject.Instantiate(Resources.Load(MyUGUIManager.POPUP_DIRECTORY + PrefabName3D), Vector3.zero, Quaternion.identity) as GameObject;
+                    }
                 }
-                GameObject.name = PrefabName + "_Reaptable (" + UnityEngine.Random.Range(0, int.MaxValue) + ")";
+                int random = UnityEngine.Random.Range(0, int.MaxValue);
+                GameObject.name = PrefabName + "_Reaptable (" + random + ")";
+                if (GameObject3D != null)
+                {
+                    GameObject3D.name = PrefabName3D + "_Reaptable (" + random + ")";
+                }
             }
             else
             {
@@ -125,17 +151,31 @@ namespace MyClasses.UI
                         else
                         {
                             GameObject = GameObject.Instantiate(Bundle.LoadAsset(PrefabName) as GameObject);
+                            if (PrefabName3D.Length > 0)
+                            {
+                                GameObject3D = GameObject.Instantiate(Bundle.LoadAsset(PrefabName3D) as GameObject);
+                            }
                         }
                     }
                     else
                     {
                         GameObject = GameObject.Instantiate(Resources.Load(MyUGUIManager.POPUP_DIRECTORY + PrefabName), Vector3.zero, Quaternion.identity) as GameObject;
                         GameObject.name = PrefabName;
+
+                        if (PrefabName3D.Length > 0)
+                        {
+                            GameObject3D = GameObject.Instantiate(Resources.Load(MyUGUIManager.POPUP_DIRECTORY + PrefabName3D), Vector3.zero, Quaternion.identity) as GameObject;
+                            GameObject3D.name = PrefabName3D;
+                        }
                     }
                 }
             }
 
             GameObject.transform.SetParent(parent.transform, false);
+            if (GameObject3D != null)
+            {
+                GameObject3D.SetActive(false);
+            }
         }
 
         /// <summary>
@@ -147,10 +187,10 @@ namespace MyClasses.UI
 
             GameObject.transform.SetAsLastSibling();
 
-            mAnimator = GameObject.GetComponent<Animator>();
-            if (mAnimator != null)
+            _animator = GameObject.GetComponent<Animator>();
+            if (_animator != null)
             {
-                mAnimator.Play("Show");
+                _animator.Play("Show");
             }
         }
 
@@ -159,7 +199,7 @@ namespace MyClasses.UI
         /// </summary>
         public override bool OnUGUIVisible()
         {
-            if (mAnimator != null && mAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1)
+            if (_animator != null && _animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1)
             {
                 return false;
             }
@@ -182,9 +222,9 @@ namespace MyClasses.UI
         {
             base.OnUGUIExit();
 
-            if (mAnimator != null)
+            if (_animator != null)
             {
-                mAnimator.Play("Hide");
+                _animator.Play("Hide");
             }
         }
 
@@ -193,17 +233,17 @@ namespace MyClasses.UI
         /// </summary>
         public override bool OnUGUIInvisible()
         {
-            if (mAnimator != null && mAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1 && GameObject.activeSelf)
+            if (_animator != null && _animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1 && GameObject.activeSelf)
             {
                 return false;
             }
             
             if (base.OnUGUIInvisible())
             {
-                if (mOnCloseCallback != null)
+                if (_onCloseCallback != null)
                 {
-                    mOnCloseCallback();
-                    mOnCloseCallback = null;
+                    _onCloseCallback();
+                    _onCloseCallback = null;
                 }
                 return true;
             }
@@ -236,7 +276,7 @@ namespace MyClasses.UI
         /// </summary>
         public void HideAndDestroy()
         {
-            mIsRetainable = false;
+            _isRetainable = false;
 
             State = EBaseState.Exit;
         }

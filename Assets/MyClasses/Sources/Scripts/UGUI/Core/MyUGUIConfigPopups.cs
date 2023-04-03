@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyUGUIConfigPopups (version 2.0)
+ * Class:       MyUGUIConfigPopups (version 2.1)
  */
 
 using UnityEngine;
@@ -26,8 +26,10 @@ namespace MyClasses.UI
         public int ScriptPathIndex;
         public string ScriptPath;
         public string ScriptName;
-        public int PrefabNameIndex;
+        public int PrefabNameIndex = -1;
+        public int PrefabNameIndex3D = -1;
         public string PrefabName;
+        public string PrefabName3D;
         public string AssetBundleURL;
         public int AssetBundleVersion;
     }

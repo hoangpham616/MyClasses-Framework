@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyUGUIBase (version 2.8)
+ * Class:       MyUGUIBase (version 2.9)
  */
 
 using UnityEngine;
@@ -13,15 +13,17 @@ namespace MyClasses.UI
     {
         #region ----- Variable -----
 
-        private EBaseState mState;
-        private GameObject mGameObject;
-        private AssetBundle mAssetBundle;
-        private string mAssetBundleURL;
-        private string mPrefabName;
-        private int mAssetBundleVersion;
-        private bool mIsAssetBundleLoading;
-        private bool mIsAssetBundleLoaded;
-        private bool mIsLoaded;
+        private EBaseState _state;
+        private GameObject _gameObject;
+        private GameObject _gameObject3D;
+        private AssetBundle _assetBundle;
+        private string _assetBundleURL;
+        private string _prefabName;
+        private string _prefabName3D;
+        private int _assetBundleVersion;
+        private bool _isAssetBundleLoading;
+        private bool _isAssetBundleLoaded;
+        private bool _isLoaded;
 
         #endregion
 
@@ -29,45 +31,61 @@ namespace MyClasses.UI
 
         public EBaseState State
         {
-            get { return mState; }
-            set { mState = value; }
+            get { return _state; }
+            set { _state = value; }
         }
 
         public bool IsUseAssetBundle
         {
-            get { return !string.IsNullOrEmpty(mAssetBundleURL); }
+            get { return !string.IsNullOrEmpty(_assetBundleURL); }
         }
 
         public string PrefabName
         {
-            get { return mPrefabName; }
+            get { return _prefabName; }
+        }
+
+        public string PrefabName3D
+        {
+            get { return _prefabName3D; }
         }
 
         public GameObject GameObject
         {
-            get { return mGameObject; }
-            protected set { mGameObject = value; }
+            get { return _gameObject; }
+            protected set { _gameObject = value; }
+        }
+
+        public GameObject GameObject3D
+        {
+            get { return _gameObject3D; }
+            protected set { _gameObject3D = value; }
         }
 
         public Transform Transform
         {
-            get { return mGameObject != null ? mGameObject.transform : null; }
+            get { return _gameObject != null ? _gameObject.transform : null; }
+        }
+
+        public Transform Transform3D
+        {
+            get { return _gameObject3D != null ? _gameObject3D.transform : null; }
         }
 
         public AssetBundle Bundle
         {
-            get { return mAssetBundle; }
+            get { return _assetBundle; }
         }
 
         public bool IsActive
         {
-            get { return mGameObject != null && mGameObject.activeSelf && State != EBaseState.Idle; }
+            get { return _gameObject != null && _gameObject.activeSelf && State != EBaseState.Idle; }
         }
 
         public bool IsLoaded
         {
-            get { return mIsLoaded; }
-            protected set { mIsLoaded = value; }
+            get { return _isLoaded; }
+            protected set { _isLoaded = value; }
         }
 
         #endregion
@@ -77,11 +95,12 @@ namespace MyClasses.UI
         /// <summary>
         /// Constructor.
         /// </summary>
-        public MyUGUIBase(string prefabName)
+        public MyUGUIBase(string prefabName, string prefabName3D)
         {
-            mState = EBaseState.Idle;
-            mPrefabName = prefabName;
-            mIsAssetBundleLoaded = false;
+            _state = EBaseState.Idle;
+            _prefabName = prefabName;
+            _prefabName3D = prefabName3D;
+            _isAssetBundleLoaded = false;
         }
 
         #endregion
@@ -93,18 +112,18 @@ namespace MyClasses.UI
         /// </summary>
         public bool OnUGUILoadAssetBundle()
         {
-            if (!IsUseAssetBundle || mIsAssetBundleLoaded)
+            if (!IsUseAssetBundle || _isAssetBundleLoaded)
             {
                 return true;
             }
 
-            if (!mIsAssetBundleLoading)
+            if (!_isAssetBundleLoading)
             {
-                MyAssetBundleManager.Load(mAssetBundleURL, mAssetBundleVersion, _OnLoadAssetBundleComplete, MyAssetBundleManager.ECacheMode.UnremovableCache);
-                mIsAssetBundleLoading = true;
+                MyAssetBundleManager.Load(_assetBundleURL, _assetBundleVersion, _OnLoadAssetBundleComplete, MyAssetBundleManager.ECacheMode.UnremovableCache);
+                _isAssetBundleLoading = true;
             }
 
-            return mIsAssetBundleLoaded;
+            return _isAssetBundleLoaded;
         }
 
         /// <summary>
@@ -112,7 +131,7 @@ namespace MyClasses.UI
         /// </summary>
         public virtual void OnUGUIInit()
         {
-            mIsLoaded = true;
+            _isLoaded = true;
         }
 
         /// <summary>
@@ -120,9 +139,13 @@ namespace MyClasses.UI
         /// </summary>
         public virtual void OnUGUIEnter()
         {
-            if (mGameObject != null)
+            if (_gameObject != null)
             {
-                mGameObject.SetActive(true);
+                _gameObject.SetActive(true);
+            }
+            if (_gameObject3D != null)
+            {
+                _gameObject3D.SetActive(true);
             }
         }
 
@@ -161,9 +184,9 @@ namespace MyClasses.UI
         /// </summary>
         public virtual void OnUGUIDestroy()
         {
-            mIsAssetBundleLoading = false;
-            mIsAssetBundleLoaded = false;
-            mIsLoaded = false;
+            _isAssetBundleLoading = false;
+            _isAssetBundleLoaded = false;
+            _isLoaded = false;
         }
 
         #endregion
@@ -175,8 +198,16 @@ namespace MyClasses.UI
         /// </summary>
         public void SetAssetBundle(string url, int versionCode)
         {
-            mAssetBundleURL = url;
-            mAssetBundleVersion = versionCode;
+            _assetBundleURL = url;
+            _assetBundleVersion = versionCode;
+        }
+
+        /// <summary>
+        /// Setup prefab 3D name.
+        /// </summary>
+        public void SetPrefabName3D(string prefabName3D)
+        {
+            _prefabName3D = prefabName3D;
         }
 
         #endregion
@@ -188,8 +219,8 @@ namespace MyClasses.UI
         /// </summary>
         private void _OnLoadAssetBundleComplete(AssetBundle assetBundle)
         {
-            mAssetBundle = assetBundle;
-            mIsAssetBundleLoaded = true;
+            _assetBundle = assetBundle;
+            _isAssetBundleLoaded = true;
         }
 
         #endregion

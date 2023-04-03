@@ -40,6 +40,8 @@ namespace MyApp.UI
             base.OnUGUIEnter();
             
             _btnMainMenuScene.OnEventPointerClick.AddListener(_OnClickMainMenuScene);
+
+            GameObject3D.transform.localScale = Vector3.one * UnityEngine.Random.Range(0.5f, 1.5f);
         }
 
         public override bool OnUGUIVisible()

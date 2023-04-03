@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyUGUIFlyingMessage (version 2.2)
+ * Class:       MyUGUIFlyingMessage (version 2.3)
  */
 
 #pragma warning disable 0114
@@ -30,14 +30,14 @@ namespace MyClasses.UI
         #region ----- Variable -----
 
 #if USE_MY_UI_TMPRO
-        private TextMeshProUGUI mTextTMPro;
+        private TextMeshProUGUI _textTMPro;
 #endif
 
-        private Text mText;
+        private Text _text;
 
-        private GameObject mGameObject;
-        private Animator mAnimator;
-        private CanvasGroup mCanvasGroup;
+        private GameObject _gameObject;
+        private Animator _animator;
+        private CanvasGroup _canvasGroup;
 
         #endregion
 
@@ -45,18 +45,18 @@ namespace MyClasses.UI
 
         public GameObject GameObject
         {
-            get { return mGameObject; }
-            set { mGameObject = value; }
+            get { return _gameObject; }
+            set { _gameObject = value; }
         }
 
         public Transform Transform
         {
-            get { return mGameObject != null ? mGameObject.transform : null; }
+            get { return _gameObject != null ? _gameObject.transform : null; }
         }
 
         public bool IsPlaying
         {
-            get { return mCanvasGroup != null && mCanvasGroup.alpha > 0; }
+            get { return _canvasGroup != null && _canvasGroup.alpha > 0; }
         }
 
         #endregion
@@ -85,49 +85,49 @@ namespace MyClasses.UI
         /// </summary>
         public void Show(string content, EType type = EType.ShortFlyFromBot)
         {
-            if (mGameObject != null)
+            if (_gameObject != null)
             {
-                if (mCanvasGroup == null)
+                if (_canvasGroup == null)
                 {
-                    mCanvasGroup = mGameObject.GetComponent<CanvasGroup>();
-                    if (mCanvasGroup == null)
+                    _canvasGroup = _gameObject.GetComponent<CanvasGroup>();
+                    if (_canvasGroup == null)
                     {
                         Debug.LogError("[" + typeof(MyUGUIFlyingMessage).Name + "] Show(): Could not find Canvas Group component.");
                         return;
                     }
                 }
 
-                if (mText == null)
+                if (_text == null)
                 {
-                    mText = MyUtilities.FindObjectInAllLayers(mGameObject, "Text").GetComponent<Text>();
+                    _text = MyUtilities.FindObjectInAllLayers(_gameObject, "Text").GetComponent<Text>();
                 }
 #if USE_MY_UI_TMPRO
-                if (mTextTMPro == null)
+                if (_textTMPro == null)
                 {
-                    mTextTMPro = MyUtilities.FindObjectInAllLayers(mGameObject, "Text").GetComponent<TextMeshProUGUI>();
+                    _textTMPro = MyUtilities.FindObjectInAllLayers(mGameObject, "Text").GetComponent<TextMeshProUGUI>();
                 }
 #endif
 
-                mGameObject.SetActive(true);
+                _gameObject.SetActive(true);
 
-                if (mText != null)
+                if (_text != null)
                 {
-                    mText.text = content;
+                    _text.text = content;
                 }
 #if USE_MY_UI_TMPRO
-                if (mTextTMPro != null)
+                if (_textTMPro != null)
                 {
-                    mTextTMPro.text = content;
+                    _textTMPro.text = content;
                 }
 #endif
 
-                if (mAnimator == null)
+                if (_animator == null)
                 {
-                    mAnimator = mGameObject.GetComponent<Animator>();
+                    _animator = _gameObject.GetComponent<Animator>();
                 }
-                if (mAnimator != null)
+                if (_animator != null)
                 {
-                    mAnimator.Play(type.ToString());
+                    _animator.Play(type.ToString());
                 }
             }
         }
@@ -137,9 +137,9 @@ namespace MyClasses.UI
         /// </summary>
         public void Hide()
         {
-            if (mGameObject != null)
+            if (_gameObject != null)
             {
-                mGameObject.SetActive(false);
+                _gameObject.SetActive(false);
             }
         }
 

@@ -17,19 +17,23 @@ MonoBehaviour:
     ID: 0
     SceneName: MainUnityScene
     SceneNameIndex: 1
-    HUDScriptPathIndex: 147
+    HUDScriptPathIndex: 144
     HUDPrefabNameIndex: 1
+    HUDPrefabNameIndex3D: 0
     HUDScriptPath: Assets/_MyAssets/Scripts/Scenes/MainUnityScene/HUD/MainHUD.cs
     HUDScriptName: MainHUD
     HUDPrefabName: MainHUD
+    HUDPrefabName3D: 
     ListScene:
     - IsFoldOut: 1
       ID: 0
-      ScriptPathIndex: 150
-      PrefabNameIndex: 2
+      ScriptPathIndex: 147
+      PrefabNameIndex: 3
+      PrefabNameIndex3D: 0
       ScriptPath: Assets/_MyAssets/Scripts/Scenes/MainUnityScene/MainMenuScene/MainMenuScene.cs
       ScriptName: MainMenuScene
       PrefabName: MainMenuScene
+      PrefabName3D: 
       AssetBundleURL: 
       AssetBundleVersion: 0
       IsInitWhenLoadUnityScene: 0
@@ -38,11 +42,13 @@ MonoBehaviour:
       FadeOutDuration: 0.2
     - IsFoldOut: 1
       ID: 1
-      ScriptPathIndex: 146
+      ScriptPathIndex: 143
       PrefabNameIndex: 1
+      PrefabNameIndex3D: 2
       ScriptPath: Assets/_MyAssets/Scripts/Scenes/MainUnityScene/GameScene/GameScene.cs
       ScriptName: GameScene
       PrefabName: GameScene
+      PrefabName3D: GameScene3D
       AssetBundleURL: 
       AssetBundleVersion: 0
       IsInitWhenLoadUnityScene: 0

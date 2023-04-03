@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyUGUILoadingIndicator (version 2.11)
+ * Class:       MyUGUILoadingIndicator (version 2.12)
 */
 
 #pragma warning disable 0114
@@ -29,16 +29,16 @@ namespace MyClasses.UI
 
         #region ----- Variable -----
 
-        private GameObject mGameObject;
-        private Text mTips;
-        private Text mDescription;
-        private MyUGUIButton mButtonCancel;
+        private GameObject _gameObject;
+        private Text _textTips;
+        private Text _textDescription;
+        private MyUGUIButton _buttonCancel;
 
-        private ELoadingType mLoadingType;
-        private List<int> mListSimpleID = new List<int>();
-        private int mCountSimple;
-        private float mStartingTime;
-        private Action mActionCancel;
+        private ELoadingType _loadingType;
+        private List<int> _listSimpleID = new List<int>();
+        private int _countSimple;
+        private float _startingTime;
+        private Action _onCancelCallback;
 
         #endregion
 
@@ -46,17 +46,17 @@ namespace MyClasses.UI
 
         public bool IsActive
         {
-            get { return mGameObject != null && mGameObject.activeSelf; }
+            get { return _gameObject != null && _gameObject.activeSelf; }
         }
 
         public GameObject GameObject
         {
-            get { return mGameObject; }
+            get { return _gameObject; }
         }
 
         public Transform Transform
         {
-            get { return mGameObject.transform; }
+            get { return _gameObject.transform; }
         }
 
         #endregion
@@ -87,10 +87,10 @@ namespace MyClasses.UI
         {
             Hide();
 
-            if (mActionCancel != null)
+            if (_onCancelCallback != null)
             {
-                mActionCancel();
-                mActionCancel = null;
+                _onCancelCallback();
+                _onCancelCallback = null;
             }
         }
 
@@ -103,31 +103,31 @@ namespace MyClasses.UI
         /// </summary>
         public void Initialize(GameObject gameObject)
         {
-            mGameObject = gameObject;
+            _gameObject = gameObject;
 
-            if (mGameObject != null)
+            if (_gameObject != null)
             {
-                GameObject tipsRoot = MyUtilities.FindObjectInFirstLayer(mGameObject, ELoadingType.Tips.ToString());
+                GameObject tipsRoot = MyUtilities.FindObjectInFirstLayer(_gameObject, ELoadingType.Tips.ToString());
                 if (tipsRoot != null)
                 {
                     GameObject description = MyUtilities.FindObject(tipsRoot, "Description");
                     if (description != null)
                     {
-                        mDescription = description.GetComponent<Text>();
+                        _textDescription = description.GetComponent<Text>();
                     }
 
                     GameObject tips = MyUtilities.FindObject(tipsRoot, "Tips");
                     if (tips != null)
                     {
-                        mTips = tips.GetComponent<Text>();
+                        _textTips = tips.GetComponent<Text>();
                     }
 
                     GameObject cancel = MyUtilities.FindObject(tipsRoot, "ButtonCancel");
                     if (cancel != null)
                     {
-                        mButtonCancel = cancel.GetComponent<MyUGUIButton>();
-                        mButtonCancel.OnEventPointerClick.RemoveAllListeners();
-                        mButtonCancel.OnEventPointerClick.AddListener(_OnClickCancel);
+                        _buttonCancel = cancel.GetComponent<MyUGUIButton>();
+                        _buttonCancel.OnEventPointerClick.RemoveAllListeners();
+                        _buttonCancel.OnEventPointerClick.AddListener(_OnClickCancel);
                     }
                 }
             }
@@ -140,27 +140,27 @@ namespace MyClasses.UI
         /// <param name="timeOut">-1: forever loading</param>
         public void ShowTips(string tips, string description, bool isThreeDots, float timeOut = -1, Action timeOutCallback = null, Action cancelCallback = null)
         {
-            if (mLoadingType != ELoadingType.Tips)
+            if (_loadingType != ELoadingType.Tips)
             {
-                mListSimpleID.Clear();
+                _listSimpleID.Clear();
             }
-            mLoadingType = ELoadingType.Tips;
+            _loadingType = ELoadingType.Tips;
 
-            if (mGameObject != null)
+            if (_gameObject != null)
             {
-                if (mTips != null)
+                if (_textTips != null)
                 {
-                    mTips.text = tips;
+                    _textTips.text = tips;
                 }
 
-                if (mDescription != null)
+                if (_textDescription != null)
                 {
-                    mDescription.text = description;
+                    _textDescription.text = description;
                 }
 
                 _Show();
 
-                if (isThreeDots && mDescription != null)
+                if (isThreeDots && _textDescription != null)
                 {
                     string[] descriptions = new string[] { description + ".", description + "..", description + "..." };
                     MyPrivateCoroutiner.Start(_DoChangeDescription(descriptions, 0.2f));
@@ -180,16 +180,16 @@ namespace MyClasses.UI
         /// <param name="timeOut">-1: forever loading</param>
         public int ShowSimple(float timeOut = -1, Action timeOutCallback = null)
         {
-            if (mLoadingType != ELoadingType.Simple)
+            if (_loadingType != ELoadingType.Simple)
             {
-                mListSimpleID.Clear();
+                _listSimpleID.Clear();
             }
-            mLoadingType = ELoadingType.Simple;
+            _loadingType = ELoadingType.Simple;
 
-            if (mGameObject != null)
+            if (_gameObject != null)
             {
-                int loadingID = ++mCountSimple;
-                mListSimpleID.Add(loadingID);
+                int loadingID = ++_countSimple;
+                _listSimpleID.Add(loadingID);
 
                 _Show();
 
@@ -211,9 +211,9 @@ namespace MyClasses.UI
         /// <param name="minLiveTime">minimum seconds have to show before hiding</param>
         public void HideSimple(int loadingID, float minLiveTime = 0)
         {
-            if (mGameObject != null)
+            if (_gameObject != null)
             {
-                if (!mListSimpleID.Contains(loadingID))
+                if (!_listSimpleID.Contains(loadingID))
                 {
                     return;
                 }
@@ -223,7 +223,7 @@ namespace MyClasses.UI
 
                 if (minLiveTime > 0)
                 {
-                    float displayedTime = Time.time - mStartingTime;
+                    float displayedTime = Time.time - _startingTime;
                     if (displayedTime < minLiveTime)
                     {
                         float delayTime = minLiveTime - displayedTime;
@@ -232,9 +232,9 @@ namespace MyClasses.UI
                     }
                 }
 
-                mListSimpleID.Remove(loadingID);
-                mListSimpleID.ToString();
-                if (mListSimpleID.Count == 0)
+                _listSimpleID.Remove(loadingID);
+                _listSimpleID.ToString();
+                if (_listSimpleID.Count == 0)
                 {
                     _Hide();
                 }
@@ -247,11 +247,11 @@ namespace MyClasses.UI
         /// <param name="minLiveTime">minimum seconds have to show before hiding</param>
         public void Hide(float minLiveTime = 0)
         {
-            if (mGameObject != null)
+            if (_gameObject != null)
             {
                 if (minLiveTime > 0)
                 {
-                    float displayedTime = Time.time - mStartingTime;
+                    float displayedTime = Time.time - _startingTime;
                     if (displayedTime < minLiveTime)
                     {
                         float delayTime = minLiveTime - displayedTime;
@@ -458,21 +458,21 @@ namespace MyClasses.UI
         /// </summary>
         private void _Show()
         {
-            if (mStartingTime < 0)
+            if (_startingTime < 0)
             {
-                mStartingTime = Time.time;
+                _startingTime = Time.time;
             }
 
             GameObject child = null;
-            int countChild = mGameObject.transform.childCount;
+            int countChild = _gameObject.transform.childCount;
             for (int i = 0; i < countChild; i++)
             {
-                child = mGameObject.transform.GetChild(i).gameObject;
-                child.SetActive(child.name.Equals(mLoadingType.ToString()));
+                child = _gameObject.transform.GetChild(i).gameObject;
+                child.SetActive(child.name.Equals(_loadingType.ToString()));
             }
 
-            mGameObject.transform.SetAsLastSibling();
-            mGameObject.SetActive(true);
+            _gameObject.transform.SetAsLastSibling();
+            _gameObject.SetActive(true);
 
             MyUGUIManager.Instance.UpdatePopupOverlay();
         }
@@ -482,11 +482,11 @@ namespace MyClasses.UI
         /// </summary>
         private void _Hide()
         {
-            if (mGameObject != null)
+            if (_gameObject != null)
             {
-                mStartingTime = -1;
-                mListSimpleID.Clear();
-                mGameObject.SetActive(false);
+                _startingTime = -1;
+                _listSimpleID.Clear();
+                _gameObject.SetActive(false);
 
                 MyUGUIManager.Instance.UpdatePopupOverlay();
             }
@@ -509,7 +509,7 @@ namespace MyClasses.UI
         {
             yield return new WaitForSeconds(delayTime);
 
-            if (mLoadingType == ELoadingType.Tips)
+            if (_loadingType == ELoadingType.Tips)
             {
                 _Hide();
 
@@ -527,10 +527,10 @@ namespace MyClasses.UI
         {
             yield return new WaitForSeconds(delayTime);
 
-            if (mLoadingType == ELoadingType.Simple && mListSimpleID.Contains(loadingID))
+            if (_loadingType == ELoadingType.Simple && _listSimpleID.Contains(loadingID))
             {
-                mListSimpleID.Remove(loadingID);
-                if (mListSimpleID.Count == 0)
+                _listSimpleID.Remove(loadingID);
+                if (_listSimpleID.Count == 0)
                 {
                     _Hide();
                 }
@@ -548,9 +548,9 @@ namespace MyClasses.UI
         private IEnumerator _DoChangeDescription(string[] descriptions, float delayTime)
         {
             int index = 0;
-            while (mLoadingType == ELoadingType.Tips && mDescription != null && descriptions != null)
+            while (_loadingType == ELoadingType.Tips && _textDescription != null && descriptions != null)
             {
-                mDescription.text = descriptions[index];
+                _textDescription.text = descriptions[index];
                 index = (index + 1) % descriptions.Length;
                 yield return new WaitForSeconds(delayTime);
             }

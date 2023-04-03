@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyUGUIScene (version 2.8)
+ * Class:       MyUGUIScene (version 2.9)
  */
 
 using UnityEngine;
@@ -13,12 +13,12 @@ namespace MyClasses.UI
     {
         #region ----- Variable -----
 
-        private ESceneID mID;
-        private EUnitySceneID mUnitySceneID;
-        private bool mIsInitWhenLoadUnityScene;
-        private bool mIsHideHUD;
-        private float mFadeInDuration;
-        private float mFadeOutDuration;
+        private ESceneID _id;
+        private EUnitySceneID _unitySceneID;
+        private bool _isInitWhenLoadUnityScene;
+        private bool _isHideHUD;
+        private float _fadeInDuration;
+        private float _fadeOutDuration;
 
         #endregion
 
@@ -26,23 +26,23 @@ namespace MyClasses.UI
 
         public ESceneID ID
         {
-            get { return mID; }
+            get { return _id; }
         }
 
         public EUnitySceneID UnitySceneID
         {
-            get { return mUnitySceneID; }
-            set { mUnitySceneID = value; }
+            get { return _unitySceneID; }
+            set { _unitySceneID = value; }
         }
 
         public bool IsInitWhenLoadUnityScene
         {
-            get { return mIsInitWhenLoadUnityScene; }
+            get { return _isInitWhenLoadUnityScene; }
         }
 
         public bool IsHideHUD
         {
-            get { return mIsHideHUD; }
+            get { return _isHideHUD; }
         }
 
         #endregion
@@ -53,13 +53,26 @@ namespace MyClasses.UI
         /// Constructor.
         /// </summary>
         public MyUGUIScene(ESceneID id, string prefabName, bool isInitWhenLoadUnityScene, bool isHideHUD = false, float fadeInDuration = 0.5f, float fadeOutDuration = 0.5f)
-            : base(prefabName)
+            : base(prefabName, null)
         {
-            mID = id;
-            mIsInitWhenLoadUnityScene = isInitWhenLoadUnityScene;
-            mIsHideHUD = isHideHUD;
-            mFadeInDuration = fadeInDuration;
-            mFadeOutDuration = fadeOutDuration;
+            _id = id;
+            _isInitWhenLoadUnityScene = isInitWhenLoadUnityScene;
+            _isHideHUD = isHideHUD;
+            _fadeInDuration = fadeInDuration;
+            _fadeOutDuration = fadeOutDuration;
+        }
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        public MyUGUIScene(ESceneID id, string prefabName, string prefabName3D, bool isInitWhenLoadUnityScene, bool isHideHUD = false, float fadeInDuration = 0.5f, float fadeOutDuration = 0.5f)
+            : base(prefabName, prefabName3D)
+        {
+            _id = id;
+            _isInitWhenLoadUnityScene = isInitWhenLoadUnityScene;
+            _isHideHUD = isHideHUD;
+            _fadeInDuration = fadeInDuration;
+            _fadeOutDuration = fadeOutDuration;
         }
 
         #endregion
@@ -98,6 +111,25 @@ namespace MyClasses.UI
                 GameObject.transform.SetParent(MyUGUIManager.Instance.Canvas.transform, false);
             }
             GameObject.SetActive(false);
+
+            if (PrefabName3D.Length > 0)
+            {
+                GameObject3D = MyUtilities.FindObjectInRoot(PrefabName3D);
+                if (GameObject3D == null)
+                {
+                    string path = MyUGUIManager.SCENE_DIRECTORY + PrefabName3D;
+                    GameObject template = Resources.Load<GameObject>(path);
+                    if (template == null)
+                    {
+                        Debug.LogError("[" + typeof(MyUGUIScene).Name + "] OnUGUIInit(): Could not find file \"" + path + "\".");
+                    }
+                    GameObject3D = GameObject.Instantiate(template, Vector3.zero, Quaternion.identity) as GameObject;
+                }
+                if (GameObject3D != null)
+                {
+                    GameObject3D.SetActive(false);
+                }
+            }
         }
 
         /// <summary>
@@ -107,7 +139,7 @@ namespace MyClasses.UI
         {
             base.OnUGUIEnter();
 
-            MyUGUIManager.Instance.CurrentSceneFading.FadeIn(mFadeInDuration);
+            MyUGUIManager.Instance.CurrentSceneFading.FadeIn(_fadeInDuration);
         }
 
         /// <summary>
@@ -132,7 +164,7 @@ namespace MyClasses.UI
         {
             base.OnUGUIExit();
 
-            MyUGUIManager.Instance.CurrentSceneFading.FadeOut(mFadeOutDuration);
+            MyUGUIManager.Instance.CurrentSceneFading.FadeOut(_fadeOutDuration);
         }
 
         /// <summary>

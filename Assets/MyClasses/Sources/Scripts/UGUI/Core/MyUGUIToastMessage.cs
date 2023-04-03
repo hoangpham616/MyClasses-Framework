@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyUGUIToastMessage (version 2.13)
+ * Class:       MyUGUIToastMessage (version 2.14)
  */
 
 #pragma warning disable 0114
@@ -25,13 +25,13 @@ namespace MyClasses.UI
 
         #region ----- Variable -----
 
-        private Text mText;
+        private Text _text;
 
-        private GameObject mGameObject;
-        private Animator mAnimator;
-        private MyTimer mTimer;
+        private GameObject _gameObject;
+        private Animator _animator;
+        private MyTimer _timer;
 
-        private int mNumFrameNeedResize;
+        private int _numFrameNeedResize;
 
         #endregion
 
@@ -39,13 +39,13 @@ namespace MyClasses.UI
 
         public GameObject GameObject
         {
-            get { return mGameObject; }
-            set { mGameObject = value; }
+            get { return _gameObject; }
+            set { _gameObject = value; }
         }
 
         public Transform Transform
         {
-            get { return mGameObject != null ? mGameObject.transform : null; }
+            get { return _gameObject != null ? _gameObject.transform : null; }
         }
 
         #endregion
@@ -74,43 +74,43 @@ namespace MyClasses.UI
         /// </summary>
         public void Show(string content, float duration)
         {
-            if (mGameObject != null)
+            if (_gameObject != null)
             {
-                if (mText == null)
+                if (_text == null)
                 {
-                    mText = MyUtilities.FindObjectInAllLayers(mGameObject, "Text").GetComponent<Text>();
-                    if (mText == null)
+                    _text = MyUtilities.FindObjectInAllLayers(_gameObject, "Text").GetComponent<Text>();
+                    if (_text == null)
                     {
                         Debug.LogError("[" + typeof(MyUGUIToastMessage).Name + "] Show(): Could not find Text component.");
                         return;
                     }
                 }
 
-                if (mText.transform.parent != null)
+                if (_text.transform.parent != null)
                 {
-                    LayoutElement layoutElement = mText.transform.parent.GetComponent<LayoutElement>();
+                    LayoutElement layoutElement = _text.transform.parent.GetComponent<LayoutElement>();
                     if (layoutElement != null)
                     {
                         layoutElement.preferredWidth = -1;
                     }
                 }
 
-                mTimer = new MyTimer(duration);
+                _timer = new MyTimer(duration);
 
-                mGameObject.SetActive(true);
+                _gameObject.SetActive(true);
 
-                mText.text = content;
+                _text.text = content;
 
-                if (mAnimator == null)
+                if (_animator == null)
                 {
-                    mAnimator = mGameObject.GetComponent<Animator>();
+                    _animator = _gameObject.GetComponent<Animator>();
                 }
-                if (mAnimator != null)
+                if (_animator != null)
                 {
-                    mAnimator.Play("Show");
+                    _animator.Play("Show");
                 }
 
-                mNumFrameNeedResize = 3;
+                _numFrameNeedResize = 3;
             }
         }
 
@@ -119,17 +119,17 @@ namespace MyClasses.UI
         /// </summary>
         public void Hide()
         {
-            if (mGameObject != null)
+            if (_gameObject != null)
             {
-                mTimer = null;
+                _timer = null;
 
-                if (mAnimator != null)
+                if (_animator != null)
                 {
-                    mAnimator.Play("Hide");
+                    _animator.Play("Hide");
                     return;
                 }
 
-                mGameObject.SetActive(false);
+                _gameObject.SetActive(false);
             }
         }
 
@@ -138,14 +138,14 @@ namespace MyClasses.UI
         /// </summary>
         public void LateUpdate(float dt)
         {
-            if (mTimer != null)
+            if (_timer != null)
             {
-                if (mNumFrameNeedResize > 0)
+                if (_numFrameNeedResize > 0)
                 {
-                    if (mGameObject != null && mText.transform.parent != null)
+                    if (_gameObject != null && _text.transform.parent != null)
                     {
                         CanvasScaler canvasScaler = MyUGUIManager.Instance.CanvasOnTop.GetComponent<CanvasScaler>();
-                        RectTransform rectTransform = mText.transform.parent.GetComponent<RectTransform>();
+                        RectTransform rectTransform = _text.transform.parent.GetComponent<RectTransform>();
                         if (canvasScaler != null && rectTransform != null)
                         {
                             if (rectTransform.sizeDelta.x > 0)
@@ -153,7 +153,7 @@ namespace MyClasses.UI
                                 float limitWidth = canvasScaler.referenceResolution.x * 0.95f;
                                 if (rectTransform.sizeDelta.x > limitWidth)
                                 {
-                                    LayoutElement layoutElement = mText.transform.parent.GetComponent<LayoutElement>();
+                                    LayoutElement layoutElement = _text.transform.parent.GetComponent<LayoutElement>();
                                     if (layoutElement != null)
                                     {
                                         layoutElement.preferredWidth = limitWidth;
@@ -162,11 +162,11 @@ namespace MyClasses.UI
                             }
                         }
                     }
-                    mNumFrameNeedResize--;
+                    _numFrameNeedResize--;
                 }
 
-                mTimer.Update(dt);
-                if (mTimer.IsJustDone())
+                _timer.Update(dt);
+                if (_timer.IsJustDone())
                 {
                     Hide();
                 }
