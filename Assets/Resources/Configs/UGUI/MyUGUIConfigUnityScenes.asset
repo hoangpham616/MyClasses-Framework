@@ -44,11 +44,11 @@ MonoBehaviour:
       ID: 1
       ScriptPathIndex: 143
       PrefabNameIndex: 1
-      PrefabNameIndex3D: 2
+      PrefabNameIndex3D: 0
       ScriptPath: Assets/_MyAssets/Scripts/Scenes/MainUnityScene/GameScene/GameScene.cs
       ScriptName: GameScene
       PrefabName: GameScene
-      PrefabName3D: GameScene3D
+      PrefabName3D: 
       AssetBundleURL: 
       AssetBundleVersion: 0
       IsInitWhenLoadUnityScene: 0

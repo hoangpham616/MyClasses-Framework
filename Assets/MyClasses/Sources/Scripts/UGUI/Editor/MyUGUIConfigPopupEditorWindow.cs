@@ -104,10 +104,18 @@ namespace MyClasses.UI.Tool
                             popup.ScriptName = string.Empty;
                         }
 
+                        if (popup.PrefabNameIndex == -1)
+                        {
+                            popup.PrefabNameIndex = _prefabNames.Length - 1;
+                        }
                         popup.PrefabNameIndex = EditorGUILayout.Popup("Prefab Canvas", popup.PrefabNameIndex, _prefabNames);
                         popup.PrefabName = _prefabNames[popup.PrefabNameIndex];
                         popup.PrefabName = popup.PrefabName.Equals("<null>") ? string.Empty : popup.PrefabName.Substring(0, popup.PrefabName.Length - 7);
 
+                        if (popup.PrefabNameIndex3D == -1)
+                        {
+                            popup.PrefabNameIndex3D = _prefabNames.Length - 1;
+                        }
                         popup.PrefabNameIndex3D = EditorGUILayout.Popup("Prefab 3D", popup.PrefabNameIndex3D, _prefabNames);
                         popup.PrefabName3D = _prefabNames[popup.PrefabNameIndex3D];
                         popup.PrefabName3D = popup.PrefabName3D.Equals("<null>") ? string.Empty : popup.PrefabName3D.Substring(0, popup.PrefabName3D.Length - 7);
