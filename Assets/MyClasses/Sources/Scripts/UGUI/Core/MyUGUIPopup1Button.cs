@@ -88,7 +88,7 @@ namespace MyClasses.UI
             {
                 _textBody = body.GetComponent<Text>();
 #if USE_MY_UI_TMPRO
-                if (mBody == null)
+                if (_textBody == null)
                 {
                     _textBodyTMPro = body.GetComponent<TextMeshProUGUI>();
                 }

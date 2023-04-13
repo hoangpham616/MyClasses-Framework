@@ -104,7 +104,7 @@ namespace MyClasses.UI
 #if USE_MY_UI_TMPRO
                 if (_textTMPro == null)
                 {
-                    _textTMPro = MyUtilities.FindObjectInAllLayers(mGameObject, "Text").GetComponent<TextMeshProUGUI>();
+                    _textTMPro = MyUtilities.FindObjectInAllLayers(_gameObject, "Text").GetComponent<TextMeshProUGUI>();
                 }
 #endif
 
