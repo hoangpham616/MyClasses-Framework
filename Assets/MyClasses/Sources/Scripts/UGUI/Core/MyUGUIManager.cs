@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyUGUIManager (version 2.37)
+ * Class:       MyUGUIManager (version 2.38)
  */
 
 #pragma warning disable 0162
@@ -519,7 +519,7 @@ namespace MyClasses.UI
         /// <summary>
         /// Show a popup.
         /// </summary>
-        public MyUGUIPopup ShowPopup(EPopupID popupID, object attachedData = null, Action onCloseCallback = null)
+        public MyUGUIPopup ShowPopup(EPopupID popupID, object attachedData = null, Action onCloseCallback = null, Action<MyUGUIPopup> onEnterCallback = null)
         {
 #if DEBUG_MY_UI
             Debug.Log("[" + typeof(MyUGUIManager).Name + "] <color=#0000FFFF>ShowPopup()</color>: " + popupID);
@@ -527,19 +527,19 @@ namespace MyClasses.UI
 
             bool isRepeatable = popupID == EPopupID.Dialog0ButtonPopup || popupID == EPopupID.Dialog1ButtonPopup || popupID == EPopupID.Dialog2ButtonsPopup;
 
-            return _ShowPopup(popupID, isRepeatable, attachedData, onCloseCallback);
+            return _ShowPopup(popupID, isRepeatable, attachedData, onCloseCallback, onEnterCallback);
         }
 
         /// <summary>
         /// Show a repeatable popup.
         /// </summary>
-        public MyUGUIPopup ShowRepeatablePopup(EPopupID popupID, object attachedData = null, Action onCloseCallback = null)
+        public MyUGUIPopup ShowRepeatablePopup(EPopupID popupID, object attachedData = null, Action onCloseCallback = null, Action<MyUGUIPopup> onEnterCallback = null)
         {
 #if DEBUG_MY_UI
             Debug.Log("[" + typeof(MyUGUIManager).Name + "] <color=#0000FFFF>ShowRepeatablePopup()</color>: " + popupID);
 #endif
 
-            return _ShowPopup(popupID, true, attachedData, onCloseCallback);
+            return _ShowPopup(popupID, true, attachedData, onCloseCallback, onEnterCallback);
         }
 
         /// <summary>
@@ -1349,7 +1349,7 @@ namespace MyClasses.UI
         /// <summary>
         /// Show a popup.
         /// </summary>
-        private MyUGUIPopup _ShowPopup(EPopupID popupID, bool isRepeatable, object attachedData, Action onCloseCallback = null)
+        private MyUGUIPopup _ShowPopup(EPopupID popupID, bool isRepeatable, object attachedData, Action onCloseCallback = null, Action<MyUGUIPopup> onEnterCallback = null)
         {
             MyUGUIPopup popup = null;
             bool isReuse = false;
@@ -1387,6 +1387,7 @@ namespace MyClasses.UI
                 _currentPopup = null;
 
                 popup.AttachedData = attachedData;
+                popup.OnEnterCallback = onEnterCallback;
                 popup.OnCloseCallback = onCloseCallback;
                 popup.State = popup.State == EBaseState.Idle && popup.IsLoaded ? EBaseState.Enter : EBaseState.LoadAssetBundle;
 

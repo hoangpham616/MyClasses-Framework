@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyUGUIPopup (version 2.23)
+ * Class:       MyUGUIPopup (version 2.24)
  */
 
 using UnityEngine;
@@ -20,6 +20,7 @@ namespace MyClasses.UI
         private bool _isRepeatable;
         private bool _isRetainable;
         private object _attachedData;
+        private Action<MyUGUIPopup> _onEnterCallback;
         private Action _onCloseCallback;
 
         #endregion
@@ -55,6 +56,11 @@ namespace MyClasses.UI
         public bool IsShowing
         {
             get { return State >= EBaseState.Enter; }
+        }
+
+        public Action<MyUGUIPopup> OnEnterCallback
+        {
+            set { _onEnterCallback = value; }
         }
 
         public Action OnCloseCallback
@@ -191,6 +197,11 @@ namespace MyClasses.UI
             if (_animator != null)
             {
                 _animator.Play("Show");
+            }
+
+            if (_onEnterCallback != null)
+            {
+                _onEnterCallback(this);
             }
         }
 
