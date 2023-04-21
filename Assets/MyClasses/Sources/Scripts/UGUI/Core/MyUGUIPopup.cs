@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyUGUIPopup (version 2.24)
+ * Class:       MyUGUIPopup (version 2.25)
  */
 
 using UnityEngine;
@@ -21,7 +21,7 @@ namespace MyClasses.UI
         private bool _isRetainable;
         private object _attachedData;
         private Action<MyUGUIPopup> _onEnterCallback;
-        private Action _onCloseCallback;
+        private Action<MyUGUIPopup> _onCloseCallback;
 
         #endregion
 
@@ -63,7 +63,7 @@ namespace MyClasses.UI
             set { _onEnterCallback = value; }
         }
 
-        public Action OnCloseCallback
+        public Action<MyUGUIPopup> OnCloseCallback
         {
             set { _onCloseCallback = value; }
         }
@@ -253,7 +253,7 @@ namespace MyClasses.UI
             {
                 if (_onCloseCallback != null)
                 {
-                    _onCloseCallback();
+                    _onCloseCallback(this);
                     _onCloseCallback = null;
                 }
                 return true;

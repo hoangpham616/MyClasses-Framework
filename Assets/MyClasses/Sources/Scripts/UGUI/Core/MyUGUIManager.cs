@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyUGUIManager (version 2.38)
+ * Class:       MyUGUIManager (version 2.39)
  */
 
 #pragma warning disable 0162
@@ -519,7 +519,7 @@ namespace MyClasses.UI
         /// <summary>
         /// Show a popup.
         /// </summary>
-        public MyUGUIPopup ShowPopup(EPopupID popupID, object attachedData = null, Action onCloseCallback = null, Action<MyUGUIPopup> onEnterCallback = null)
+        public MyUGUIPopup ShowPopup(EPopupID popupID)
         {
 #if DEBUG_MY_UI
             Debug.Log("[" + typeof(MyUGUIManager).Name + "] <color=#0000FFFF>ShowPopup()</color>: " + popupID);
@@ -527,19 +527,135 @@ namespace MyClasses.UI
 
             bool isRepeatable = popupID == EPopupID.Dialog0ButtonPopup || popupID == EPopupID.Dialog1ButtonPopup || popupID == EPopupID.Dialog2ButtonsPopup;
 
-            return _ShowPopup(popupID, isRepeatable, attachedData, onCloseCallback, onEnterCallback);
+            return _ShowPopup(popupID, isRepeatable, null, null, null);
+        }
+
+        /// <summary>
+        /// Show a popup.
+        /// </summary>
+        public MyUGUIPopup ShowPopup(EPopupID popupID, Action<MyUGUIPopup> onCloseCallback)
+        {
+#if DEBUG_MY_UI
+            Debug.Log("[" + typeof(MyUGUIManager).Name + "] <color=#0000FFFF>ShowPopup()</color>: " + popupID);
+#endif
+
+            bool isRepeatable = popupID == EPopupID.Dialog0ButtonPopup || popupID == EPopupID.Dialog1ButtonPopup || popupID == EPopupID.Dialog2ButtonsPopup;
+
+            return _ShowPopup(popupID, isRepeatable, null, null, onCloseCallback);
+        }
+
+        /// <summary>
+        /// Show a popup.
+        /// </summary>
+        public MyUGUIPopup ShowPopup(EPopupID popupID, Action<MyUGUIPopup> onEnterCallback, Action<MyUGUIPopup> onCloseCallback)
+        {
+#if DEBUG_MY_UI
+            Debug.Log("[" + typeof(MyUGUIManager).Name + "] <color=#0000FFFF>ShowPopup()</color>: " + popupID);
+#endif
+
+            bool isRepeatable = popupID == EPopupID.Dialog0ButtonPopup || popupID == EPopupID.Dialog1ButtonPopup || popupID == EPopupID.Dialog2ButtonsPopup;
+
+            return _ShowPopup(popupID, isRepeatable, null, onEnterCallback, onCloseCallback);
+        }
+
+        /// <summary>
+        /// Show a popup.
+        /// </summary>
+        public MyUGUIPopup ShowPopup(EPopupID popupID, object attachedData, Action<MyUGUIPopup> onCloseCallback)
+        {
+#if DEBUG_MY_UI
+            Debug.Log("[" + typeof(MyUGUIManager).Name + "] <color=#0000FFFF>ShowPopup()</color>: " + popupID);
+#endif
+
+            bool isRepeatable = popupID == EPopupID.Dialog0ButtonPopup || popupID == EPopupID.Dialog1ButtonPopup || popupID == EPopupID.Dialog2ButtonsPopup;
+
+            return _ShowPopup(popupID, isRepeatable, attachedData, null, onCloseCallback);
+        }
+
+        /// <summary>
+        /// Show a popup.
+        /// </summary>
+        public MyUGUIPopup ShowPopup(EPopupID popupID, object attachedData, Action<MyUGUIPopup> onEnterCallback, Action<MyUGUIPopup> onCloseCallback)
+        {
+#if DEBUG_MY_UI
+            Debug.Log("[" + typeof(MyUGUIManager).Name + "] <color=#0000FFFF>ShowPopup()</color>: " + popupID);
+#endif
+
+            bool isRepeatable = popupID == EPopupID.Dialog0ButtonPopup || popupID == EPopupID.Dialog1ButtonPopup || popupID == EPopupID.Dialog2ButtonsPopup;
+
+            return _ShowPopup(popupID, isRepeatable, attachedData, onEnterCallback, onCloseCallback);
         }
 
         /// <summary>
         /// Show a repeatable popup.
         /// </summary>
-        public MyUGUIPopup ShowRepeatablePopup(EPopupID popupID, object attachedData = null, Action onCloseCallback = null, Action<MyUGUIPopup> onEnterCallback = null)
+        public MyUGUIPopup ShowRepeatablePopup(EPopupID popupID)
         {
 #if DEBUG_MY_UI
             Debug.Log("[" + typeof(MyUGUIManager).Name + "] <color=#0000FFFF>ShowRepeatablePopup()</color>: " + popupID);
 #endif
 
-            return _ShowPopup(popupID, true, attachedData, onCloseCallback, onEnterCallback);
+            return _ShowPopup(popupID, true, null, null, null);
+        }
+
+        /// <summary>
+        /// Show a repeatable popup.
+        /// </summary>
+        public MyUGUIPopup ShowRepeatablePopup(EPopupID popupID, Action<MyUGUIPopup> onCloseCallback)
+        {
+#if DEBUG_MY_UI
+            Debug.Log("[" + typeof(MyUGUIManager).Name + "] <color=#0000FFFF>ShowRepeatablePopup()</color>: " + popupID);
+#endif
+
+            return _ShowPopup(popupID, true, null, null, onCloseCallback);
+        }
+
+        /// <summary>
+        /// Show a repeatable popup.
+        /// </summary>
+        public MyUGUIPopup ShowRepeatablePopup(EPopupID popupID, Action<MyUGUIPopup> onEnterCallback, Action<MyUGUIPopup> onCloseCallback)
+        {
+#if DEBUG_MY_UI
+            Debug.Log("[" + typeof(MyUGUIManager).Name + "] <color=#0000FFFF>ShowRepeatablePopup()</color>: " + popupID);
+#endif
+
+            return _ShowPopup(popupID, true, null, onEnterCallback, onCloseCallback);
+        }
+
+        /// <summary>
+        /// Show a repeatable popup.
+        /// </summary>
+        public MyUGUIPopup ShowRepeatablePopup(EPopupID popupID, object attachedData)
+        {
+#if DEBUG_MY_UI
+            Debug.Log("[" + typeof(MyUGUIManager).Name + "] <color=#0000FFFF>ShowRepeatablePopup()</color>: " + popupID);
+#endif
+
+            return _ShowPopup(popupID, true, attachedData, null, null);
+        }
+
+        /// <summary>
+        /// Show a repeatable popup.
+        /// </summary>
+        public MyUGUIPopup ShowRepeatablePopup(EPopupID popupID, object attachedData, Action<MyUGUIPopup> onCloseCallback)
+        {
+#if DEBUG_MY_UI
+            Debug.Log("[" + typeof(MyUGUIManager).Name + "] <color=#0000FFFF>ShowRepeatablePopup()</color>: " + popupID);
+#endif
+
+            return _ShowPopup(popupID, true, attachedData, null, onCloseCallback);
+        }
+
+        /// <summary>
+        /// Show a repeatable popup.
+        /// </summary>
+        public MyUGUIPopup ShowRepeatablePopup(EPopupID popupID, object attachedData, Action<MyUGUIPopup> onEnterCallback, Action<MyUGUIPopup> onCloseCallback)
+        {
+#if DEBUG_MY_UI
+            Debug.Log("[" + typeof(MyUGUIManager).Name + "] <color=#0000FFFF>ShowRepeatablePopup()</color>: " + popupID);
+#endif
+
+            return _ShowPopup(popupID, true, attachedData, onEnterCallback, onCloseCallback);
         }
 
         /// <summary>
@@ -1349,7 +1465,7 @@ namespace MyClasses.UI
         /// <summary>
         /// Show a popup.
         /// </summary>
-        private MyUGUIPopup _ShowPopup(EPopupID popupID, bool isRepeatable, object attachedData, Action onCloseCallback = null, Action<MyUGUIPopup> onEnterCallback = null)
+        private MyUGUIPopup _ShowPopup(EPopupID popupID, bool isRepeatable, object attachedData, Action<MyUGUIPopup> onEnterCallback, Action<MyUGUIPopup> onCloseCallback)
         {
             MyUGUIPopup popup = null;
             bool isReuse = false;
