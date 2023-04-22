@@ -191,7 +191,7 @@ namespace MyClasses.UI
                 if (System.IO.File.Exists(paths[i] + "/Sources/Animations/MyAnimatorToastMessage.controller"))
                 {
                     root_animator.runtimeAnimatorController = (RuntimeAnimatorController)UnityEditor.AssetDatabase.LoadAssetAtPath(paths[i] + "/Sources/Animations/MyAnimatorToastMessage.controller", typeof(RuntimeAnimatorController));
-                    Debug.LogError("[" + typeof(MyUGUIToastMessage).Name + "] CreateTemplate(): please setup \"my_animator_toast\" controller.");
+                    Debug.LogError("[" + typeof(MyUGUIToastMessage).Name + "] CreateTemplate(): please setup \"MyAnimatorToastMessage\" controller.");
                     Debug.LogError("[" + typeof(MyUGUIToastMessage).Name + "] CreateTemplate(): mapping \"MyAnimationToastMessageShow\" motion for \"Show\" state.");
                     Debug.LogError("[" + typeof(MyUGUIToastMessage).Name + "] CreateTemplate(): mapping \"MyAnimationToastMessageIdle\" motion for \"Idle\" state.");
                     Debug.LogError("[" + typeof(MyUGUIToastMessage).Name + "] CreateTemplate(): mapping \"MyAnimationToastMessageHide\" motion for \"Hide\" state.");
