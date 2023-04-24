@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 22535831}
   - component: {fileID: 22535830}
   - component: {fileID: 22535829}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -469,7 +469,7 @@ MonoBehaviour:
   m_RequiresOpaqueTextureOption: 2
   m_CameraType: 0
   m_Cameras: []
-  m_RendererIndex: -1
+  m_RendererIndex: 0
   m_VolumeLayerMask:
     serializedVersion: 2
     m_Bits: 1
@@ -563,7 +563,7 @@ GameObject:
   - component: {fileID: 1061283131}
   - component: {fileID: 1061283130}
   - component: {fileID: 1061283129}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -661,7 +661,7 @@ GameObject:
   - component: {fileID: 1492852284}
   - component: {fileID: 1492852283}
   - component: {fileID: 1492852282}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Bot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -759,7 +759,7 @@ GameObject:
   - component: {fileID: 1802060816}
   - component: {fileID: 1802060815}
   - component: {fileID: 1802060814}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Top
   m_TagString: Untagged
   m_Icon: {fileID: 0}

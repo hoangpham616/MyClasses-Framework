@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: MyClasses_Water_Material_CartoonWater
+  m_Name: MyClasses_Water_Material
   m_Shader: {fileID: -6465566751694194690, guid: 11fcb153b697a7f45a38ca7e65f5082a, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
@@ -102,7 +102,7 @@ Material:
     - _Metallic: 0.1
     - _Min_Distance_To_See_Below: 0.36
     - _Normal_Speed: 0.1
-    - _Normal_Strength: 2.5
+    - _Normal_Strength: 3
     - _OcclusionStrength: 1
     - _Opacity: 1
     - _Parallax: 0.005
@@ -110,6 +110,7 @@ Material:
     - _QueueOffset: 0
     - _ReceiveShadows: 1
     - _Ripples_Dissolve: 5
+    - _Ripples_Normal_Strength: 5
     - _Ripples_Scale: 5
     - _Ripples_Speed: 0.75
     - _Smoothness: 1

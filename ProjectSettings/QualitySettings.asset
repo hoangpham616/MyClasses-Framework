@@ -40,8 +40,7 @@ QualitySettings:
     asyncUploadBufferSize: 16
     asyncUploadPersistentBuffer: 1
     resolutionScalingFixedDPIFactor: 1
-    customRenderPipeline: {fileID: 11400000, guid: 1a57479a73be2d2439979ac0abcd95cf,
-      type: 2}
+    customRenderPipeline: {fileID: 11400000, guid: 1a57479a73be2d2439979ac0abcd95cf, type: 2}
     excludedTargetPlatforms: []
   - serializedVersion: 2
     name: Balanced
@@ -77,8 +76,7 @@ QualitySettings:
     asyncUploadBufferSize: 16
     asyncUploadPersistentBuffer: 1
     resolutionScalingFixedDPIFactor: 1
-    customRenderPipeline: {fileID: 11400000, guid: b99d0730616213b46b5921ec6ed79f1c,
-      type: 2}
+    customRenderPipeline: {fileID: 11400000, guid: b99d0730616213b46b5921ec6ed79f1c, type: 2}
     excludedTargetPlatforms: []
   - serializedVersion: 2
     name: High Fidelity
@@ -95,7 +93,7 @@ QualitySettings:
     skinWeights: 255
     textureQuality: 0
     anisotropicTextures: 2
-    antiAliasing: 0
+    antiAliasing: 4
     softParticles: 0
     softVegetation: 1
     realtimeReflectionProbes: 1
@@ -114,8 +112,7 @@ QualitySettings:
     asyncUploadBufferSize: 16
     asyncUploadPersistentBuffer: 1
     resolutionScalingFixedDPIFactor: 1
-    customRenderPipeline: {fileID: 11400000, guid: 44e764f21ef0174499763e95219fdd08,
-      type: 2}
+    customRenderPipeline: {fileID: 11400000, guid: c84a7bc261454e642bc00540b1830ade, type: 2}
     excludedTargetPlatforms: []
   m_PerPlatformDefaultQuality:
     Android: 1
