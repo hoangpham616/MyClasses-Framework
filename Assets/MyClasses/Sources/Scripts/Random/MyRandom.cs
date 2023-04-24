@@ -2,10 +2,9 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyRandom (version 1.2)
+ * Class:       MyRandom (version 1.3)
  */
 
-using UnityEngine;
 using System.Collections.Generic;
 
 namespace MyClasses
@@ -37,6 +36,10 @@ namespace MyClasses
 
             _evenFactor = (seed * 2) + 2;
             _oddFactor = (seed * 3 / 2) + 1;
+
+            _firstValue = 0;
+            _curValue = seed % 10;
+            _count = 0;
 
             _NextValue();
 
@@ -95,7 +98,7 @@ namespace MyClasses
                 int count = list.Count;
                 if (count > 0)
                 {
-                    return list[Random.Range(0, count)];
+                    return list[Range(0, count - 1)];
                 }
             }
 
@@ -107,10 +110,9 @@ namespace MyClasses
         /// </summary>
         public static void Shuffle<T>(List<T> list)
         {
-            int count = list.Count;
-            for (int i = 0; i < count; i++)
+            for (int i = 0, lastIndex = list.Count - 1; i <= lastIndex; i++)
             {
-                MyUtilities.Swap(list, i, Random.Range(i, count));
+                MyUtilities.Swap(list, i, Range(0, lastIndex));
             }
         }
 
