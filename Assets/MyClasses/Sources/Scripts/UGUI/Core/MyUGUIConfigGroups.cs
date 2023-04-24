@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyUGUIConfigGroups (version 2.0)
+ * Class:       MyUGUIConfigGroups (version 2.1)
  */
 
 using UnityEngine;
@@ -14,6 +14,7 @@ namespace MyClasses.UI
     [Serializable]
     public class MyUGUIConfigGroups : ScriptableObject
     {
+        public string Directory = "Assets/";
         public List<MyUGUIConfigGroup> ListGroup = new List<MyUGUIConfigGroup>();
     }
 
