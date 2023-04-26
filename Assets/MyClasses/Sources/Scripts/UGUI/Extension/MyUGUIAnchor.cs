@@ -368,12 +368,12 @@ namespace MyClasses.UI
         /// </summary>
         private void _Anchor1()
         {
-            RectTransform rectTrans = gameObject.GetComponent<RectTransform>();
-            rectTrans.pivot = mDefaultPivot;
-            rectTrans.anchorMin = mDefaultAnchorMin;
-            rectTrans.anchorMax = mDefaultAnchorMax;
-            rectTrans.offsetMin = mDefaultOffsetMin;
-            rectTrans.offsetMax = mDefaultOffsetMax;
+            RectTransform rectTransform = gameObject.GetComponent<RectTransform>();
+            rectTransform.pivot = mDefaultPivot;
+            rectTransform.anchorMin = mDefaultAnchorMin;
+            rectTransform.anchorMax = mDefaultAnchorMax;
+            rectTransform.offsetMin = mDefaultOffsetMin;
+            rectTransform.offsetMax = mDefaultOffsetMax;
         }
 
         /// <summary>
@@ -385,30 +385,30 @@ namespace MyClasses.UI
 
             if (curRatio > GetRatio(mHighestRatio))
             {
-                RectTransform rectTrans = gameObject.GetComponent<RectTransform>();
-                rectTrans.pivot = mHighestPivot;
-                rectTrans.anchorMin = mHighestAnchorMin;
-                rectTrans.anchorMax = mHighestAnchorMax;
-                rectTrans.offsetMin = mHighestOffsetMin;
-                rectTrans.offsetMax = mHighestOffsetMax;
+                RectTransform rectTransform = gameObject.GetComponent<RectTransform>();
+                rectTransform.pivot = mHighestPivot;
+                rectTransform.anchorMin = mHighestAnchorMin;
+                rectTransform.anchorMax = mHighestAnchorMax;
+                rectTransform.offsetMin = mHighestOffsetMin;
+                rectTransform.offsetMax = mHighestOffsetMax;
             }
             else if (curRatio < GetRatio(mLowestRatio))
             {
-                RectTransform rectTrans = gameObject.GetComponent<RectTransform>();
-                rectTrans.pivot = mLowestPivot;
-                rectTrans.anchorMin = mLowestAnchorMin;
-                rectTrans.anchorMax = mLowestAnchorMax;
-                rectTrans.offsetMin = mLowestOffsetMin;
-                rectTrans.offsetMax = mLowestOffsetMax;
+                RectTransform rectTransform = gameObject.GetComponent<RectTransform>();
+                rectTransform.pivot = mLowestPivot;
+                rectTransform.anchorMin = mLowestAnchorMin;
+                rectTransform.anchorMax = mLowestAnchorMax;
+                rectTransform.offsetMin = mLowestOffsetMin;
+                rectTransform.offsetMax = mLowestOffsetMax;
             }
             else
             {
-                RectTransform rectTrans = gameObject.GetComponent<RectTransform>();
-                rectTrans.pivot = mDefaultPivot;
-                rectTrans.anchorMin = mDefaultAnchorMin;
-                rectTrans.anchorMax = mDefaultAnchorMax;
-                rectTrans.offsetMin = mDefaultOffsetMin;
-                rectTrans.offsetMax = mDefaultOffsetMax;
+                RectTransform rectTransform = gameObject.GetComponent<RectTransform>();
+                rectTransform.pivot = mDefaultPivot;
+                rectTransform.anchorMin = mDefaultAnchorMin;
+                rectTransform.anchorMax = mDefaultAnchorMax;
+                rectTransform.offsetMin = mDefaultOffsetMin;
+                rectTransform.offsetMax = mDefaultOffsetMax;
             }
         }
 
@@ -421,48 +421,48 @@ namespace MyClasses.UI
 
             if (curRatio >= GetRatio(mHighestRatio))
             {
-                RectTransform rectTrans = gameObject.GetComponent<RectTransform>();
-                rectTrans.pivot = mHighestPivot;
-                rectTrans.anchorMin = mHighestAnchorMin;
-                rectTrans.anchorMax = mHighestAnchorMax;
-                rectTrans.offsetMin = mHighestOffsetMin;
-                rectTrans.offsetMax = mHighestOffsetMax;
+                RectTransform rectTransform = gameObject.GetComponent<RectTransform>();
+                rectTransform.pivot = mHighestPivot;
+                rectTransform.anchorMin = mHighestAnchorMin;
+                rectTransform.anchorMax = mHighestAnchorMax;
+                rectTransform.offsetMin = mHighestOffsetMin;
+                rectTransform.offsetMax = mHighestOffsetMax;
             }
             else if (curRatio >= GetRatio(mHighRatio))
             {
-                RectTransform rectTrans = gameObject.GetComponent<RectTransform>();
-                rectTrans.pivot = mHighPivot;
-                rectTrans.anchorMin = mHighAnchorMin;
-                rectTrans.anchorMax = mHighAnchorMax;
-                rectTrans.offsetMin = mHighOffsetMin;
-                rectTrans.offsetMax = mHighOffsetMax;
+                RectTransform rectTransform = gameObject.GetComponent<RectTransform>();
+                rectTransform.pivot = mHighPivot;
+                rectTransform.anchorMin = mHighAnchorMin;
+                rectTransform.anchorMax = mHighAnchorMax;
+                rectTransform.offsetMin = mHighOffsetMin;
+                rectTransform.offsetMax = mHighOffsetMax;
             }
             else if (curRatio <= GetRatio(mLowestRatio))
             {
-                RectTransform rectTrans = gameObject.GetComponent<RectTransform>();
-                rectTrans.pivot = mLowestPivot;
-                rectTrans.anchorMin = mLowestAnchorMin;
-                rectTrans.anchorMax = mLowestAnchorMax;
-                rectTrans.offsetMin = mLowestOffsetMin;
-                rectTrans.offsetMax = mLowestOffsetMax;
+                RectTransform rectTransform = gameObject.GetComponent<RectTransform>();
+                rectTransform.pivot = mLowestPivot;
+                rectTransform.anchorMin = mLowestAnchorMin;
+                rectTransform.anchorMax = mLowestAnchorMax;
+                rectTransform.offsetMin = mLowestOffsetMin;
+                rectTransform.offsetMax = mLowestOffsetMax;
             }
             else if (curRatio <= GetRatio(mLowRatio))
             {
-                RectTransform rectTrans = gameObject.GetComponent<RectTransform>();
-                rectTrans.pivot = mLowPivot;
-                rectTrans.anchorMin = mLowAnchorMin;
-                rectTrans.anchorMax = mLowAnchorMax;
-                rectTrans.offsetMin = mLowOffsetMin;
-                rectTrans.offsetMax = mLowOffsetMax;
+                RectTransform rectTransform = gameObject.GetComponent<RectTransform>();
+                rectTransform.pivot = mLowPivot;
+                rectTransform.anchorMin = mLowAnchorMin;
+                rectTransform.anchorMax = mLowAnchorMax;
+                rectTransform.offsetMin = mLowOffsetMin;
+                rectTransform.offsetMax = mLowOffsetMax;
             }
             else
             {
-                RectTransform rectTrans = gameObject.GetComponent<RectTransform>();
-                rectTrans.pivot = mDefaultPivot;
-                rectTrans.anchorMin = mDefaultAnchorMin;
-                rectTrans.anchorMax = mDefaultAnchorMax;
-                rectTrans.offsetMin = mDefaultOffsetMin;
-                rectTrans.offsetMax = mDefaultOffsetMax;
+                RectTransform rectTransform = gameObject.GetComponent<RectTransform>();
+                rectTransform.pivot = mDefaultPivot;
+                rectTransform.anchorMin = mDefaultAnchorMin;
+                rectTransform.anchorMax = mDefaultAnchorMax;
+                rectTransform.offsetMin = mDefaultOffsetMin;
+                rectTransform.offsetMax = mDefaultOffsetMax;
             }
         }
 
@@ -475,66 +475,66 @@ namespace MyClasses.UI
 
             if (curRatio >= GetRatio(mHighestRatio))
             {
-                RectTransform rectTrans = gameObject.GetComponent<RectTransform>();
-                rectTrans.pivot = mHighestPivot;
-                rectTrans.anchorMin = mHighestAnchorMin;
-                rectTrans.anchorMax = mHighestAnchorMax;
-                rectTrans.offsetMin = mHighestOffsetMin;
-                rectTrans.offsetMax = mHighestOffsetMax;
+                RectTransform rectTransform = gameObject.GetComponent<RectTransform>();
+                rectTransform.pivot = mHighestPivot;
+                rectTransform.anchorMin = mHighestAnchorMin;
+                rectTransform.anchorMax = mHighestAnchorMax;
+                rectTransform.offsetMin = mHighestOffsetMin;
+                rectTransform.offsetMax = mHighestOffsetMax;
             }
             else if (curRatio >= GetRatio(mHigherRatio))
             {
-                RectTransform rectTrans = gameObject.GetComponent<RectTransform>();
-                rectTrans.pivot = mHigherPivot;
-                rectTrans.anchorMin = mHigherAnchorMin;
-                rectTrans.anchorMax = mHigherAnchorMax;
-                rectTrans.offsetMin = mHigherOffsetMin;
-                rectTrans.offsetMax = mHigherOffsetMax;
+                RectTransform rectTransform = gameObject.GetComponent<RectTransform>();
+                rectTransform.pivot = mHigherPivot;
+                rectTransform.anchorMin = mHigherAnchorMin;
+                rectTransform.anchorMax = mHigherAnchorMax;
+                rectTransform.offsetMin = mHigherOffsetMin;
+                rectTransform.offsetMax = mHigherOffsetMax;
             }
             else if (curRatio >= GetRatio(mHighRatio))
             {
-                RectTransform rectTrans = gameObject.GetComponent<RectTransform>();
-                rectTrans.pivot = mHighPivot;
-                rectTrans.anchorMin = mHighAnchorMin;
-                rectTrans.anchorMax = mHighAnchorMax;
-                rectTrans.offsetMin = mHighOffsetMin;
-                rectTrans.offsetMax = mHighOffsetMax;
+                RectTransform rectTransform = gameObject.GetComponent<RectTransform>();
+                rectTransform.pivot = mHighPivot;
+                rectTransform.anchorMin = mHighAnchorMin;
+                rectTransform.anchorMax = mHighAnchorMax;
+                rectTransform.offsetMin = mHighOffsetMin;
+                rectTransform.offsetMax = mHighOffsetMax;
             }
             else if (curRatio <= GetRatio(mLowestRatio))
             {
-                RectTransform rectTrans = gameObject.GetComponent<RectTransform>();
-                rectTrans.pivot = mLowestPivot;
-                rectTrans.anchorMin = mLowestAnchorMin;
-                rectTrans.anchorMax = mLowestAnchorMax;
-                rectTrans.offsetMin = mLowestOffsetMin;
-                rectTrans.offsetMax = mLowestOffsetMax;
+                RectTransform rectTransform = gameObject.GetComponent<RectTransform>();
+                rectTransform.pivot = mLowestPivot;
+                rectTransform.anchorMin = mLowestAnchorMin;
+                rectTransform.anchorMax = mLowestAnchorMax;
+                rectTransform.offsetMin = mLowestOffsetMin;
+                rectTransform.offsetMax = mLowestOffsetMax;
             }
             else if (curRatio <= GetRatio(mLowerRatio))
             {
-                RectTransform rectTrans = gameObject.GetComponent<RectTransform>();
-                rectTrans.pivot = mLowerPivot;
-                rectTrans.anchorMin = mLowerAnchorMin;
-                rectTrans.anchorMax = mLowerAnchorMax;
-                rectTrans.offsetMin = mLowerOffsetMin;
-                rectTrans.offsetMax = mLowerOffsetMax;
+                RectTransform rectTransform = gameObject.GetComponent<RectTransform>();
+                rectTransform.pivot = mLowerPivot;
+                rectTransform.anchorMin = mLowerAnchorMin;
+                rectTransform.anchorMax = mLowerAnchorMax;
+                rectTransform.offsetMin = mLowerOffsetMin;
+                rectTransform.offsetMax = mLowerOffsetMax;
             }
             else if (curRatio <= GetRatio(mLowRatio))
             {
-                RectTransform rectTrans = gameObject.GetComponent<RectTransform>();
-                rectTrans.pivot = mLowPivot;
-                rectTrans.anchorMin = mLowAnchorMin;
-                rectTrans.anchorMax = mLowAnchorMax;
-                rectTrans.offsetMin = mLowOffsetMin;
-                rectTrans.offsetMax = mLowOffsetMax;
+                RectTransform rectTransform = gameObject.GetComponent<RectTransform>();
+                rectTransform.pivot = mLowPivot;
+                rectTransform.anchorMin = mLowAnchorMin;
+                rectTransform.anchorMax = mLowAnchorMax;
+                rectTransform.offsetMin = mLowOffsetMin;
+                rectTransform.offsetMax = mLowOffsetMax;
             }
             else
             {
-                RectTransform rectTrans = gameObject.GetComponent<RectTransform>();
-                rectTrans.pivot = mDefaultPivot;
-                rectTrans.anchorMin = mDefaultAnchorMin;
-                rectTrans.anchorMax = mDefaultAnchorMax;
-                rectTrans.offsetMin = mDefaultOffsetMin;
-                rectTrans.offsetMax = mDefaultOffsetMax;
+                RectTransform rectTransform = gameObject.GetComponent<RectTransform>();
+                rectTransform.pivot = mDefaultPivot;
+                rectTransform.anchorMin = mDefaultAnchorMin;
+                rectTransform.anchorMax = mDefaultAnchorMax;
+                rectTransform.offsetMin = mDefaultOffsetMin;
+                rectTransform.offsetMax = mDefaultOffsetMax;
             }
         }
 

@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyUGUISizeFitter (version 2.0)
+ * Class:       MyUGUISizeFitter (version 2.1)
  */
 
 #if UNITY_EDITOR
@@ -29,7 +29,7 @@ namespace MyClasses.UI
         [SerializeField]
         private Vector2 _minSize = new Vector2(100, 100);
         [SerializeField]
-        private Vector2 _maxSize = new Vector2(500, 100);
+        private Vector2 _maxSize = new Vector2(1000, 1000);
         [SerializeField]
         private Vector2 _originalSize = Vector2.zero;
         [SerializeField]
@@ -44,7 +44,16 @@ namespace MyClasses.UI
         public RectTransform Target
         {
             get { return _rectTransformTarget; }
-            set { _rectTransformTarget = value; }
+            set
+            {
+                _rectTransformTarget = value;
+#if UNITY_EDITOR
+                if (!Application.isPlaying)
+                {
+                    Resize();
+                }
+#endif
+            }
         }
 
         public EFrequency Frequency
@@ -56,25 +65,73 @@ namespace MyClasses.UI
         public EMode Mode
         {
             get { return _mode; }
-            set { _mode = value; }
+            set
+            {
+                _mode = value;
+#if UNITY_EDITOR
+                if (!Application.isPlaying)
+                {
+                    Resize();
+                }
+#endif
+            }
+        }
+
+        public float ExtraWidth
+        {
+            get { return _extraSize.x; }
+            set { _extraSize.x = value; }
+        }
+
+        public float ExtraHeight
+        {
+            get { return _extraSize.y; }
+            set { _extraSize.y = value; }
         }
 
         public Vector2 ExtraSize
         {
             get { return _extraSize; }
-            set { _extraSize = value; }
+            set
+            {
+                _extraSize = value;
+#if UNITY_EDITOR
+                if (!Application.isPlaying)
+                {
+                    Resize();
+                }
+#endif
+            }
         }
 
         public Vector2 MinSize
         {
             get { return _minSize; }
-            set { _minSize = value; }
+            set
+            {
+                _minSize = value;
+#if UNITY_EDITOR
+                if (!Application.isPlaying)
+                {
+                    Resize();
+                }
+#endif
+            }
         }
 
         public Vector2 MaxSize
         {
             get { return _maxSize; }
-            set { _maxSize = value; }
+            set
+            {
+                _maxSize = value;
+#if UNITY_EDITOR
+                if (!Application.isPlaying)
+                {
+                    Resize();
+                }
+#endif
+            }
         }
 
         #endregion
@@ -86,8 +143,7 @@ namespace MyClasses.UI
         /// </summary>
         void Awake()
         {
-            _rectTransform = GetComponent<RectTransform>();
-            _originalSize = _rectTransform.sizeDelta;
+            _Initialize();
         }
 
         /// <summary>
@@ -110,6 +166,13 @@ namespace MyClasses.UI
         /// </summary>
         public void Resize()
         {
+#if UNITY_EDITOR
+            if (!Application.isPlaying)
+            {
+                _Initialize();
+            }
+#endif
+
             if (_mode == EMode.None)
             {
             }
@@ -130,6 +193,10 @@ namespace MyClasses.UI
                     {
                         Debug.LogWarning("[" + typeof(MyUGUISizeFitter).Name + "] Resize(): Target does not have ContentSizeFitter component. Please make sure you have set it up correctly.");
                     }
+                    else if (MyUtilities.IsStretchAnchorPreset(MyUtilities.GetAnchorPreset(_rectTransformTarget)))
+                    {
+                        Debug.LogWarning("[" + typeof(MyUGUISizeFitter).Name + "] Resize(): Target's Anchor Presets can not be stretch type. Please make sure you have set it up correctly.");
+                    }
 #endif
 
                     Vector2 targetSize = _rectTransformTarget.sizeDelta;
@@ -139,7 +206,6 @@ namespace MyClasses.UI
                             {
                                 targetSize.x = Mathf.Clamp(targetSize.x + _extraSize.x, _minSize.x, _maxSize.x);
                                 targetSize.y = _originalSize.y;
-                                _rectTransform.sizeDelta = targetSize;
                             }
                             break;
 
@@ -147,7 +213,6 @@ namespace MyClasses.UI
                             {
                                 targetSize.x = _originalSize.x;
                                 targetSize.y = Mathf.Clamp(targetSize.y + _extraSize.y, _minSize.y, _maxSize.y);
-                                _rectTransform.sizeDelta = targetSize;
                             }
                             break;
 
@@ -155,11 +220,11 @@ namespace MyClasses.UI
                             {
                                 targetSize.x = Mathf.Clamp(targetSize.x + _extraSize.x, _minSize.x, _maxSize.x);
                                 targetSize.y = Mathf.Clamp(targetSize.y + _extraSize.y, _minSize.y, _maxSize.y);
-                                _rectTransform.sizeDelta = targetSize;
                             }
                             break;
                     }
-                    _targetLastSize = targetSize;
+                    _rectTransform.sizeDelta = targetSize;
+                    _targetLastSize = _rectTransformTarget.sizeDelta;
                 }
             }
         }
@@ -169,13 +234,24 @@ namespace MyClasses.UI
         #region ----- Private Method -----
 
         /// <summary>
+        /// Initialize.
+        /// </summary>
+        private void _Initialize()
+        {
+            _rectTransform = GetComponent<RectTransform>();
+            _originalSize = _rectTransform.sizeDelta;
+        }
+
+        /// <summary>
         /// Handle resizing.
         /// </summary>
         private IEnumerator _DoResize()
         {
-            yield return new WaitForEndOfFrame();
+            yield return null;
 
             Resize();
+
+            yield return null;
 
             while (_frequency == EFrequency.Always && gameObject.activeInHierarchy)
             {
@@ -184,6 +260,7 @@ namespace MyClasses.UI
                 {
                     Resize();
                 }
+
                 yield return null;
             }
         }

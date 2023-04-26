@@ -140,21 +140,21 @@ namespace MyClasses.UI
             if (mDeviceOrientation == ScreenOrientation.Landscape || mDeviceOrientation == ScreenOrientation.LandscapeLeft || mDeviceOrientation == ScreenOrientation.LandscapeRight)
 #endif
             {
-                RectTransform rectTrans = gameObject.GetComponent<RectTransform>();
-                rectTrans.pivot = mLandscapePivot;
-                rectTrans.anchorMin = mLandscapeAnchorMin;
-                rectTrans.anchorMax = mLandscapeAnchorMax;
-                rectTrans.offsetMin = mLandscapeOffsetMin;
-                rectTrans.offsetMax = mLandscapeOffsetMax;
+                RectTransform rectTransform = gameObject.GetComponent<RectTransform>();
+                rectTransform.pivot = mLandscapePivot;
+                rectTransform.anchorMin = mLandscapeAnchorMin;
+                rectTransform.anchorMax = mLandscapeAnchorMax;
+                rectTransform.offsetMin = mLandscapeOffsetMin;
+                rectTransform.offsetMax = mLandscapeOffsetMax;
             }
             else if (mDeviceOrientation == ScreenOrientation.Portrait || mDeviceOrientation == ScreenOrientation.PortraitUpsideDown)
             {
-                RectTransform rectTrans = gameObject.GetComponent<RectTransform>();
-                rectTrans.pivot = mPortraitPivot;
-                rectTrans.anchorMin = mPortraitAnchorMin;
-                rectTrans.anchorMax = mPortraitAnchorMax;
-                rectTrans.offsetMin = mPortraitOffsetMin;
-                rectTrans.offsetMax = mPortraitOffsetMax;
+                RectTransform rectTransform = gameObject.GetComponent<RectTransform>();
+                rectTransform.pivot = mPortraitPivot;
+                rectTransform.anchorMin = mPortraitAnchorMin;
+                rectTransform.anchorMax = mPortraitAnchorMax;
+                rectTransform.offsetMin = mPortraitOffsetMin;
+                rectTransform.offsetMax = mPortraitOffsetMax;
             }
         }
 

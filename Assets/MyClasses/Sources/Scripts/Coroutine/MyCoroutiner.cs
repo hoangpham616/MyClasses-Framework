@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyCoroutiner (version 1.7)
+ * Class:       MyCoroutiner (version 1.8)
  */
 
 using UnityEngine;
@@ -33,25 +33,21 @@ namespace MyClasses
         #region ----- Public Method -----
 
         /// <summary>
-        /// Excute a function after a delay.
+        /// Execute a function after a delay.
         /// </summary>
-        public static void ExcuteAfterEndOfFrame(Action action)
+        public static void ExecuteAfterEndOfFrame(Action action)
         {
-            _Initialize();
-
-            _coroutineInstance.StartCoroutine(_DelayActionUntilEndOfFrame(action));
+            Start(_DelayActionUntilEndOfFrame(action));
         }
 
         /// <summary>
-        /// Excute a function after a delay.
+        /// Execute a function after a delay.
         /// </summary>
-        public static void ExcuteAfterDelayTime(float delayTime, Action action)
+        public static void ExecuteAfterDelayTime(float delaySecond, Action action)
         {
-            _Initialize();
-
-            if (delayTime > 0)
+            if (delaySecond > 0)
             {
-                _coroutineInstance.StartCoroutine(_DelayActionByTime(delayTime, action));
+                Start(_DelayActionByTime(delaySecond, action));
             }
             else
             {
@@ -63,13 +59,13 @@ namespace MyClasses
         }
 
         /// <summary>
-        /// Excute a function after a delay.
+        /// Execute a function after a delay.
         /// </summary>
-        public static void ExcuteAfterDelayTime(string key, float delayTime, Action action)
+        public static void ExecuteAfterDelayTime(string key, float delaySecond, Action action)
         {
-            if (delayTime > 0)
+            if (delaySecond > 0)
             {
-                Start(key, _DelayActionByTime(delayTime, action));
+                Start(key, _DelayActionByTime(delaySecond, action));
             }
             else
             {
@@ -81,15 +77,13 @@ namespace MyClasses
         }
 
         /// <summary>
-        /// Excute a function after a delay.
+        /// Execute a function after a delay.
         /// </summary>
-        public static void ExcuteAfterDelayFrame(int delayFrame, Action action)
+        public static void ExecuteAfterDelayFrame(int delayFrame, Action action)
         {
-            _Initialize();
-
             if (delayFrame > 0)
             {
-                _coroutineInstance.StartCoroutine(_DelayActionByFrame(delayFrame, action));
+                Start(_DelayActionByFrame(delayFrame, action));
             }
             else
             {
@@ -101,9 +95,9 @@ namespace MyClasses
         }
 
         /// <summary>
-        /// Excute a function after a delay.
+        /// Execute a function after a delay.
         /// </summary>
-        public static void ExcuteAfterDelayFrame(string key, int delayFrame, Action action)
+        public static void ExecuteAfterDelayFrame(string key, int delayFrame, Action action)
         {
             if (delayFrame > 0)
             {
@@ -118,6 +112,38 @@ namespace MyClasses
             }
         }
 
+        /// <summary>
+        /// Execute a function iteratively in the interval.
+        /// </summary>
+        public static void SetInterval(float duration, int delayFrame, Action onUpdateCallback, Action onCompleteCallback)
+        {
+            Start(_DoActionRepeatedly(duration, delayFrame, onUpdateCallback, onCompleteCallback));
+        }
+
+        /// <summary>
+        /// Executing a function iteratively in the interval.
+        /// </summary>
+        public static void SetInterval(string key, float duration, int delayFrame, Action onUpdateCallback, Action onCompleteCallback)
+        {
+            Start(key, _DoActionRepeatedly(duration, delayFrame, onUpdateCallback, onCompleteCallback));
+        }
+
+        /// <summary>
+        /// Executing a function iteratively in the interval.
+        /// </summary>
+        public static void SetInterval(float duration, float delaySecond, Action onUpdateCallback, Action onCompleteCallback)
+        {
+            Start(_DoActionRepeatedly(duration, delaySecond, onUpdateCallback, onCompleteCallback));
+        }
+
+        /// <summary>
+        /// Executing a function iteratively in the interval.
+        /// </summary>
+        public static void SetInterval(string key, float duration, float delaySecond, Action onUpdateCallback, Action onCompleteCallback)
+        {
+            Start(key, _DoActionRepeatedly(duration, delaySecond, onUpdateCallback, onCompleteCallback));
+        }
+ 
         /// <summary>
         /// Start a coroutine.
         /// </summary>
@@ -227,9 +253,9 @@ namespace MyClasses
         /// <summary>
         /// Delay a action.
         /// </summary>
-        private static IEnumerator _DelayActionByTime(float delayTime, Action action)
+        private static IEnumerator _DelayActionByTime(float delaySecond, Action action)
         {
-            yield return new WaitForSeconds(delayTime);
+            yield return new WaitForSeconds(delaySecond);
 
             if (action != null)
             {
@@ -250,6 +276,63 @@ namespace MyClasses
             if (action != null)
             {
                 action();
+            }
+        }
+
+        /// <summary>
+        /// Do a action repeatedly.
+        /// </summary>
+        private static IEnumerator _DoActionRepeatedly(float duration, int delayFrame, Action onUpdateCallback, Action onCompleteCallback)
+        {
+            int countFrame = 0;
+            float deadline = Time.time + duration;
+            while (Time.time < deadline)
+            {
+                yield return null;
+                countFrame += 1;
+
+                if (countFrame == delayFrame)
+                {
+                    countFrame = 0;
+                    if (onUpdateCallback != null)
+                    {
+                        onUpdateCallback();
+                    }
+                }
+            }
+
+            if (onCompleteCallback != null)
+            {
+                onCompleteCallback();
+            }
+        }
+
+        /// <summary>
+        /// Do a action repeatedly.
+        /// </summary>
+        private static IEnumerator _DoActionRepeatedly(float duration, float delaySecond, Action onUpdateCallback, Action onCompleteCallback)
+        {
+            float deadline = Time.time + duration;
+            while (Time.time < deadline)
+            {
+                float remainingSecond = deadline - Time.time;
+                if (delaySecond < remainingSecond)
+                {
+                    yield return new WaitForSeconds(delaySecond);
+                    if (onUpdateCallback != null)
+                    {
+                        onUpdateCallback();
+                    }
+                }
+                else
+                {
+                    yield return new WaitForSeconds(remainingSecond);
+                }
+            }
+
+            if (onCompleteCallback != null)
+            {
+                onCompleteCallback();
             }
         }
 
