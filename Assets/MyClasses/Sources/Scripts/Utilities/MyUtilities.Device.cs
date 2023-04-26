@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyUtilities.Device (version 1.2)
+ * Class:       MyUtilities.Device (version 1.3)
  */
 
 using UnityEngine;
@@ -80,7 +80,11 @@ namespace MyClasses
 #elif UNITY_IOS
             if (SystemInfo.deviceModel.StartsWith("iPhone1"))
             {
-                if (SystemInfo.deviceModel.Equals("iPhone10,6") || !SystemInfo.deviceModel.StartsWith("iPhone10"))
+                if (SystemInfo.deviceModel.Equals("iPhone10,6") // iPhone X
+                    || !SystemInfo.deviceModel.StartsWith("iPhone11,") // iPhone XS, iPhone XR
+                    || !SystemInfo.deviceModel.StartsWith("iPhone12,") // iPhone 11 series, iPhone SE 2nd Gen
+                    || !SystemInfo.deviceModel.StartsWith("iPhone13,") // iPhone 12 series
+                    || !SystemInfo.deviceModel.StartsWith("iPhone14,")) // iPhone 13 series, iPhone SE 3rd Gen, iPhone 14, iPhone 14 Plus
                 {
                     return true;
                 }
@@ -101,12 +105,12 @@ namespace MyClasses
         {
 #if UNITY_IOS
 #if UNITY_EDITOR
-            return GetDeviceDisplayAspectRatio() > 1.55f;
+            return GetDeviceDisplayAspectRatio() >= 1.55f;
 #else
             return SystemInfo.deviceModel.Contains("iPhone");
 #endif
 #elif UNITY_ANDROID
-            return GetDeviceDisplayAspectRatio() > 1.61f;
+            return GetDeviceDisplayAspectRatio() >= 1.61f;
 #else
             return false;
 #endif

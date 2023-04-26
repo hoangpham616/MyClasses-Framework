@@ -41,6 +41,12 @@ namespace MyClasses.UI
 
         #region ----- Property -----
 
+        public RectTransform Target
+        {
+            get { return _rectTransformTarget; }
+            set { _rectTransformTarget = value; }
+        }
+
         public EFrequency Frequency
         {
             get { return _frequency; }
@@ -51,12 +57,6 @@ namespace MyClasses.UI
         {
             get { return _mode; }
             set { _mode = value; }
-        }
-
-        public RectTransform Target
-        {
-            get { return _rectTransformTarget; }
-            set { _rectTransformTarget = value; }
         }
 
         public Vector2 ExtraSize
@@ -112,7 +112,6 @@ namespace MyClasses.UI
         {
             if (_mode == EMode.None)
             {
-                _rectTransform.sizeDelta = _originalSize;
             }
             else if (_mode == EMode.Original)
             {
@@ -218,9 +217,9 @@ namespace MyClasses.UI
     {
         private MyUGUISizeFitter _script;
 
+        private SerializedProperty _rectTransformTarget;
         private SerializedProperty _frequency;
         private SerializedProperty _mode;
-        private SerializedProperty _rectTransformTarget;
         private SerializedProperty _extraSize;
         private SerializedProperty _minSize;
         private SerializedProperty _maxSize;
@@ -232,9 +231,9 @@ namespace MyClasses.UI
         {
             _script = (MyUGUISizeFitter)target;
 
+            _rectTransformTarget = serializedObject.FindProperty("_rectTransformTarget");
             _frequency = serializedObject.FindProperty("_frequency");
             _mode = serializedObject.FindProperty("_mode");
-            _rectTransformTarget = serializedObject.FindProperty("_rectTransformTarget");
             _extraSize = serializedObject.FindProperty("_extraSize");
             _minSize = serializedObject.FindProperty("_minSize");
             _maxSize = serializedObject.FindProperty("_maxSize");

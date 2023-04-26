@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyUGUIGridLayoutGroup (version 2.1)
+ * Class:       MyUGUIGridLayoutGroup (version 2.2)
  */
 
 #pragma warning disable 0414
@@ -26,14 +26,14 @@ namespace MyClasses.UI
         [SerializeField]
         private EOrientation mOrientation = EOrientation.Both;
         [SerializeField]
-        private ELevel mLevel = ELevel.Three;
+        private ELevel mLevel = ELevel.Seven;
         [SerializeField]
         private EFrequency mFrequency = EFrequency.OneTimeOnly;
         [SerializeField]
         private ERoundingRatio mRoundingRatio = ERoundingRatio.TwoDigits;
 
         [SerializeField]
-        private Vector2 mHighestRatio = new Vector2(19, 9);
+        private Vector2 mHighestRatio = new Vector2(20.4f, 9);
         [SerializeField]
         private Vector2 mHighestCellSize;
         [SerializeField]
@@ -44,7 +44,18 @@ namespace MyClasses.UI
         private int mHighestConstraintCount;
 
         [SerializeField]
-        private Vector2 mHighRatio = new Vector2(18, 9);
+        private Vector2 mHigherRatio = new Vector2(19.4f, 9);
+        [SerializeField]
+        private Vector2 mHigherCellSize;
+        [SerializeField]
+        private Vector2 mHigherSpacing;
+        [SerializeField]
+        private GridLayoutGroup.Constraint mHigherConstraint;
+        [SerializeField]
+        private int mHigherConstraintCount;
+
+        [SerializeField]
+        private Vector2 mHighRatio = new Vector2(18.4f, 9);
         [SerializeField]
         private Vector2 mHighCellSize;
         [SerializeField]
@@ -64,7 +75,7 @@ namespace MyClasses.UI
         private int mDefaultConstraintCount;
 
         [SerializeField]
-        private Vector2 mLowRatio = new Vector2(16, 10);
+        private Vector2 mLowRatio = new Vector2(16.6f, 9);
         [SerializeField]
         private Vector2 mLowCellSize;
         [SerializeField]
@@ -75,7 +86,18 @@ namespace MyClasses.UI
         private int mLowConstraintCount;
 
         [SerializeField]
-        private Vector2 mLowestRatio = new Vector2(4.2f, 3);
+        private Vector2 mLowerRatio = new Vector2(16.1f, 10);
+        [SerializeField]
+        private Vector2 mLowerCellSize;
+        [SerializeField]
+        private Vector2 mLowerSpacing;
+        [SerializeField]
+        private GridLayoutGroup.Constraint mLowerConstraint;
+        [SerializeField]
+        private int mLowerConstraintCount;
+
+        [SerializeField]
+        private Vector2 mLowestRatio = new Vector2(3.02f, 2);
         [SerializeField]
         private Vector2 mLowestCellSize;
         [SerializeField]
@@ -220,14 +242,22 @@ namespace MyClasses.UI
                         _Layout1();
                     }
                     break;
+
                 case ELevel.Three:
                     {
                         _Layout3();
                     }
                     break;
+
                 case ELevel.Five:
                     {
                         _Layout5();
+                    }
+                    break;
+
+                case ELevel.Seven:
+                    {
+                        _Layout7();
                     }
                     break;
             }
@@ -361,6 +391,71 @@ namespace MyClasses.UI
             }
         }
 
+        /// <summary>
+        /// Layout for Seven Levels. 
+        /// </summary>
+        private void _Layout7()
+        {
+            double curRatio = GetCurrentRatio();
+
+            if (curRatio >= GetRatio(mHighestRatio))
+            {
+                GridLayoutGroup gridLayoutGroup = gameObject.GetComponent<GridLayoutGroup>();
+                gridLayoutGroup.cellSize = mHighestCellSize;
+                gridLayoutGroup.spacing = mHighestSpacing;
+                gridLayoutGroup.constraint = mHighestConstraint;
+                gridLayoutGroup.constraintCount = mHighestConstraintCount;
+            }
+            else if (curRatio >= GetRatio(mHigherRatio))
+            {
+                GridLayoutGroup gridLayoutGroup = gameObject.GetComponent<GridLayoutGroup>();
+                gridLayoutGroup.cellSize = mHigherCellSize;
+                gridLayoutGroup.spacing = mHigherSpacing;
+                gridLayoutGroup.constraint = mHigherConstraint;
+                gridLayoutGroup.constraintCount = mHigherConstraintCount;
+            }
+            else if (curRatio >= GetRatio(mHighRatio))
+            {
+                GridLayoutGroup gridLayoutGroup = gameObject.GetComponent<GridLayoutGroup>();
+                gridLayoutGroup.cellSize = mHighCellSize;
+                gridLayoutGroup.spacing = mHighSpacing;
+                gridLayoutGroup.constraint = mHighConstraint;
+                gridLayoutGroup.constraintCount = mHighConstraintCount;
+            }
+            else if (curRatio <= GetRatio(mLowestRatio))
+            {
+                GridLayoutGroup gridLayoutGroup = gameObject.GetComponent<GridLayoutGroup>();
+                gridLayoutGroup.cellSize = mLowestCellSize;
+                gridLayoutGroup.spacing = mLowestSpacing;
+                gridLayoutGroup.constraint = mLowestConstraint;
+                gridLayoutGroup.constraintCount = mLowestConstraintCount;
+            }
+            else if (curRatio <= GetRatio(mLowerRatio))
+            {
+                GridLayoutGroup gridLayoutGroup = gameObject.GetComponent<GridLayoutGroup>();
+                gridLayoutGroup.cellSize = mLowerCellSize;
+                gridLayoutGroup.spacing = mLowerSpacing;
+                gridLayoutGroup.constraint = mLowerConstraint;
+                gridLayoutGroup.constraintCount = mLowerConstraintCount;
+            }
+            else if (curRatio <= GetRatio(mLowRatio))
+            {
+                GridLayoutGroup gridLayoutGroup = gameObject.GetComponent<GridLayoutGroup>();
+                gridLayoutGroup.cellSize = mLowCellSize;
+                gridLayoutGroup.spacing = mLowSpacing;
+                gridLayoutGroup.constraint = mLowConstraint;
+                gridLayoutGroup.constraintCount = mLowConstraintCount;
+            }
+            else
+            {
+                GridLayoutGroup gridLayoutGroup = gameObject.GetComponent<GridLayoutGroup>();
+                gridLayoutGroup.cellSize = mDefaultCellSize;
+                gridLayoutGroup.spacing = mDefaultSpacing;
+                gridLayoutGroup.constraint = mDefaultConstraint;
+                gridLayoutGroup.constraintCount = mDefaultConstraintCount;
+            }
+        }
+
         #endregion
 
         #region ----- Enumeration -----
@@ -376,7 +471,8 @@ namespace MyClasses.UI
         {
             One,
             Three,
-            Five
+            Five,
+            Seven
         }
 
         public enum EFrequency
@@ -410,6 +506,12 @@ namespace MyClasses.UI
         private SerializedProperty mHighestConstraint;
         private SerializedProperty mHighestConstraintCount;
 
+        private SerializedProperty mHigherRatio;
+        private SerializedProperty mHigherCellSize;
+        private SerializedProperty mHigherSpacing;
+        private SerializedProperty mHigherConstraint;
+        private SerializedProperty mHigherConstraintCount;
+
         private SerializedProperty mHighRatio;
         private SerializedProperty mHighCellSize;
         private SerializedProperty mHighSpacing;
@@ -426,6 +528,12 @@ namespace MyClasses.UI
         private SerializedProperty mLowSpacing;
         private SerializedProperty mLowConstraint;
         private SerializedProperty mLowConstraintCount;
+
+        private SerializedProperty mLowerRatio;
+        private SerializedProperty mLowerCellSize;
+        private SerializedProperty mLowerSpacing;
+        private SerializedProperty mLowerConstraint;
+        private SerializedProperty mLowerConstraintCount;
 
         private SerializedProperty mLowestRatio;
         private SerializedProperty mLowestCellSize;
@@ -450,6 +558,12 @@ namespace MyClasses.UI
             mHighestConstraint = serializedObject.FindProperty("mHighestConstraint");
             mHighestConstraintCount = serializedObject.FindProperty("mHighestConstraintCount");
 
+            mHigherRatio = serializedObject.FindProperty("mHigherRatio");
+            mHigherCellSize = serializedObject.FindProperty("mHigherCellSize");
+            mHigherSpacing = serializedObject.FindProperty("mHigherSpacing");
+            mHigherConstraint = serializedObject.FindProperty("mHigherConstraint");
+            mHigherConstraintCount = serializedObject.FindProperty("mHigherConstraintCount");
+
             mHighRatio = serializedObject.FindProperty("mHighRatio");
             mHighCellSize = serializedObject.FindProperty("mHighCellSize");
             mHighSpacing = serializedObject.FindProperty("mHighSpacing");
@@ -467,6 +581,12 @@ namespace MyClasses.UI
             mLowConstraint = serializedObject.FindProperty("mLowConstraint");
             mLowConstraintCount = serializedObject.FindProperty("mLowConstraintCount");
 
+            mLowerRatio = serializedObject.FindProperty("mLowerRatio");
+            mLowerCellSize = serializedObject.FindProperty("mLowerCellSize");
+            mLowerSpacing = serializedObject.FindProperty("mLowerSpacing");
+            mLowerConstraint = serializedObject.FindProperty("mLowerConstraint");
+            mLowerConstraintCount = serializedObject.FindProperty("mLowerConstraintCount");
+
             mLowestRatio = serializedObject.FindProperty("mLowestRatio");
             mLowestCellSize = serializedObject.FindProperty("mLowestCellSize");
             mLowestSpacing = serializedObject.FindProperty("mLowestSpacing");
@@ -482,6 +602,11 @@ namespace MyClasses.UI
                 mHighestConstraint.enumValueIndex = (int)mGridLayoutGroup.constraint;
                 mHighestConstraintCount.intValue = mGridLayoutGroup.constraintCount;
 
+                mHigherCellSize.vector2Value = mGridLayoutGroup.cellSize;
+                mHigherSpacing.vector2Value = mGridLayoutGroup.spacing;
+                mHigherConstraint.enumValueIndex = (int)mGridLayoutGroup.constraint;
+                mHigherConstraintCount.intValue = mGridLayoutGroup.constraintCount;
+
                 mHighCellSize.vector2Value = mGridLayoutGroup.cellSize;
                 mHighSpacing.vector2Value = mGridLayoutGroup.spacing;
                 mHighConstraint.enumValueIndex = (int)mGridLayoutGroup.constraint;
@@ -496,6 +621,11 @@ namespace MyClasses.UI
                 mLowSpacing.vector2Value = mGridLayoutGroup.spacing;
                 mLowConstraint.enumValueIndex = (int)mGridLayoutGroup.constraint;
                 mLowConstraintCount.intValue = mGridLayoutGroup.constraintCount;
+
+                mLowerCellSize.vector2Value = mGridLayoutGroup.cellSize;
+                mLowerSpacing.vector2Value = mGridLayoutGroup.spacing;
+                mLowerConstraint.enumValueIndex = (int)mGridLayoutGroup.constraint;
+                mLowerConstraintCount.intValue = mGridLayoutGroup.constraintCount;
 
                 mLowestCellSize.vector2Value = mGridLayoutGroup.cellSize;
                 mLowestSpacing.vector2Value = mGridLayoutGroup.spacing;
@@ -580,6 +710,7 @@ namespace MyClasses.UI
                         }
                     }
                     break;
+
                 case MyUGUIGridLayoutGroup.ELevel.Three:
                     {
                         double ratio = mScript.GetCurrentRatio();
@@ -655,6 +786,7 @@ namespace MyClasses.UI
                         }
                     }
                     break;
+
                 case MyUGUIGridLayoutGroup.ELevel.Five:
                     {
                         double ratio = mScript.GetCurrentRatio();
@@ -762,6 +894,183 @@ namespace MyClasses.UI
                         EditorGUILayout.LabelField(string.Empty);
                         GUILayout.BeginHorizontal();
                         EditorGUILayout.LabelField("Lowest Aspect Ratio" + (ratioLevel == -2 ? " (Current)" : string.Empty), EditorStyles.boldLabel);
+                        if (GUILayout.Button("Use Current Layout", GUILayout.MaxWidth(135)))
+                        {
+                            mLowestCellSize.vector2Value = mGridLayoutGroup.cellSize;
+                            mLowestSpacing.vector2Value = mGridLayoutGroup.spacing;
+                            mLowestConstraint.enumValueIndex = (int)mGridLayoutGroup.constraint;
+                            mLowestConstraintCount.intValue = mGridLayoutGroup.constraintCount;
+                        }
+                        GUILayout.EndHorizontal();
+                        mLowestRatio.vector2Value = EditorGUILayout.Vector2Field("   Ratio <= (" + mScript.GetRatio(mLowestRatio.vector2Value) + ")", mLowestRatio.vector2Value);
+                        EditorGUILayout.LabelField(string.Empty);
+                        mLowestCellSize.vector2Value = EditorGUILayout.Vector2Field("   Cell Size", mLowestCellSize.vector2Value);
+                        mLowestSpacing.vector2Value = EditorGUILayout.Vector2Field("   Spacing", mLowestSpacing.vector2Value);
+                        mLowestConstraint.enumValueIndex = (int)(GridLayoutGroup.Constraint)EditorGUILayout.EnumPopup("   Constraint", (GridLayoutGroup.Constraint)mLowestConstraint.enumValueIndex);
+                        if (mLowestConstraint.enumValueIndex != (int)GridLayoutGroup.Constraint.Flexible)
+                        {
+                            mLowestConstraintCount.intValue = EditorGUILayout.IntField("   Constraint Count", mLowestConstraintCount.intValue);
+                        }
+                    }
+                    break;
+                    
+                case MyUGUIGridLayoutGroup.ELevel.Seven:
+                    {
+                        double ratio = mScript.GetCurrentRatio();
+                        int ratioLevel = 0;
+                        if (ratio >= mScript.GetRatio(mHighestRatio.vector2Value))
+                        {
+                            ratioLevel = 3;
+                        }
+                        else if (ratio >= mScript.GetRatio(mHigherRatio.vector2Value))
+                        {
+                            ratioLevel = 2;
+                        }
+                        else if (ratio >= mScript.GetRatio(mHighRatio.vector2Value))
+                        {
+                            ratioLevel = 1;
+                        }
+                        else if (ratio <= mScript.GetRatio(mLowestRatio.vector2Value))
+                        {
+                            ratioLevel = -3;
+                        }
+                        else if (ratio <= mScript.GetRatio(mLowerRatio.vector2Value))
+                        {
+                            ratioLevel = -2;
+                        }
+                        else if (ratio <= mScript.GetRatio(mLowRatio.vector2Value))
+                        {
+                            ratioLevel = -1;
+                        }
+
+                        EditorGUILayout.LabelField(string.Empty);
+                        GUILayout.BeginHorizontal();
+                        EditorGUILayout.LabelField("Highest Aspect Ratio" + (ratioLevel == 3 ? " (Current)" : string.Empty), EditorStyles.boldLabel);
+                        if (GUILayout.Button("Use Current Layout", GUILayout.MaxWidth(135)))
+                        {
+                            mHighestCellSize.vector2Value = mGridLayoutGroup.cellSize;
+                            mHighestSpacing.vector2Value = mGridLayoutGroup.spacing;
+                            mHighestConstraint.enumValueIndex = (int)mGridLayoutGroup.constraint;
+                            mHighestConstraintCount.intValue = mGridLayoutGroup.constraintCount;
+                        }
+                        GUILayout.EndHorizontal();
+                        mHighestRatio.vector2Value = EditorGUILayout.Vector2Field("   Ratio >= (" + mScript.GetRatio(mHighestRatio.vector2Value) + ")", mHighestRatio.vector2Value);
+                        EditorGUILayout.LabelField(string.Empty);
+                        mHighestCellSize.vector2Value = EditorGUILayout.Vector2Field("   Cell Size", mHighestCellSize.vector2Value);
+                        mHighestSpacing.vector2Value = EditorGUILayout.Vector2Field("   Spacing", mHighestSpacing.vector2Value);
+                        mHighestConstraint.enumValueIndex = (int)(GridLayoutGroup.Constraint)EditorGUILayout.EnumPopup("   Constraint", (GridLayoutGroup.Constraint)mHighestConstraint.enumValueIndex);
+                        if (mHighestConstraint.enumValueIndex != (int)GridLayoutGroup.Constraint.Flexible)
+                        {
+                            mHighestConstraintCount.intValue = EditorGUILayout.IntField("   Constraint Count", mHighestConstraintCount.intValue);
+                        }
+
+                        EditorGUILayout.LabelField(string.Empty);
+                        GUILayout.BeginHorizontal();
+                        EditorGUILayout.LabelField("Higher Aspect Ratio" + (ratioLevel == 2 ? " (Current)" : string.Empty), EditorStyles.boldLabel);
+                        if (GUILayout.Button("Use Current Layout", GUILayout.MaxWidth(135)))
+                        {
+                            mHigherCellSize.vector2Value = mGridLayoutGroup.cellSize;
+                            mHigherSpacing.vector2Value = mGridLayoutGroup.spacing;
+                            mHigherConstraint.enumValueIndex = (int)mGridLayoutGroup.constraint;
+                            mHigherConstraintCount.intValue = mGridLayoutGroup.constraintCount;
+                        }
+                        GUILayout.EndHorizontal();
+                        mHigherRatio.vector2Value = EditorGUILayout.Vector2Field("   Ratio >= (" + mScript.GetRatio(mHigherRatio.vector2Value) + ")", mHigherRatio.vector2Value);
+                        EditorGUILayout.LabelField(string.Empty);
+                        mHigherCellSize.vector2Value = EditorGUILayout.Vector2Field("   Cell Size", mHigherCellSize.vector2Value);
+                        mHigherSpacing.vector2Value = EditorGUILayout.Vector2Field("   Spacing", mHigherSpacing.vector2Value);
+                        mHigherConstraint.enumValueIndex = (int)(GridLayoutGroup.Constraint)EditorGUILayout.EnumPopup("   Constraint", (GridLayoutGroup.Constraint)mHigherConstraint.enumValueIndex);
+                        if (mHigherConstraint.enumValueIndex != (int)GridLayoutGroup.Constraint.Flexible)
+                        {
+                            mHigherConstraintCount.intValue = EditorGUILayout.IntField("   Constraint Count", mHigherConstraintCount.intValue);
+                        }
+
+                        EditorGUILayout.LabelField(string.Empty);
+                        GUILayout.BeginHorizontal();
+                        EditorGUILayout.LabelField("High Aspect Ratio" + (ratioLevel == 1 ? " (Current)" : string.Empty), EditorStyles.boldLabel);
+                        if (GUILayout.Button("Use Current Layout", GUILayout.MaxWidth(135)))
+                        {
+                            mHighCellSize.vector2Value = mGridLayoutGroup.cellSize;
+                            mHighSpacing.vector2Value = mGridLayoutGroup.spacing;
+                            mHighConstraint.enumValueIndex = (int)mGridLayoutGroup.constraint;
+                            mHighConstraintCount.intValue = mGridLayoutGroup.constraintCount;
+                        }
+                        GUILayout.EndHorizontal();
+                        mHighRatio.vector2Value = EditorGUILayout.Vector2Field("   Ratio >= (" + mScript.GetRatio(mHighRatio.vector2Value) + ")", mHighRatio.vector2Value);
+                        EditorGUILayout.LabelField(string.Empty);
+                        mHighCellSize.vector2Value = EditorGUILayout.Vector2Field("   Cell Size", mHighCellSize.vector2Value);
+                        mHighSpacing.vector2Value = EditorGUILayout.Vector2Field("   Spacing", mHighSpacing.vector2Value);
+                        mHighConstraint.enumValueIndex = (int)(GridLayoutGroup.Constraint)EditorGUILayout.EnumPopup("   Constraint", (GridLayoutGroup.Constraint)mHighConstraint.enumValueIndex);
+                        if (mHighConstraint.enumValueIndex != (int)GridLayoutGroup.Constraint.Flexible)
+                        {
+                            mHighConstraintCount.intValue = EditorGUILayout.IntField("   Constraint Count", mHighConstraintCount.intValue);
+                        }
+
+                        EditorGUILayout.LabelField(string.Empty);
+                        GUILayout.BeginHorizontal();
+                        EditorGUILayout.LabelField("Medium Aspect Ratio" + (ratioLevel == 0 ? " (Current)" : string.Empty), EditorStyles.boldLabel);
+                        if (GUILayout.Button("Use Current Layout", GUILayout.MaxWidth(135)))
+                        {
+                            mDefaultCellSize.vector2Value = mGridLayoutGroup.cellSize;
+                            mDefaultSpacing.vector2Value = mGridLayoutGroup.spacing;
+                            mDefaultConstraint.enumValueIndex = (int)mGridLayoutGroup.constraint;
+                            mDefaultConstraintCount.intValue = mGridLayoutGroup.constraintCount;
+                        }
+                        GUILayout.EndHorizontal();
+                        EditorGUILayout.LabelField(string.Empty);
+                        mDefaultCellSize.vector2Value = EditorGUILayout.Vector2Field("   Cell Size", mDefaultCellSize.vector2Value);
+                        mDefaultSpacing.vector2Value = EditorGUILayout.Vector2Field("   Spacing", mDefaultSpacing.vector2Value);
+                        mDefaultConstraint.enumValueIndex = (int)(GridLayoutGroup.Constraint)EditorGUILayout.EnumPopup("   Constraint", (GridLayoutGroup.Constraint)mDefaultConstraint.enumValueIndex);
+                        if (mDefaultConstraint.enumValueIndex != (int)GridLayoutGroup.Constraint.Flexible)
+                        {
+                            mDefaultConstraintCount.intValue = EditorGUILayout.IntField("   Constraint Count", mDefaultConstraintCount.intValue);
+                        }
+
+                        EditorGUILayout.LabelField(string.Empty);
+                        GUILayout.BeginHorizontal();
+                        EditorGUILayout.LabelField("Low Aspect Ratio" + (ratioLevel == -1 ? " (Current)" : string.Empty), EditorStyles.boldLabel);
+                        if (GUILayout.Button("Use Current Layout", GUILayout.MaxWidth(135)))
+                        {
+                            mLowCellSize.vector2Value = mGridLayoutGroup.cellSize;
+                            mLowSpacing.vector2Value = mGridLayoutGroup.spacing;
+                            mLowConstraint.enumValueIndex = (int)mGridLayoutGroup.constraint;
+                            mLowConstraintCount.intValue = mGridLayoutGroup.constraintCount;
+                        }
+                        GUILayout.EndHorizontal();
+                        mLowRatio.vector2Value = EditorGUILayout.Vector2Field("   Ratio <= (" + mScript.GetRatio(mLowRatio.vector2Value) + ")", mLowRatio.vector2Value);
+                        EditorGUILayout.LabelField(string.Empty);
+                        mLowCellSize.vector2Value = EditorGUILayout.Vector2Field("   Cell Size", mLowCellSize.vector2Value);
+                        mLowSpacing.vector2Value = EditorGUILayout.Vector2Field("   Spacing", mLowSpacing.vector2Value);
+                        mLowConstraint.enumValueIndex = (int)(GridLayoutGroup.Constraint)EditorGUILayout.EnumPopup("   Constraint", (GridLayoutGroup.Constraint)mLowConstraint.enumValueIndex);
+                        if (mLowConstraint.enumValueIndex != (int)GridLayoutGroup.Constraint.Flexible)
+                        {
+                            mLowConstraintCount.intValue = EditorGUILayout.IntField("   Constraint Count", mLowConstraintCount.intValue);
+                        }
+
+                        EditorGUILayout.LabelField(string.Empty);
+                        GUILayout.BeginHorizontal();
+                        EditorGUILayout.LabelField("Lower Aspect Ratio" + (ratioLevel == -2 ? " (Current)" : string.Empty), EditorStyles.boldLabel);
+                        if (GUILayout.Button("Use Current Layout", GUILayout.MaxWidth(135)))
+                        {
+                            mLowerCellSize.vector2Value = mGridLayoutGroup.cellSize;
+                            mLowerSpacing.vector2Value = mGridLayoutGroup.spacing;
+                            mLowerConstraint.enumValueIndex = (int)mGridLayoutGroup.constraint;
+                            mLowerConstraintCount.intValue = mGridLayoutGroup.constraintCount;
+                        }
+                        GUILayout.EndHorizontal();
+                        mLowerRatio.vector2Value = EditorGUILayout.Vector2Field("   Ratio <= (" + mScript.GetRatio(mLowerRatio.vector2Value) + ")", mLowerRatio.vector2Value);
+                        EditorGUILayout.LabelField(string.Empty);
+                        mLowerCellSize.vector2Value = EditorGUILayout.Vector2Field("   Cell Size", mLowerCellSize.vector2Value);
+                        mLowerSpacing.vector2Value = EditorGUILayout.Vector2Field("   Spacing", mLowerSpacing.vector2Value);
+                        mLowerConstraint.enumValueIndex = (int)(GridLayoutGroup.Constraint)EditorGUILayout.EnumPopup("   Constraint", (GridLayoutGroup.Constraint)mLowerConstraint.enumValueIndex);
+                        if (mLowerConstraint.enumValueIndex != (int)GridLayoutGroup.Constraint.Flexible)
+                        {
+                            mLowerConstraintCount.intValue = EditorGUILayout.IntField("   Constraint Count", mLowerConstraintCount.intValue);
+                        }
+
+                        EditorGUILayout.LabelField(string.Empty);
+                        GUILayout.BeginHorizontal();
+                        EditorGUILayout.LabelField("Lowest Aspect Ratio" + (ratioLevel == -3 ? " (Current)" : string.Empty), EditorStyles.boldLabel);
                         if (GUILayout.Button("Use Current Layout", GUILayout.MaxWidth(135)))
                         {
                             mLowestCellSize.vector2Value = mGridLayoutGroup.cellSize;

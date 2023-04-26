@@ -50,7 +50,7 @@ namespace MyClasses.UI
         private Vector3 mDefaultScale = Vector3.one;
 
         [SerializeField]
-        private Vector2 mLowRatio = new Vector2(16.1f, 9);
+        private Vector2 mLowRatio = new Vector2(16.6f, 9);
         [SerializeField]
         private Vector3 mLowScale = Vector3.one;
 
@@ -60,7 +60,7 @@ namespace MyClasses.UI
         private Vector3 mLowerScale = Vector3.one;
 
         [SerializeField]
-        private Vector2 mLowestRatio = new Vector2(3.05f, 2);
+        private Vector2 mLowestRatio = new Vector2(3.02f, 2);
         [SerializeField]
         private Vector3 mLowestScale = Vector3.one;
 

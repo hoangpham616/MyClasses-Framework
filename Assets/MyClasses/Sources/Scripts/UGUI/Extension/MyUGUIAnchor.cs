@@ -86,7 +86,7 @@ namespace MyClasses.UI
         private Vector2 mDefaultOffsetMax;
 
         [SerializeField]
-        private Vector2 mLowRatio = new Vector2(16.1f, 9);
+        private Vector2 mLowRatio = new Vector2(16.6f, 9);
         [SerializeField]
         private Vector2 mLowPivot;
         [SerializeField]
@@ -112,7 +112,7 @@ namespace MyClasses.UI
         private Vector2 mLowerOffsetMax;
 
         [SerializeField]
-        private Vector2 mLowestRatio = new Vector2(3.05f, 2);
+        private Vector2 mLowestRatio = new Vector2(3.02f, 2);
         [SerializeField]
         private Vector2 mLowestPivot;
         [SerializeField]
