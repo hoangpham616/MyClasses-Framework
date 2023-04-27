@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9bb0ddfc46edab45a1b821728a98fc3, type: 3}
   m_Name: MyUGUIConfigGroups
   m_EditorClassIdentifier: 
+  Directory: Assets/
   ListGroup:
   - IsFoldOut: 1
     Name: EUnitySceneID
@@ -35,3 +36,4 @@ MonoBehaviour:
     - LocalizationPopup
     - AdMobPopup
     - ReusableListViewPopup
+    - ExtensionPopup

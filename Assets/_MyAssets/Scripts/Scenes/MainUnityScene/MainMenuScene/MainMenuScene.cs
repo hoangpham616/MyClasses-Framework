@@ -16,6 +16,7 @@ namespace MyApp.UI
         private MyUGUIButton _btnLoadingIndicator;
         private MyUGUIButton _btnDialog2Buttons;
         private MyUGUIButton _btnReuasbleListView;
+        private MyUGUIButton _btnExtension;
         private MyUGUIButton _btnGameScene;
         private MyUGUIButton _btnLogger;
         private MyUGUIButton _btnCoroutine;
@@ -50,6 +51,7 @@ namespace MyApp.UI
             _btnLoadingIndicator = MyUtilities.FindObject(GameObject, "Buttons/ButtonLoadingIndicator").GetComponent<MyUGUIButton>();
             _btnDialog2Buttons = MyUtilities.FindObject(GameObject, "Buttons/ButtonDialog2Buttons").GetComponent<MyUGUIButton>();
             _btnReuasbleListView = MyUtilities.FindObject(GameObject, "Buttons/ButtonReusableListView").GetComponent<MyUGUIButton>();
+            _btnExtension = MyUtilities.FindObject(GameObject, "Buttons/ButtonExtension").GetComponent<MyUGUIButton>();
             _btnGameScene = MyUtilities.FindObject(GameObject, "Buttons/ButtonGameScene").GetComponent<MyUGUIButton>();
             _btnLogger = MyUtilities.FindObject(GameObject, "Buttons/ButtonLogger").GetComponent<MyUGUIButton>();
             _btnCoroutine = MyUtilities.FindObject(GameObject, "Buttons/ButtonCoroutine").GetComponent<MyUGUIButton>();
@@ -72,6 +74,7 @@ namespace MyApp.UI
             _btnLoadingIndicator.OnEventPointerClick.AddListener(_OnClickLoadingIndicator);
             _btnDialog2Buttons.OnEventPointerClick.AddListener(_OnClickDialog2Buttons);
             _btnReuasbleListView.OnEventPointerClick.AddListener(_OnClickReuasbleListView);
+            _btnExtension.OnEventPointerClick.AddListener(_OnClickExtension);
             _btnGameScene.OnEventPointerClick.AddListener(_OnClickGameScene);
             _btnLogger.OnEventPointerClick.AddListener(_OnClickLogger);
             _btnCoroutine.OnEventPointerClick.AddListener(_OnClickCoroutine);
@@ -110,6 +113,7 @@ namespace MyApp.UI
             _btnLoadingIndicator.OnEventPointerClick.RemoveAllListeners();
             _btnDialog2Buttons.OnEventPointerClick.RemoveAllListeners();
             _btnReuasbleListView.OnEventPointerClick.RemoveAllListeners();
+            _btnExtension.OnEventPointerClick.RemoveAllListeners();
             _btnGameScene.OnEventPointerClick.RemoveAllListeners();
             _btnLogger.OnEventPointerClick.RemoveAllListeners();
             _btnCoroutine.OnEventPointerClick.RemoveAllListeners();
@@ -240,6 +244,13 @@ namespace MyApp.UI
             MyUGUIManager.Instance.ShowPopup(EPopupID.ReusableListViewPopup);
         }
 
+        private void _OnClickExtension(PointerEventData arg0)
+        {
+            this.LogInfo("_OnClickExtension", null, ELogColor.UI);
+
+            MyUGUIManager.Instance.ShowPopup(EPopupID.ExtensionPopup);
+        }
+
         private void _OnClickGameScene(PointerEventData arg0)
         {
             this.LogInfo("_OnClickGameScene", null, ELogColor.UI);
@@ -266,15 +277,15 @@ namespace MyApp.UI
         {
             this.LogInfo("_OnClickCoroutine", null, ELogColor.UI);
 
-            MyCoroutiner.ExcuteAfterDelayFrame("DelayFrame", 2000, () =>
+            MyCoroutiner.ExecuteAfterDelayFrame("DelayFrame", 2000, () =>
             {
                 this.LogInfo("_OnClickCoroutine", "callback after 2000 frames delay");
             });
-            MyCoroutiner.ExcuteAfterDelayTime("DelaySecond", 1.5f, () =>
+            MyCoroutiner.ExecuteAfterDelayTime("DelaySecond", 1.5f, () =>
             {
                 this.LogInfo("_OnClickCoroutine", "callback after 1.5 second delay");
             });
-            MyCoroutiner.ExcuteAfterEndOfFrame(() =>
+            MyCoroutiner.ExecuteAfterEndOfFrame(() =>
             {
                 this.LogInfo("_OnClickCoroutine", "callback after frame ends");
             });

@@ -27,5 +27,6 @@ namespace MyClasses.UI
 		LocalizationPopup,
 		AdMobPopup,
 		ReusableListViewPopup,
+		ExtensionPopup,
 	}
 }

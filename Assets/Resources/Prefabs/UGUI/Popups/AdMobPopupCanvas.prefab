@@ -1194,7 +1194,7 @@ GameObject:
   - component: {fileID: 5479617360996047029}
   - component: {fileID: 7074817062351483321}
   m_Layer: 0
-  m_Name: AdMobPopup
+  m_Name: AdMobPopupCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
