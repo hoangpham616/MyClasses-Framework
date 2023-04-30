@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyCoroutiner (version 1.8)
+ * Class:       MyCoroutiner (version 1.9)
  */
 
 using UnityEngine;
@@ -35,61 +35,25 @@ namespace MyClasses
         /// <summary>
         /// Execute a function after a delay.
         /// </summary>
-        public static void ExecuteAfterEndOfFrame(Action action)
+        public static void ExecuteAfterEndOfFrame(Action onCallback)
         {
-            Start(_DelayActionUntilEndOfFrame(action));
+            Start(_DoExecuteAfterEndOfFrame(onCallback));
         }
 
         /// <summary>
         /// Execute a function after a delay.
         /// </summary>
-        public static void ExecuteAfterDelayTime(float delaySecond, Action action)
-        {
-            if (delaySecond > 0)
-            {
-                Start(_DelayActionByTime(delaySecond, action));
-            }
-            else
-            {
-                if (action != null)
-                {
-                    action();
-                }
-            }
-        }
-
-        /// <summary>
-        /// Execute a function after a delay.
-        /// </summary>
-        public static void ExecuteAfterDelayTime(string key, float delaySecond, Action action)
-        {
-            if (delaySecond > 0)
-            {
-                Start(key, _DelayActionByTime(delaySecond, action));
-            }
-            else
-            {
-                if (action != null)
-                {
-                    action();
-                }
-            }
-        }
-
-        /// <summary>
-        /// Execute a function after a delay.
-        /// </summary>
-        public static void ExecuteAfterDelayFrame(int delayFrame, Action action)
+        public static void ExecuteAfterDelayFrame(int delayFrame, Action onCallback)
         {
             if (delayFrame > 0)
             {
-                Start(_DelayActionByFrame(delayFrame, action));
+                Start(_DoExecuteAfterDelayFrame(delayFrame, onCallback));
             }
             else
             {
-                if (action != null)
+                if (onCallback != null)
                 {
-                    action();
+                    onCallback();
                 }
             }
         }
@@ -97,19 +61,73 @@ namespace MyClasses
         /// <summary>
         /// Execute a function after a delay.
         /// </summary>
-        public static void ExecuteAfterDelayFrame(string key, int delayFrame, Action action)
+        public static void ExecuteAfterDelayFrame(string key, int delayFrame, Action onCallback)
         {
             if (delayFrame > 0)
             {
-                Start(key, _DelayActionByFrame(delayFrame, action));
+                Start(key, _DoExecuteAfterDelayFrame(delayFrame, onCallback));
             }
             else
             {
-                if (action != null)
+                if (onCallback != null)
                 {
-                    action();
+                    onCallback();
                 }
             }
+        }
+
+        /// <summary>
+        /// Execute a function after a delay.
+        /// </summary>
+        public static void ExecuteAfterDelayTime(float delaySecond, Action onCallback)
+        {
+            if (delaySecond > 0)
+            {
+                Start(_DoExecuteAfterDelayTime(delaySecond, onCallback));
+            }
+            else
+            {
+                if (onCallback != null)
+                {
+                    onCallback();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Execute a function after a delay.
+        /// </summary>
+        public static void ExecuteAfterDelayTime(string key, float delaySecond, Action onCallback)
+        {
+            if (delaySecond > 0)
+            {
+                Start(key, _DoExecuteAfterDelayTime(delaySecond, onCallback));
+            }
+            else
+            {
+                if (onCallback != null)
+                {
+                    onCallback();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Execute a function by frame.
+        /// </summary>
+        /// <param name="onUpdateCallback">called at each frame with the index attached. Index 0 is the frame at the time of function call.</param>
+        public static void ExecuteFrameByFrame(string key, int totalFrame, Action<int> onUpdateCallback)
+        {
+            Start(key, _DoExecuteFrameByFrame(totalFrame, onUpdateCallback));
+        }
+
+        /// <summary>
+        /// Execute a function by frame.
+        /// </summary>
+        /// <param name="onUpdateCallback">called at each frame with the index attached. Index 0 is the frame at the time of function call.</param>
+        public static void ExecuteFrameByFrame(int totalFrame, Action<int> onUpdateCallback)
+        {
+            Start(_DoExecuteFrameByFrame(totalFrame, onUpdateCallback));
         }
 
         /// <summary>
@@ -240,42 +258,57 @@ namespace MyClasses
         /// <summary>
         /// Delay a action.
         /// </summary>
-        private static IEnumerator _DelayActionUntilEndOfFrame(Action action)
+        private static IEnumerator _DoExecuteAfterEndOfFrame(Action onCallback)
         {
             yield return new WaitForEndOfFrame();
 
-            if (action != null)
+            if (onCallback != null)
             {
-                action();
+                onCallback();
             }
         }
 
         /// <summary>
         /// Delay a action.
         /// </summary>
-        private static IEnumerator _DelayActionByTime(float delaySecond, Action action)
-        {
-            yield return new WaitForSeconds(delaySecond);
-
-            if (action != null)
-            {
-                action();
-            }
-        }
-
-        /// <summary>
-        /// Delay a action.
-        /// </summary>
-        private static IEnumerator _DelayActionByFrame(int delayFrame, Action action)
+        private static IEnumerator _DoExecuteAfterDelayFrame(int delayFrame, Action onCallback)
         {
             for (int i = 0; i < delayFrame; i++)
             {
                 yield return null;
             }
 
-            if (action != null)
+            if (onCallback != null)
             {
-                action();
+                onCallback();
+            }
+        }
+
+        /// <summary>
+        /// Delay a action.
+        /// </summary>
+        private static IEnumerator _DoExecuteAfterDelayTime(float delaySecond, Action onCallback)
+        {
+            yield return new WaitForSeconds(delaySecond);
+
+            if (onCallback != null)
+            {
+                onCallback();
+            }
+        }
+
+        /// <summary>
+        /// Delay a action.
+        /// </summary>
+        private static IEnumerator _DoExecuteFrameByFrame(int totalFrame, Action<int> onCallback)
+        {
+            for (int i = 0; i < totalFrame; i++)
+            {
+                if (onCallback != null)
+                {
+                    onCallback(i);
+                }
+                yield return null;
             }
         }
 
