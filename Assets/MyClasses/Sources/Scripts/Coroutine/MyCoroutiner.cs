@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyCoroutiner (version 1.9)
+ * Class:       MyCoroutiner (version 1.10)
  */
 
 using UnityEngine;
@@ -37,7 +37,7 @@ namespace MyClasses
         /// </summary>
         public static void ExecuteAfterEndOfFrame(Action onCallback)
         {
-            Start(_DoExecuteAfterEndOfFrame(onCallback));
+            Start(_DelayActionUntilEndOfFrame(onCallback));
         }
 
         /// <summary>
@@ -61,6 +61,7 @@ namespace MyClasses
         /// <summary>
         /// Execute a function after a delay.
         /// </summary>
+        /// <param name="key">if the key name is the same, the following function call will replace the previous function call.</param>
         public static void ExecuteAfterDelayFrame(string key, int delayFrame, Action onCallback)
         {
             if (delayFrame > 0)
@@ -97,6 +98,7 @@ namespace MyClasses
         /// <summary>
         /// Execute a function after a delay.
         /// </summary>
+        /// <param name="key">if the key name is the same, the following function call will replace the previous function call.</param>
         public static void ExecuteAfterDelayTime(string key, float delaySecond, Action onCallback)
         {
             if (delaySecond > 0)
@@ -116,50 +118,53 @@ namespace MyClasses
         /// Execute a function by frame.
         /// </summary>
         /// <param name="onUpdateCallback">called at each frame with the index attached. Index 0 is the frame at the time of function call.</param>
-        public static void ExecuteFrameByFrame(string key, int totalFrame, Action<int> onUpdateCallback)
-        {
-            Start(key, _DoExecuteFrameByFrame(totalFrame, onUpdateCallback));
-        }
-
-        /// <summary>
-        /// Execute a function by frame.
-        /// </summary>
-        /// <param name="onUpdateCallback">called at each frame with the index attached. Index 0 is the frame at the time of function call.</param>
         public static void ExecuteFrameByFrame(int totalFrame, Action<int> onUpdateCallback)
         {
             Start(_DoExecuteFrameByFrame(totalFrame, onUpdateCallback));
         }
 
         /// <summary>
+        /// Execute a function by frame.
+        /// </summary>
+        /// <param name="key">if the key name is the same, the following function call will replace the previous function call.</param>
+        /// <param name="onUpdateCallback">called at each frame with the index attached. Index 0 is the frame at the time of function call.</param>
+        public static void ExecuteFrameByFrame(string key, int totalFrame, Action<int> onUpdateCallback)
+        {
+            Start(key, _DoExecuteFrameByFrame(totalFrame, onUpdateCallback));
+        }
+
+        /// <summary>
         /// Execute a function iteratively in the interval.
         /// </summary>
-        public static void SetInterval(float duration, int delayFrame, Action onUpdateCallback, Action onCompleteCallback)
+        public static void SetInterval(float duration, int frameStep, Action onUpdateCallback, Action onCompleteCallback)
         {
-            Start(_DoActionRepeatedly(duration, delayFrame, onUpdateCallback, onCompleteCallback));
+            Start(_DoActionRepeatedly(duration, frameStep, onUpdateCallback, onCompleteCallback));
         }
 
         /// <summary>
         /// Executing a function iteratively in the interval.
         /// </summary>
-        public static void SetInterval(string key, float duration, int delayFrame, Action onUpdateCallback, Action onCompleteCallback)
+        /// <param name="key">if the key name is the same, the following function call will replace the previous function call.</param>
+        public static void SetInterval(string key, float duration, int frameStep, Action onUpdateCallback, Action onCompleteCallback)
         {
-            Start(key, _DoActionRepeatedly(duration, delayFrame, onUpdateCallback, onCompleteCallback));
+            Start(key, _DoActionRepeatedly(duration, frameStep, onUpdateCallback, onCompleteCallback));
         }
 
         /// <summary>
         /// Executing a function iteratively in the interval.
         /// </summary>
-        public static void SetInterval(float duration, float delaySecond, Action onUpdateCallback, Action onCompleteCallback)
+        public static void SetInterval(float duration, float timeStep, Action onUpdateCallback, Action onCompleteCallback)
         {
-            Start(_DoActionRepeatedly(duration, delaySecond, onUpdateCallback, onCompleteCallback));
+            Start(_DoActionRepeatedly(duration, timeStep, onUpdateCallback, onCompleteCallback));
         }
 
         /// <summary>
         /// Executing a function iteratively in the interval.
         /// </summary>
-        public static void SetInterval(string key, float duration, float delaySecond, Action onUpdateCallback, Action onCompleteCallback)
+        /// <param name="key">if the key name is the same, the following function call will replace the previous function call.</param>
+        public static void SetInterval(string key, float duration, float timeStep, Action onUpdateCallback, Action onCompleteCallback)
         {
-            Start(key, _DoActionRepeatedly(duration, delaySecond, onUpdateCallback, onCompleteCallback));
+            Start(key, _DoActionRepeatedly(duration, timeStep, onUpdateCallback, onCompleteCallback));
         }
  
         /// <summary>
@@ -175,6 +180,7 @@ namespace MyClasses
         /// <summary>
         /// Start a coroutine.
         /// </summary>
+        /// <param name="key">if the key name is the same, the following function call will replace the previous function call.</param>
         public static void Start(string key, IEnumerator routine)
         {
             _Initialize();
@@ -258,7 +264,7 @@ namespace MyClasses
         /// <summary>
         /// Delay a action.
         /// </summary>
-        private static IEnumerator _DoExecuteAfterEndOfFrame(Action onCallback)
+        private static IEnumerator _DelayActionUntilEndOfFrame(Action onCallback)
         {
             yield return new WaitForEndOfFrame();
 
@@ -315,7 +321,7 @@ namespace MyClasses
         /// <summary>
         /// Do a action repeatedly.
         /// </summary>
-        private static IEnumerator _DoActionRepeatedly(float duration, int delayFrame, Action onUpdateCallback, Action onCompleteCallback)
+        private static IEnumerator _DoActionRepeatedly(float duration, int frameStep, Action onUpdateCallback, Action onCompleteCallback)
         {
             int countFrame = 0;
             float deadline = Time.time + duration;
@@ -324,7 +330,7 @@ namespace MyClasses
                 yield return null;
                 countFrame += 1;
 
-                if (countFrame == delayFrame)
+                if (countFrame == frameStep)
                 {
                     countFrame = 0;
                     if (onUpdateCallback != null)
@@ -343,15 +349,15 @@ namespace MyClasses
         /// <summary>
         /// Do a action repeatedly.
         /// </summary>
-        private static IEnumerator _DoActionRepeatedly(float duration, float delaySecond, Action onUpdateCallback, Action onCompleteCallback)
+        private static IEnumerator _DoActionRepeatedly(float duration, float timeStep, Action onUpdateCallback, Action onCompleteCallback)
         {
             float deadline = Time.time + duration;
             while (Time.time < deadline)
             {
                 float remainingSecond = deadline - Time.time;
-                if (delaySecond < remainingSecond)
+                if (timeStep < remainingSecond)
                 {
-                    yield return new WaitForSeconds(delaySecond);
+                    yield return new WaitForSeconds(timeStep);
                     if (onUpdateCallback != null)
                     {
                         onUpdateCallback();
