@@ -91,6 +91,9 @@ namespace MyClasses.Tool
                 RenderTexture renderTexture = RenderTexture.GetTemporary((int)_size.x, (int)_size.y, 32, RenderTextureFormat.Default, RenderTextureReadWrite.Default);
                 RenderTexture.active = renderTexture;
                 ScreenCapture.CaptureScreenshot(_lastPath, _superSize);
+            }
+            if (GUILayout.Button("Refresh Editor", GUILayout.Width(400)))
+            {
                 AssetDatabase.Refresh();
             }
 
