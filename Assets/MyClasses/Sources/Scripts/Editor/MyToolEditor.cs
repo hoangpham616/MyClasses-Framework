@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyToolEditor (version 1.5)
+ * Class:       MyToolEditor (version 1.6)
  */
 
 using UnityEditor;
@@ -138,9 +138,18 @@ namespace MyClasses.Tool
         #region ----- Panels -----
 
         /// <summary>
-        /// Open UI Config Scene.
+        /// Open Screnshot Panel.
         /// </summary>
-        [MenuItem("MyClasses/Panels/UV Viewer", false, 1)]
+        [MenuItem("MyClasses/Panels/Screenshot", false, 1)]
+        public static void OpenScreenshotPanel()
+        {
+            EditorWindow.GetWindow(typeof(MyScreenshotEditorWindow));
+        }
+
+        /// <summary>
+        /// Open UV Viewer Panel.
+        /// </summary>
+        [MenuItem("MyClasses/Panels/UV Viewer", false, 2)]
         public static void OpenUVViewerPanel()
         {
             EditorWindow.GetWindow(typeof(MyUVViewerEditorWindow));

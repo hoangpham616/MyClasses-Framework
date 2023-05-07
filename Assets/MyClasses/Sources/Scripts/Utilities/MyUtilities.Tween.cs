@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyUtilities.Tween (version 1.2)
+ * Class:       MyUtilities.Tween (version 1.3)
  */
 
 using UnityEngine;
@@ -12,6 +12,62 @@ namespace MyClasses
 {
     public static partial class MyUtilities
     {
+
+        #region ----- Color -----
+
+        /// <summary>
+        /// Change the value of a color over time.
+        /// </summary>
+        /// <param name="key">if the key name is the same, the following function call will replace the previous function call.</param>
+        public static void TweenColor(string key, Color from, Color to, float duration, float timeStep, Action<Color> onUpdateCallback, Action onCompleteCallback)
+        {
+            float startTime = Time.time;
+            MyCoroutiner.SetInterval(key, duration, timeStep, () => 
+            {
+                if (onUpdateCallback != null)
+                {
+                    float timeElapsed = Time.time - startTime;
+                    float t = Mathf.Clamp01(timeElapsed / duration);
+                    Color lerpedColor = Color.Lerp(from, to, t);
+                    onUpdateCallback(lerpedColor);
+                }
+            }, () =>
+            {
+                if (onCompleteCallback != null)
+                {
+                    onCompleteCallback();
+                }
+            });
+        }
+
+        /// <summary>
+        /// Change the value of a color over time.
+        /// </summary>
+        public static void TweenColor(Color from, Color to, float duration, float timeStep, Action<Color> onUpdateCallback, Action onCompleteCallback)
+        {
+            float startTime = Time.time;
+            MyCoroutiner.SetInterval(duration, timeStep, () => 
+            {
+                if (onUpdateCallback != null)
+                {
+                    float timeElapsed = Time.time - startTime;
+                    float t = Mathf.Clamp01(timeElapsed / duration);
+                    Color lerpedColor = Color.Lerp(from, to, t);
+                    onUpdateCallback(lerpedColor);
+                }
+            }, () =>
+            {
+                if (onCompleteCallback != null)
+                {
+                    onCompleteCallback();
+                }
+            });
+        }
+
+        #endregion
+
+        #region ----- Number -----
+
         /// <summary>
         /// Change the value of a number over time.
         /// </summary>
@@ -152,5 +208,7 @@ namespace MyClasses
                 }
             });
         }
+
+        #endregion
     }
 }

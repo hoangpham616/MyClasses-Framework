@@ -2,8 +2,9 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyAdMobManager (version 1.26)
- * Require:     GoogleMobileAds-v7.1.0
+ * Class:       MyAdMobManager (version 1.27)
+ * Require:     GoogleMobileAds-v8.0.0
+ * Require:     GoogleMobileAds-v7.1.0 (USE_MY_ADMOB_7_1_0)
  */
 
 #pragma warning disable 0162
@@ -75,7 +76,7 @@ namespace MyClasses
         [SerializeField]
         private int _bannerFailedToLoadDelayFrameCallback = 0;
         [SerializeField]
-        private int _bannerOpeningDelayFrameCallback = 0;
+        private int _bannerOpenedDelayFrameCallback = 0;
         [SerializeField]
         private int _bannerClosedDelayFrameCallback = 0;
 
@@ -92,7 +93,7 @@ namespace MyClasses
         [SerializeField]
         private int _interstitialFailedToLoadDelayFrameCallback = 0;
         [SerializeField]
-        private int _interstitialOpeningDelayFrameCallback = 0;
+        private int _interstitialOpenedDelayFrameCallback = 0;
         [SerializeField]
         private int _interstitialClosedDelayFrameCallback = 0;
 
@@ -111,9 +112,9 @@ namespace MyClasses
         [SerializeField]
         private int _rewardedFailedToLoadDelayFrameCallback = 0;
         [SerializeField]
-        private int _rewardedOpeningDelayFrameCallback = 0;
+        private int _rewardedOpenedDelayFrameCallback = 0;
         [SerializeField]
-        private int _rewardedFailedToShowDelayFrameCallback = 0;
+        private int _rewardedFailedToOpenDelayFrameCallback = 0;
         [SerializeField]
         private int _rewardedClosedDelayFrameCallback = 0;
 
@@ -134,28 +135,31 @@ namespace MyClasses
         private AdRequest _bannerRequest;
         private Action _onBannerLoadedCallback;
         private Action _onBannerFailedToLoadCallback;
-        private Action _onBannerOpeningCallback;
+        private Action _onBannerOpenedCallback;
         private Action _onBannerClosedCallback;
 
         private InterstitialAd _interstitialAd;
+        private AdRequest _interstitialAdRequest;
         private Action _onInterstitialAdLoadedCallback;
         private Action _onInterstitialAdFailedToLoadCallback;
-        private Action _onInterstitialAdOpeningCallback;
+        private Action _onInterstitialAdOpenedCallback;
         private Action _onInterstitialAdClosedCallback;
 
         private RewardedAd _rewardedAd;
+        private AdRequest _rewardedAdRequest;
         private Action _onRewardedAdLoadedCallback;
         private Action _onRewardedAdFailedToLoadCallback;
-        private Action _onRewardedAdOpeningCallback;
-        private Action _onRewardedAdFailedToShowCallback;
+        private Action _onRewardedAdOpenedCallback;
+        private Action _onRewardedAdFailedToOpenCallback;
         private Action _onRewardedAdSkippedCallback;
         private Action _onRewardedAdUserEarnedRewardCallback;
         private Action _onRewardedAdClosedCallback;
 
         private AppOpenAd _appOpenAd;
-        private Action _onAppOpenAdShowCallback;
-        private Action _onAppOpenAdFailedToShowCallback;
-        private Action _onAppOpenAdRecordImpressionCallback;
+        private AdRequest _appOpenAdRequest;
+        private Action _onAppOpenAdOpenedCallback;
+        private Action _onAppOpenAdFailedToOpenCallback;
+        private Action _onAppOpenAdImpressionRecordedCallback;
         private Action _onAppOpenAdClosedCallback;
 
         public bool IsInitialized
@@ -246,7 +250,7 @@ namespace MyClasses
                 if (_bannerLoadedDelayFrameCallback == 0)
                 {
 #if DEBUG_MY_ADMOB
-            Debug.Log("[" + typeof(MyAdMobManager).Name + "] _OnBannerLoaded(): callback");
+                    Debug.Log("[" + typeof(MyAdMobManager).Name + "] _OnBannerLoaded(): callback");
 #endif
 
                     _isLoadingBanner = false;
@@ -265,7 +269,7 @@ namespace MyClasses
                 if (_bannerFailedToLoadDelayFrameCallback == 0)
                 {
 #if DEBUG_MY_ADMOB
-            Debug.LogError("[" + typeof(MyAdMobManager).Name + "] _OnBannerFaiedToLoad(): callback");
+                    Debug.LogError("[" + typeof(MyAdMobManager).Name + "] _OnBannerFaiedToLoad(): callback");
 #endif
 
                     _isLoadingBanner = false;
@@ -276,18 +280,18 @@ namespace MyClasses
                     }
                 }
             }
-            if (_bannerOpeningDelayFrameCallback > 0)
+            if (_bannerOpenedDelayFrameCallback > 0)
             {
-                _bannerOpeningDelayFrameCallback -= 1;
-                if (_bannerOpeningDelayFrameCallback == 0)
+                _bannerOpenedDelayFrameCallback -= 1;
+                if (_bannerOpenedDelayFrameCallback == 0)
                 {
 #if DEBUG_MY_ADMOB
-            Debug.Log("[" + typeof(MyAdMobManager).Name + "] _OnBannerOpening(): callback");
+                    Debug.Log("[" + typeof(MyAdMobManager).Name + "] _OnBannerOpened(): callback");
 #endif
 
-                    if (_onBannerOpeningCallback != null)
+                    if (_onBannerOpenedCallback != null)
                     {
-                        _onBannerOpeningCallback();
+                        _onBannerOpenedCallback();
                     }
                 }
             }
@@ -297,7 +301,7 @@ namespace MyClasses
                 if (_bannerClosedDelayFrameCallback == 0)
                 {
 #if DEBUG_MY_ADMOB
-            Debug.Log("[" + typeof(MyAdMobManager).Name + "] _OnBannerClosed(): callback");
+                    Debug.Log("[" + typeof(MyAdMobManager).Name + "] _OnBannerClosed(): callback");
 #endif
 
                     if (_onBannerClosedCallback != null)
@@ -314,7 +318,7 @@ namespace MyClasses
                 if (_interstitialLoadedDelayFrameCallback == 0)
                 {
 #if DEBUG_MY_ADMOB
-            Debug.Log("[" + typeof(MyAdMobManager).Name + "] _OnInterstitialLoaded(): callback");
+                    Debug.Log("[" + typeof(MyAdMobManager).Name + "] _OnInterstitialLoaded(): callback");
 #endif
 
                     _isLoadingInterstitial = false;
@@ -331,7 +335,7 @@ namespace MyClasses
                 if (_interstitialFailedToLoadDelayFrameCallback == 0)
                 {
 #if DEBUG_MY_ADMOB
-            Debug.LogError("[" + typeof(MyAdMobManager).Name + "] _OnInterstitialFaiedToLoad(): callback");
+                    Debug.LogError("[" + typeof(MyAdMobManager).Name + "] _OnInterstitialFaiedToLoad(): callback");
 #endif
 
                     _isLoadingInterstitial = false;
@@ -342,18 +346,18 @@ namespace MyClasses
                     }
                 }
             }
-            if (_interstitialOpeningDelayFrameCallback > 0)
+            if (_interstitialOpenedDelayFrameCallback > 0)
             {
-                _interstitialOpeningDelayFrameCallback -= 1;
-                if (_interstitialOpeningDelayFrameCallback == 0)
+                _interstitialOpenedDelayFrameCallback -= 1;
+                if (_interstitialOpenedDelayFrameCallback == 0)
                 {
 #if DEBUG_MY_ADMOB
-            Debug.Log("[" + typeof(MyAdMobManager).Name + "] _OnInterstitialOpening(): callback");
+                    Debug.Log("[" + typeof(MyAdMobManager).Name + "] _OnInterstitialOpened(): callback");
 #endif
 
-                    if (_onInterstitialAdOpeningCallback != null)
+                    if (_onInterstitialAdOpenedCallback != null)
                     {
-                        _onInterstitialAdOpeningCallback();
+                        _onInterstitialAdOpenedCallback();
                     }
                 }
             }
@@ -363,7 +367,7 @@ namespace MyClasses
                 if (_interstitialClosedDelayFrameCallback == 0)
                 {
 #if DEBUG_MY_ADMOB
-            Debug.Log("[" + typeof(MyAdMobManager).Name + "] _OnInterstitialClosed(): callback");
+                    Debug.Log("[" + typeof(MyAdMobManager).Name + "] _OnInterstitialClosed(): callback");
 #endif
 
                     _isLoadingInterstitial = false;
@@ -383,7 +387,7 @@ namespace MyClasses
                 if (_rewardedLoadedDelayFrameCallback == 0)
                 {
 #if DEBUG_MY_ADMOB
-            Debug.Log("[" + typeof(MyAdMobManager).Name + "] _OnRewardedAdLoaded(): callback");
+                    Debug.Log("[" + typeof(MyAdMobManager).Name + "] _OnRewardedAdLoaded(): callback");
 #endif
 
                     _isLoadingRewardred = false;
@@ -400,7 +404,7 @@ namespace MyClasses
                 if (_rewardedFailedToLoadDelayFrameCallback == 0)
                 {
 #if DEBUG_MY_ADMOB
-            Debug.LogError("[" + typeof(MyAdMobManager).Name + "] _OnRewardedAdFaiedToLoad(): callback");
+                    Debug.LogError("[" + typeof(MyAdMobManager).Name + "] _OnRewardedAdFaiedToLoad(): callback");
 #endif
 
                     _isLoadingRewardred = false;
@@ -411,33 +415,33 @@ namespace MyClasses
                     }
                 }
             }
-            if (_rewardedOpeningDelayFrameCallback > 0)
+            if (_rewardedOpenedDelayFrameCallback > 0)
             {
-                _rewardedOpeningDelayFrameCallback -= 1;
-                if (_rewardedOpeningDelayFrameCallback == 0)
+                _rewardedOpenedDelayFrameCallback -= 1;
+                if (_rewardedOpenedDelayFrameCallback == 0)
                 {
 #if DEBUG_MY_ADMOB
-            Debug.Log("[" + typeof(MyAdMobManager).Name + "] _OnRewardedAdOpening(): callback");
+                    Debug.Log("[" + typeof(MyAdMobManager).Name + "] _OnRewardedAdOpened(): callback");
 #endif
 
-                    if (_onRewardedAdOpeningCallback != null)
+                    if (_onRewardedAdOpenedCallback != null)
                     {
-                        _onRewardedAdOpeningCallback();
+                        _onRewardedAdOpenedCallback();
                     }
                 }
             }
-            else if (_rewardedFailedToShowDelayFrameCallback > 0)
+            else if (_rewardedFailedToOpenDelayFrameCallback > 0)
             {
-                _rewardedFailedToShowDelayFrameCallback -= 1;
-                if (_rewardedFailedToShowDelayFrameCallback == 0)
+                _rewardedFailedToOpenDelayFrameCallback -= 1;
+                if (_rewardedFailedToOpenDelayFrameCallback == 0)
                 {
 #if DEBUG_MY_ADMOB
-            Debug.LogError("[" + typeof(MyAdMobManager).Name + "] _OnRewardedAdFaiedToShow(): callback");
+                    Debug.LogError("[" + typeof(MyAdMobManager).Name + "] _OnRewardedAdFaiedToOpen(): callback");
 #endif
 
-                    if (_onRewardedAdFailedToShowCallback != null)
+                    if (_onRewardedAdFailedToOpenCallback != null)
                     {
-                        _onRewardedAdFailedToShowCallback();
+                        _onRewardedAdFailedToOpenCallback();
                     }
                 }
             }
@@ -452,7 +456,7 @@ namespace MyClasses
                     if (_isHasReward)
                     {
 #if DEBUG_MY_ADMOB
-            Debug.Log("[" + typeof(MyAdMobManager).Name + "] _OnRewardedAdUserEarnedReward(): callback");
+                    Debug.Log("[" + typeof(MyAdMobManager).Name + "] _OnRewardedAdUserEarnedReward(): callback");
 #endif
 
                         if (_onRewardedAdUserEarnedRewardCallback != null)
@@ -469,7 +473,7 @@ namespace MyClasses
                     }
 
 #if DEBUG_MY_ADMOB
-            Debug.Log("[" + typeof(MyAdMobManager).Name + "] _OnRewardedAdClosed(): callback");
+                    Debug.Log("[" + typeof(MyAdMobManager).Name + "] _OnRewardedAdClosed(): callback");
 #endif
 
                     if (_onRewardedAdClosedCallback != null)
@@ -554,7 +558,7 @@ namespace MyClasses
 
 #if USE_MY_ADMOB_UNITY_ADS
             // UnityAds.SetGDPRConsentMetaData(true); // Unity Ads < 3.3.0
-            UnityAds.SetConsentMetaData("gdpr.consent", true);
+            GoogleMobileAds.Mediation.UnityAds.Api.UnityAds.SetConsentMetaData("gdpr.consent", true);
 #endif
 
 #if USE_MY_ADMOB_VUNGLE
@@ -635,7 +639,7 @@ namespace MyClasses
 
             _onBannerLoadedCallback = onLoadedCallback;
             _onBannerFailedToLoadCallback = onFailedToLoadCallback;
-            _onBannerOpeningCallback = onOpeningCallback;
+            _onBannerOpenedCallback = onOpeningCallback;
             _onBannerClosedCallback = onClosedCallback;
 
             _countBannerRequest += 1;
@@ -657,10 +661,17 @@ namespace MyClasses
             }
             _banner = new BannerView(adUnitId, size, position);
             _banner.LoadAd(_bannerRequest);
-            _banner.OnAdLoaded += _OnBannerLoaded;
-            _banner.OnAdFailedToLoad += _OnBannerFaiedToLoad;
-            _banner.OnAdOpening += _OnBannerOpening;
-            _banner.OnAdClosed += _OnBannerClosed;
+#if USE_MY_ADMOB_7_1_0
+            _banner.OnAdLoaded += _OnBannerLoaded_7_1_0;
+            _banner.OnAdFailedToLoad += _OnBannerFaiedToLoad_7_1_0;
+            _banner.OnAdOpening += _OnBannerOpening_7_1_0;
+            _banner.OnAdClosed += _OnBannerClosed_7_1_0;
+#else
+            _banner.OnBannerAdLoaded += _OnBannerLoaded;
+            _banner.OnBannerAdLoadFailed += _OnBannerFaiedToLoad;
+            _banner.OnAdFullScreenContentOpened += _OnBannerOpened;
+            _banner.OnAdFullScreenContentClosed += _OnBannerClosed;
+#endif
         }
 
         /// <summary>
@@ -674,7 +685,7 @@ namespace MyClasses
 
             _onBannerLoadedCallback = null;
             _onBannerFailedToLoadCallback = null;
-            _onBannerOpeningCallback = null;
+            _onBannerOpenedCallback = null;
             _onBannerClosedCallback = null;
 
             if (_banner != null)
@@ -719,7 +730,11 @@ namespace MyClasses
         /// </summary>
         public bool IsInterstitialAdLoaded()
         {
+#if USE_MY_ADMOB_7_1_0
             return _interstitialAd != null && _interstitialAd.IsLoaded();
+#else
+            return _interstitialAd != null && _interstitialAd.CanShowAd();
+#endif
         }
 
         /// <summary>
@@ -754,15 +769,58 @@ namespace MyClasses
 
             _isLoadingInterstitial = true;
 
+            if (_interstitialAdRequest == null)
+            {
+                _interstitialAdRequest = new AdRequest.Builder().Build();
+            }
+
+#if USE_MY_ADMOB_7_1_0
             _interstitialAd = new InterstitialAd(adUnitId);
-            _interstitialAd.LoadAd(new AdRequest.Builder().Build());
-            _interstitialAd.OnAdLoaded += _OnInterstitialLoaded;
-            _interstitialAd.OnAdFailedToLoad += _OnInterstitialFaiedToLoad;
-            _interstitialAd.OnAdOpening += _OnInterstitialOpening;
-            _interstitialAd.OnAdClosed += _OnInterstitialClosed;
+            _interstitialAd.LoadAd(_interstitialAdRequest);
+            _interstitialAd.OnAdLoaded += _OnInterstitialLoaded_7_1_0;
+            _interstitialAd.OnAdFailedToLoad += _OnInterstitialFaiedToLoad_7_1_0;
+            _interstitialAd.OnAdOpening += _OnInterstitialOpening_7_1_0;
+            _interstitialAd.OnAdClosed += _OnInterstitialClosed_7_1_0;
 
 #if UNITY_EDITOR
             _OnInterstitialLoaded(null, null);
+#endif
+#else
+            if (_interstitialAd != null)
+            {
+                _interstitialAd.Destroy();
+                _interstitialAd = null;
+            }
+
+            InterstitialAd.Load(adUnitId, _interstitialAdRequest, (InterstitialAd ad, LoadAdError error) =>
+            {
+                _isLoadingInterstitial = false;
+
+                if (error != null || ad == null)
+                {
+#if DEBUG_MY_ADMOB
+                    Debug.LogError("[" + typeof(MyAdMobManager).Name + "] LoadInterstitialAd(): error=" + error.GetMessage());
+#endif
+
+                    _OnInterstitialFaiedToLoad(error);
+                }
+                else
+                {
+#if DEBUG_MY_ADMOB
+                    Debug.Log("[" + typeof(MyAdMobManager).Name + "] LoadInterstitialAd(): succeed");
+#endif
+
+                    _interstitialAd = ad;
+                    _interstitialAd.OnAdFullScreenContentOpened += _OnInterstitialOpened;
+                    _interstitialAd.OnAdFullScreenContentClosed += _OnInterstitialClosed;
+
+                    _OnInterstitialLoaded();
+                }
+            });
+
+#if UNITY_EDITOR
+            _OnInterstitialLoaded();
+#endif
 #endif
         }
 
@@ -779,7 +837,7 @@ namespace MyClasses
             {
                 _onInterstitialAdLoadedCallback = null;
                 _onInterstitialAdFailedToLoadCallback = null;
-                _onInterstitialAdOpeningCallback = onOpeningCallback;
+                _onInterstitialAdOpenedCallback = onOpeningCallback;
                 _onInterstitialAdClosedCallback = onClosedCallback;
 
                 _lastInterstitialHideTimestamp = MyLocalTime.CurrentUnixTime;
@@ -824,7 +882,11 @@ namespace MyClasses
         /// </summary>
         public bool IsRewardedAdLoaded()
         {
+#if USE_MY_ADMOB_7_1_0
             return _rewardedAd != null && _rewardedAd.IsLoaded();
+#else
+            return _rewardedAd != null && _rewardedAd.CanShowAd();
+#endif
         }
 
         /// <summary>
@@ -858,24 +920,62 @@ namespace MyClasses
 
             _isLoadingRewardred = true;
 
+            if (_rewardedAdRequest == null)
+            {
+                _rewardedAdRequest = new AdRequest.Builder().Build();
+            }
+
+#if USE_MY_ADMOB_7_1_0
             _rewardedAd = new RewardedAd(adUnitId);
-            _rewardedAd.LoadAd(new AdRequest.Builder().Build());
-            _rewardedAd.OnAdLoaded += _OnRewardedAdLoaded;
-            _rewardedAd.OnAdFailedToLoad += _OnRewardedAdFaiedToLoad;
-            _rewardedAd.OnAdOpening += _OnRewardedAdOpening;
-            _rewardedAd.OnAdFailedToShow += _OnRewardedAdFaiedToShow;
-            _rewardedAd.OnUserEarnedReward += _OnRewardedAdUserEarnedReward;
-            _rewardedAd.OnAdClosed += _OnRewardedAdClosed;
+            _rewardedAd.LoadAd(_rewardedAdRequest);
+            _rewardedAd.OnAdLoaded += _OnRewardedAdLoaded_7_1_0;
+            _rewardedAd.OnAdFailedToLoad += _OnRewardedAdFaiedToLoad_7_1_0;
+            _rewardedAd.OnAdOpening += _OnRewardedAdOpening_7_1_0;
+            _rewardedAd.OnAdFailedToShow += _OnRewardedAdFaiedToShow_7_1_0;
+            _rewardedAd.OnUserEarnedReward += _OnRewardedAdUserEarnedReward_7_1_0;
+            _rewardedAd.OnAdClosed += _OnRewardedAdClosed_7_1_0;
 
 #if UNITY_EDITOR
             _OnRewardedAdLoaded(null, null);
+#endif
+#else
+            if (_rewardedAd != null)
+            {
+                _rewardedAd.Destroy();
+                _rewardedAd = null;
+            }
+
+            RewardedAd.Load(adUnitId, _rewardedAdRequest, (RewardedAd ad, LoadAdError error) =>
+            {
+                if (error != null || ad == null)
+                {
+#if DEBUG_MY_ADMOB
+                    Debug.LogError("[" + typeof(MyAdMobManager).Name + "] LoadRewardedAd(): error=" + error.GetMessage());
+#endif
+
+                    _OnRewardedAdFaiedToLoad(error);
+                }
+                else
+                {
+#if DEBUG_MY_ADMOB
+                    Debug.Log("[" + typeof(MyAdMobManager).Name + "] LoadRewardedAd(): succeed");
+#endif
+
+                    _rewardedAd = ad;
+                    _rewardedAd.OnAdFullScreenContentOpened += _OnRewardedAdOpened;
+                    _rewardedAd.OnAdFullScreenContentFailed += _OnRewardedAdFaiedToOpen;
+                    _rewardedAd.OnAdFullScreenContentClosed += _OnRewardedAdClosed;
+
+                    _OnRewardedAdLoaded(ad.GetResponseInfo());
+                }
+            });
 #endif
         }
 
         /// <summary>
         /// Show a rewarded ad.
         /// </summary>
-        public void ShowRewardedAd(Action onOpeningCallback = null, Action onUserEarnedRewardCallback = null, Action onFailedToShowCallback = null, Action onSkippedCallback = null, Action onClosedCallback = null)
+        public void ShowRewardedAd(Action onOpenedCallback = null, Action onUserEarnedRewardCallback = null, Action onFailedToOpenCallback = null, Action onSkippedCallback = null, Action onClosedCallback = null)
         {
 #if DEBUG_MY_ADMOB
             Debug.Log("[" + typeof(MyAdMobManager).Name + "] ShowRewardedAd(): isLoaded=" + IsRewardedAdLoaded());
@@ -885,15 +985,22 @@ namespace MyClasses
             {
                 _onRewardedAdLoadedCallback = null;
                 _onRewardedAdFailedToLoadCallback = null;
-                _onRewardedAdOpeningCallback = onOpeningCallback;
-                _onRewardedAdFailedToShowCallback = onFailedToShowCallback;
+                _onRewardedAdOpenedCallback = onOpenedCallback;
+                _onRewardedAdFailedToOpenCallback = onFailedToOpenCallback;
                 _onRewardedAdSkippedCallback = onSkippedCallback;
                 _onRewardedAdUserEarnedRewardCallback = onUserEarnedRewardCallback;
                 _onRewardedAdClosedCallback = onClosedCallback;
 
                 _isHasReward = false;
 
+#if USE_MY_ADMOB_7_1_0
                 _rewardedAd.Show();
+#else
+                _rewardedAd.Show((Reward reward) =>
+                {
+                    _OnRewardedAdUserEarnedReward();
+                });
+#endif
             }
         }
 
@@ -913,11 +1020,10 @@ namespace MyClasses
             
 #if UNITY_ANDROID
             PlayerPrefs.SetString("MyAdMobManager_AppOpenAdId", string.IsNullOrEmpty(id) ? _androidDefaultAppOpenAdId : id);
-            PlayerPrefs.Save();
 #elif UNITY_IOS
             PlayerPrefs.SetString("MyAdMobManager_AppOpenAdId", string.IsNullOrEmpty(id) ? mIosDefaultAppOpenAdId : id);
-            PlayerPrefs.Save();
 #endif
+            PlayerPrefs.Save();
         }
 
         /// <summary>
@@ -973,15 +1079,21 @@ namespace MyClasses
 
             _appOpenAd = null;
 
-            _onAppOpenAdShowCallback = null;
-            _onAppOpenAdFailedToShowCallback = null;
-            _onAppOpenAdRecordImpressionCallback = null;
+            _onAppOpenAdOpenedCallback = null;
+            _onAppOpenAdFailedToOpenCallback = null;
+            _onAppOpenAdImpressionRecordedCallback = null;
             _onAppOpenAdClosedCallback = null;
 
             _isLoadingAppOpen = true;
             _isShowingAppOpen = false;
+
+            if (_appOpenAdRequest == null)
+            {
+                _appOpenAdRequest = new AdRequest.Builder().Build();
+            }
             
-            AppOpenAd.LoadAd(adUnitId, screenOrientation, new AdRequest.Builder().Build(), ((appOpenAd, error) =>
+#if USE_MY_ADMOB_7_1_0
+            AppOpenAd.LoadAd(adUnitId, screenOrientation, _appOpenAdRequest, ((appOpenAd, error) =>
             {
                 _isLoadingAppOpen = false;
 
@@ -1011,6 +1123,47 @@ namespace MyClasses
                     }
                 }
             }));
+#else
+            if (_appOpenAd != null)
+            {
+                _appOpenAd.Destroy();
+                _appOpenAd = null;
+            }
+
+            AppOpenAd.Load(adUnitId, screenOrientation, _appOpenAdRequest, (AppOpenAd ad, LoadAdError error) =>
+            {
+                if (error != null || ad == null)
+                {
+#if DEBUG_MY_ADMOB
+                    Debug.LogError("[" + typeof(MyAdMobManager).Name + "] LoadAppOpenAd(): error=" + error.GetMessage());
+#endif
+
+                    if (onFailedToLoadCallback != null)
+                    {
+                        onFailedToLoadCallback();
+                    }
+                }
+                else
+                {
+#if DEBUG_MY_ADMOB
+                    Debug.Log("[" + typeof(MyAdMobManager).Name + "] LoadAppOpenAd(): succeed");
+#endif
+
+                    _lastAppOpenRequestTimestamp = MyLocalTime.CurrentUnixTime;
+
+                    _appOpenAd = ad;
+                    _appOpenAd.OnAdFullScreenContentOpened += _onAppOpenAdOpenedCallback;
+                    _appOpenAd.OnAdFullScreenContentFailed += _OnAppOpenAdFailedToOpen;
+                    _appOpenAd.OnAdImpressionRecorded += _OnAppOpenAdImpressionRecorded;
+                    _appOpenAd.OnAdFullScreenContentClosed += _OnAppOpenAdClosed;
+
+                    if (onLoadedCallback != null)
+                    {
+                        onLoadedCallback();
+                    }
+                }
+            });
+#endif
         }
 
         /// <summary>
@@ -1024,15 +1177,17 @@ namespace MyClasses
 
             if (IsAppOpenAdLoaded())
             {
-                _onAppOpenAdShowCallback = onShowCallback;
-                _onAppOpenAdFailedToShowCallback = onFailedToShowCallback;
-                _onAppOpenAdRecordImpressionCallback = onRecordImpressionCallback;
+                _onAppOpenAdOpenedCallback = onShowCallback;
+                _onAppOpenAdFailedToOpenCallback = onFailedToShowCallback;
+                _onAppOpenAdImpressionRecordedCallback = onRecordImpressionCallback;
                 _onAppOpenAdClosedCallback = onClosedCallback;
 
-                _appOpenAd.OnAdDidPresentFullScreenContent += _OnAppOpenDidPresentFullScreenContent;
-                _appOpenAd.OnAdFailedToPresentFullScreenContent += _OnAppOpenFailedToPresentFullScreenContent;
-                _appOpenAd.OnAdDidRecordImpression += _OnAppOpenDidRecordImpression;
-                _appOpenAd.OnAdDidDismissFullScreenContent += _OnAppOpenDidDismissFullScreenContent;
+#if USE_MY_ADMOB_7_1_0
+                _appOpenAd.OnAdDidPresentFullScreenContent += _OnAppOpenDidPresentFullScreenContent_7_1_0;
+                _appOpenAd.OnAdFailedToPresentFullScreenContent += _OnAppOpenFailedToPresentFullScreenContent_7_1_0;
+                _appOpenAd.OnAdDidRecordImpression += _OnAppOpenDidRecordImpression_7_1_0;
+                _appOpenAd.OnAdDidDismissFullScreenContent += _OnAppOpenDidDismissFullScreenContent_7_1_0;
+#endif
 
                 _appOpenAd.Show();
             }
@@ -1042,7 +1197,7 @@ namespace MyClasses
 
         #region ----- Banner Event -----
 
-        private void _OnBannerLoaded(object sender, EventArgs args)
+        private void _OnBannerLoaded()
         {
 #if DEBUG_MY_ADMOB
             Debug.Log("[" + typeof(MyAdMobManager).Name + "] _OnBannerLoaded()");
@@ -1051,25 +1206,25 @@ namespace MyClasses
             _bannerLoadedDelayFrameCallback = CALLBACK_DELAY_FRAME;
         }
 
-        private void _OnBannerFaiedToLoad(object sender, AdFailedToLoadEventArgs args)
+        private void _OnBannerFaiedToLoad(LoadAdError error)
         {
 #if DEBUG_MY_ADMOB
-            Debug.LogError("[" + typeof(MyAdMobManager).Name + "] _OnBannerFaiedToLoad(): message=" + args.ToString());
+            Debug.LogError("[" + typeof(MyAdMobManager).Name + "] _OnBannerFaiedToLoad(): error=" + error.GetMessage());
 #endif
 
             _bannerFailedToLoadDelayFrameCallback = CALLBACK_DELAY_FRAME;
         }
 
-        private void _OnBannerOpening(object sender, EventArgs args)
+        private void _OnBannerOpened()
         {
 #if DEBUG_MY_ADMOB
-            Debug.Log("[" + typeof(MyAdMobManager).Name + "] _OnBannerOpening()");
+            Debug.Log("[" + typeof(MyAdMobManager).Name + "] _OnBannerOpened()");
 #endif
 
-            _bannerOpeningDelayFrameCallback = CALLBACK_DELAY_FRAME;
+            _bannerOpenedDelayFrameCallback = CALLBACK_DELAY_FRAME;
         }
 
-        private void _OnBannerClosed(object sender, EventArgs args)
+        private void _OnBannerClosed()
         {
 #if DEBUG_MY_ADMOB
             Debug.Log("[" + typeof(MyAdMobManager).Name + "] _OnBannerClosed()");
@@ -1078,11 +1233,49 @@ namespace MyClasses
             _bannerClosedDelayFrameCallback = CALLBACK_DELAY_FRAME;
         }
 
+#if USE_MY_ADMOB_7_1_0
+        private void _OnBannerLoaded_7_1_0(object sender, EventArgs args)
+        {
+#if DEBUG_MY_ADMOB
+            Debug.Log("[" + typeof(MyAdMobManager).Name + "] _OnBannerLoaded_7_1_0()");
+#endif
+
+            _bannerLoadedDelayFrameCallback = CALLBACK_DELAY_FRAME;
+        }
+
+        private void _OnBannerFaiedToLoad_7_1_0(object sender, AdFailedToLoadEventArgs args)
+        {
+#if DEBUG_MY_ADMOB
+            Debug.LogError("[" + typeof(MyAdMobManager).Name + "] _OnBannerFaiedToLoad_7_1_0(): message=" + args.ToString());
+#endif
+
+            _bannerFailedToLoadDelayFrameCallback = CALLBACK_DELAY_FRAME;
+        }
+
+        private void _OnBannerOpening_7_1_0(object sender, EventArgs args)
+        {
+#if DEBUG_MY_ADMOB
+            Debug.Log("[" + typeof(MyAdMobManager).Name + "] _OnBannerOpening_7_1_0()");
+#endif
+
+            _bannerOpenedDelayFrameCallback = CALLBACK_DELAY_FRAME;
+        }
+
+        private void _OnBannerClosed_7_1_0(object sender, EventArgs args)
+        {
+#if DEBUG_MY_ADMOB
+            Debug.Log("[" + typeof(MyAdMobManager).Name + "] _OnBannerClosed_7_1_0()");
+#endif
+
+            _bannerClosedDelayFrameCallback = CALLBACK_DELAY_FRAME;
+        }
+#endif
+
         #endregion
 
         #region ----- Interstitial Event -----
 
-        private void _OnInterstitialLoaded(object sender, EventArgs args)
+        private void _OnInterstitialLoaded()
         {
 #if DEBUG_MY_ADMOB
             Debug.Log("[" + typeof(MyAdMobManager).Name + "] _OnInterstitialLoaded()");
@@ -1091,25 +1284,25 @@ namespace MyClasses
             _interstitialLoadedDelayFrameCallback = CALLBACK_DELAY_FRAME;
         }
 
-        private void _OnInterstitialFaiedToLoad(object sender, AdFailedToLoadEventArgs args)
+        private void _OnInterstitialFaiedToLoad(LoadAdError error)
         {
 #if DEBUG_MY_ADMOB
-            Debug.LogError("[" + typeof(MyAdMobManager).Name + "] _OnInterstitialFaiedToLoad(): message=" + args.ToString());
+            Debug.LogError("[" + typeof(MyAdMobManager).Name + "] _OnInterstitialFaiedToLoad(): error=" + error.GetMessage());
 #endif
 
             _interstitialFailedToLoadDelayFrameCallback = CALLBACK_DELAY_FRAME;
         }
 
-        private void _OnInterstitialOpening(object sender, EventArgs args)
+        private void _OnInterstitialOpened()
         {
 #if DEBUG_MY_ADMOB
-            Debug.Log("[" + typeof(MyAdMobManager).Name + "] _OnInterstitialOpening()");
+            Debug.Log("[" + typeof(MyAdMobManager).Name + "] _OnInterstitialOpened()");
 #endif
 
-            _interstitialOpeningDelayFrameCallback = CALLBACK_DELAY_FRAME;
+            _interstitialOpenedDelayFrameCallback = CALLBACK_DELAY_FRAME;
         }
 
-        private void _OnInterstitialClosed(object sender, EventArgs args)
+        private void _OnInterstitialClosed()
         {
 #if DEBUG_MY_ADMOB
             Debug.Log("[" + typeof(MyAdMobManager).Name + "] _OnInterstitialClosed()");
@@ -1118,47 +1311,85 @@ namespace MyClasses
             _interstitialClosedDelayFrameCallback = CALLBACK_DELAY_FRAME;
         }
 
+#if USE_MY_ADMOB_7_1_0
+        private void _OnInterstitialLoaded_7_1_0(object sender, EventArgs args)
+        {
+#if DEBUG_MY_ADMOB
+            Debug.Log("[" + typeof(MyAdMobManager).Name + "] _OnInterstitialLoaded_7_1_0()");
+#endif
+
+            _interstitialLoadedDelayFrameCallback = CALLBACK_DELAY_FRAME;
+        }
+
+        private void _OnInterstitialFaiedToLoad_7_1_0(object sender, AdFailedToLoadEventArgs args)
+        {
+#if DEBUG_MY_ADMOB
+            Debug.LogError("[" + typeof(MyAdMobManager).Name + "] _OnInterstitialFaiedToLoad_7_1_0(): message=" + args.ToString());
+#endif
+
+            _interstitialFailedToLoadDelayFrameCallback = CALLBACK_DELAY_FRAME;
+        }
+
+        private void _OnInterstitialOpening_7_1_0(object sender, EventArgs args)
+        {
+#if DEBUG_MY_ADMOB
+            Debug.Log("[" + typeof(MyAdMobManager).Name + "] _OnInterstitialOpening_7_1_0()");
+#endif
+
+            _interstitialOpenedDelayFrameCallback = CALLBACK_DELAY_FRAME;
+        }
+
+        private void _OnInterstitialClosed_7_1_0(object sender, EventArgs args)
+        {
+#if DEBUG_MY_ADMOB
+            Debug.Log("[" + typeof(MyAdMobManager).Name + "] _OnInterstitialClosed_7_1_0()");
+#endif
+
+            _interstitialClosedDelayFrameCallback = CALLBACK_DELAY_FRAME;
+        }
+#endif
+
         #endregion
 
         #region ----- Rewarded Video Event -----
 
-        private void _OnRewardedAdLoaded(object sender, EventArgs args)
+        private void _OnRewardedAdLoaded(ResponseInfo info)
         {
 #if DEBUG_MY_ADMOB
-            Debug.Log("[" + typeof(MyAdMobManager).Name + "] _OnRewardedAdLoaded()");
+            Debug.Log("[" + typeof(MyAdMobManager).Name + "] _OnRewardedAdLoaded(): info=" + info);
 #endif
 
             _rewardedLoadedDelayFrameCallback = CALLBACK_DELAY_FRAME;
         }
 
-        private void _OnRewardedAdFaiedToLoad(object sender, AdFailedToLoadEventArgs args)
+        private void _OnRewardedAdFaiedToLoad(LoadAdError error)
         {
 #if DEBUG_MY_ADMOB
-            Debug.LogError("[" + typeof(MyAdMobManager).Name + "] _OnRewardedAdFaiedToLoad(): message=" + args.LoadAdError.GetMessage());
+            Debug.LogError("[" + typeof(MyAdMobManager).Name + "] _OnRewardedAdFaiedToLoad(): error=" + error);
 #endif
 
             _rewardedFailedToLoadDelayFrameCallback = CALLBACK_DELAY_FRAME;
         }
 
-        private void _OnRewardedAdOpening(object sender, EventArgs args)
+        private void _OnRewardedAdOpened()
         {
 #if DEBUG_MY_ADMOB
-            Debug.Log("[" + typeof(MyAdMobManager).Name + "] _OnRewardedAdOpening()");
+            Debug.Log("[" + typeof(MyAdMobManager).Name + "] _OnRewardedAdOpened()");
 #endif
 
-            _rewardedOpeningDelayFrameCallback = CALLBACK_DELAY_FRAME;
+            _rewardedOpenedDelayFrameCallback = CALLBACK_DELAY_FRAME;
         }
 
-        private void _OnRewardedAdFaiedToShow(object sender, AdErrorEventArgs args)
+        private void _OnRewardedAdFaiedToOpen(AdError error)
         {
 #if DEBUG_MY_ADMOB
-            Debug.LogError("[" + typeof(MyAdMobManager).Name + "] _OnRewardedAdFaiedToShow(): message=" + args.AdError.GetMessage());
+            Debug.LogError("[" + typeof(MyAdMobManager).Name + "] _OnRewardedAdFaiedToOpen(): error=" + error);
 #endif
 
-            _rewardedFailedToShowDelayFrameCallback = CALLBACK_DELAY_FRAME;
+            _rewardedFailedToOpenDelayFrameCallback = CALLBACK_DELAY_FRAME;
         }
 
-        private void _OnRewardedAdUserEarnedReward(object sender, EventArgs args)
+        private void _OnRewardedAdUserEarnedReward()
         {
 #if DEBUG_MY_ADMOB
             Debug.Log("[" + typeof(MyAdMobManager).Name + "] _OnRewardedAdUserEarnedReward()");
@@ -1167,7 +1398,7 @@ namespace MyClasses
             _isHasReward = true;
         }
 
-        private void _OnRewardedAdClosed(object sender, EventArgs args)
+        private void _OnRewardedAdClosed()
         {
 #if DEBUG_MY_ADMOB
             Debug.Log("[" + typeof(MyAdMobManager).Name + "] _OnRewardedAdClosed()");
@@ -1176,52 +1407,108 @@ namespace MyClasses
             _rewardedClosedDelayFrameCallback = CALLBACK_DELAY_FRAME;
         }
 
+#if USE_MY_ADMOB_7_1_0
+        private void _OnRewardedAdLoaded_7_1_0(object sender, EventArgs args)
+        {
+#if DEBUG_MY_ADMOB
+            Debug.Log("[" + typeof(MyAdMobManager).Name + "] _OnRewardedAdLoaded_7_1_0()");
+#endif
+
+            _rewardedLoadedDelayFrameCallback = CALLBACK_DELAY_FRAME;
+        }
+
+        private void _OnRewardedAdFaiedToLoad_7_1_0(object sender, AdFailedToLoadEventArgs args)
+        {
+#if DEBUG_MY_ADMOB
+            Debug.LogError("[" + typeof(MyAdMobManager).Name + "] _OnRewardedAdFaiedToLoad_7_1_0(): message=" + args.LoadAdError.GetMessage());
+#endif
+
+            _rewardedFailedToLoadDelayFrameCallback = CALLBACK_DELAY_FRAME;
+        }
+
+        private void _OnRewardedAdOpening_7_1_0(object sender, EventArgs args)
+        {
+#if DEBUG_MY_ADMOB
+            Debug.Log("[" + typeof(MyAdMobManager).Name + "] _OnRewardedAdOpening_7_1_0()");
+#endif
+
+            _rewardedOpenedDelayFrameCallback = CALLBACK_DELAY_FRAME;
+        }
+
+        private void _OnRewardedAdFaiedToShow_7_1_0(object sender, AdErrorEventArgs args)
+        {
+#if DEBUG_MY_ADMOB
+            Debug.LogError("[" + typeof(MyAdMobManager).Name + "] _OnRewardedAdFaiedToShow_7_1_0(): message=" + args.AdError.GetMessage());
+#endif
+
+            _rewardedFailedToOpenDelayFrameCallback = CALLBACK_DELAY_FRAME;
+        }
+
+        private void _OnRewardedAdUserEarnedReward_7_1_0(object sender, EventArgs args)
+        {
+#if DEBUG_MY_ADMOB
+            Debug.Log("[" + typeof(MyAdMobManager).Name + "] _OnRewardedAdUserEarnedReward_7_1_0()");
+#endif
+
+            _isHasReward = true;
+        }
+
+        private void _OnRewardedAdClosed_7_1_0(object sender, EventArgs args)
+        {
+#if DEBUG_MY_ADMOB
+            Debug.Log("[" + typeof(MyAdMobManager).Name + "] _OnRewardedAdClosed_7_1_0()");
+#endif
+
+            _rewardedClosedDelayFrameCallback = CALLBACK_DELAY_FRAME;
+        }
+#endif
+
         #endregion
 
         #region ----- App Open Event -----
 
-        private void _OnAppOpenDidPresentFullScreenContent(object sender, EventArgs args)
+        private void _OnAppOpenOpened(ResponseInfo info)
         {
 #if DEBUG_MY_ADMOB
-            Debug.Log("[" + typeof(MyAdMobManager).Name + "] _OnAppOpenDidPresentFullScreenContent()");
+            Debug.Log("[" + typeof(MyAdMobManager).Name + "] _OnAppOpenOpened(): info=" + info);
 #endif
 
             _isShowingAppOpen = true;
 
-            if (_onAppOpenAdShowCallback != null)
+            if (_onAppOpenAdOpenedCallback != null)
             {
-                _onAppOpenAdShowCallback();
+                _onAppOpenAdOpenedCallback();
             }
         }
 
-        private void _OnAppOpenFailedToPresentFullScreenContent(object sender, AdErrorEventArgs args)
+        private void _OnAppOpenAdFailedToOpen(AdError error)
         {
 #if DEBUG_MY_ADMOB
-            Debug.LogError("[" + typeof(MyAdMobManager).Name + "] _OnAppOpenFailedToPresentFullScreenContent(): message=" + args.ToString());
+            Debug.LogError("[" + typeof(MyAdMobManager).Name + "] _OnAppOpenAdFailedToOpen(): error=" + error);
 #endif
 
-            if (_onAppOpenAdFailedToShowCallback != null)
+            if (_onAppOpenAdFailedToOpenCallback != null)
             {
-                _onAppOpenAdFailedToShowCallback();
+                _onAppOpenAdFailedToOpenCallback();
             }
         }
 
-        private void _OnAppOpenDidRecordImpression(object sender, EventArgs args)
+        private void _OnAppOpenAdImpressionRecorded()
         {
 #if DEBUG_MY_ADMOB
-            Debug.Log("[" + typeof(MyAdMobManager).Name + "] _OnAppOpenDidRecordImpression()");
+            Debug.Log("[" + typeof(MyAdMobManager).Name + "] _OnAppOpenAdImpressionRecorded()");
 #endif
 
-            if (_onAppOpenAdRecordImpressionCallback != null)
+            if (_onAppOpenAdImpressionRecordedCallback != null)
             {
-                _onAppOpenAdRecordImpressionCallback();
+                _onAppOpenAdImpressionRecordedCallback();
             }
         }
 
-        private void _OnAppOpenDidDismissFullScreenContent(object sender, EventArgs args)
+        private void _OnAppOpenAdClosed()
         {
 #if DEBUG_MY_ADMOB
-            Debug.Log("[" + typeof(MyAdMobManager).Name + "] _OnAppOpenDidDismissFullScreenContent()");
+            Debug.Log("[" + typeof(MyAdMobManager).Name + "] _OnAppOpenAdClosed()");
 #endif
 
             _appOpenAd = null;
@@ -1233,6 +1520,62 @@ namespace MyClasses
                 _onAppOpenAdClosedCallback();
             }
         }
+
+#if USE_MY_ADMOB_7_1_0
+        private void _OnAppOpenDidPresentFullScreenContent_7_1_0(object sender, EventArgs args)
+        {
+#if DEBUG_MY_ADMOB
+            Debug.Log("[" + typeof(MyAdMobManager).Name + "] _OnAppOpenDidPresentFullScreenContent_7_1_0()");
+#endif
+
+            _isShowingAppOpen = true;
+
+            if (_onAppOpenAdOpenedCallback != null)
+            {
+                _onAppOpenAdOpenedCallback();
+            }
+        }
+
+        private void _OnAppOpenFailedToPresentFullScreenContent_7_1_0(object sender, AdErrorEventArgs args)
+        {
+#if DEBUG_MY_ADMOB
+            Debug.LogError("[" + typeof(MyAdMobManager).Name + "] _OnAppOpenFailedToPresentFullScreenContent_7_1_0(): message=" + args.ToString());
+#endif
+
+            if (_onAppOpenAdFailedToOpenCallback != null)
+            {
+                _onAppOpenAdFailedToOpenCallback();
+            }
+        }
+
+        private void _OnAppOpenDidRecordImpression_7_1_0(object sender, EventArgs args)
+        {
+#if DEBUG_MY_ADMOB
+            Debug.Log("[" + typeof(MyAdMobManager).Name + "] _OnAppOpenDidRecordImpression_7_1_0()");
+#endif
+
+            if (_onAppOpenAdImpressionRecordedCallback != null)
+            {
+                _onAppOpenAdImpressionRecordedCallback();
+            }
+        }
+
+        private void _OnAppOpenDidDismissFullScreenContent_7_1_0(object sender, EventArgs args)
+        {
+#if DEBUG_MY_ADMOB
+            Debug.Log("[" + typeof(MyAdMobManager).Name + "] _OnAppOpenDidDismissFullScreenContent_7_1_0()");
+#endif
+
+            _appOpenAd = null;
+            _isShowingAppOpen = false;
+            _lastAppOpenHideTimestamp = MyLocalTime.CurrentUnixTime;
+
+            if (_onAppOpenAdClosedCallback != null)
+            {
+                _onAppOpenAdClosedCallback();
+            }
+        }
+#endif
 
         #endregion
     }

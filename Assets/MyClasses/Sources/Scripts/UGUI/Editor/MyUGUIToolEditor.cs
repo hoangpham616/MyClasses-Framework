@@ -224,7 +224,7 @@ namespace MyClasses.UI.Tool
         }
 
         /// <summary>
-        /// Open UI Config ID.
+        /// Open UI Config ID Panel.
         /// </summary>
         [MenuItem("MyClasses/UGUI/Setup/Config ID", false, 21)]
         public static void OpenConfigID()
@@ -233,7 +233,7 @@ namespace MyClasses.UI.Tool
         }
 
         /// <summary>
-        /// Open UI Config Scene.
+        /// Open UI Config Scene Panel.
         /// </summary>
         [MenuItem("MyClasses/UGUI/Setup/Config Scene", false, 22)]
         public static void OpenConfigScene()
@@ -242,7 +242,7 @@ namespace MyClasses.UI.Tool
         }
 
         /// <summary>
-        /// Open UI Config Popup.
+        /// Open UI Config Popup Panel.
         /// </summary>
         [MenuItem("MyClasses/UGUI/Setup/Config Popup", false, 23)]
         public static void OpenConfigPopup()

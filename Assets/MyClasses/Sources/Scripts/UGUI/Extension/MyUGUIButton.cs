@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyUGUIButton (version 2.39)
+ * Class:       MyUGUIButton (version 2.40)
  */
 
 #pragma warning disable 0114
@@ -969,6 +969,18 @@ namespace MyClasses.UI
                 {
                     mIcon = icon.GetComponent<Image>();
                 }
+                else
+                {
+                    for (int i = 0, count = transform.childCount; i < count; i++)
+                    {
+                        Image childIcon = transform.GetChild(i).GetComponent<Image>();
+                        if (childIcon != null)
+                        {
+                            mIcon = childIcon;
+                            break;
+                        }
+                    }
+                }
             }
         }
 
@@ -1000,6 +1012,38 @@ namespace MyClasses.UI
                 else
                 {
                     mTextTMPro = gameObject.GetComponent<TextMeshProUGUI>();
+                    if (mTextTMPro == null)
+                    {
+                        for (int i = 0, count = transform.childCount; i < count; i++)
+                        {
+                            Transform child = transform.GetChild(i);
+                            TextMeshProUGUI childTextMesh = child.GetComponent<TextMeshProUGUI>();
+                            if (childTextMesh != null)
+                            {
+                                mTextTMPro = childTextMesh;
+                                break;
+                            }
+                            Text childText = child.GetComponent<Text>();
+                            if (childText != null)
+                            {
+                                mText = childText;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+#else
+            if (mText == null)
+            {
+                for (int i = 0, count = transform.childCount; i < count; i++)
+                {
+                    Text childText = transform.GetChild(i).GetComponent<Text>();
+                    if (childText != null)
+                    {
+                        mText = childText;
+                        break;
+                    }
                 }
             }
 #endif

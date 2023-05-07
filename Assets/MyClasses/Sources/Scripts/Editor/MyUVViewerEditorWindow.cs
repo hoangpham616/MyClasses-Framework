@@ -44,7 +44,7 @@ namespace MyClasses.Tool
 
         #endregion
 
-        #region ----- GUI Implementation -----
+        #region ----- EditorWindow Implementation -----
 
         /// <summary>
         /// OnEnable.
