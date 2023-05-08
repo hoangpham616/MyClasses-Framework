@@ -783,7 +783,7 @@ namespace MyClasses
             _interstitialAd.OnAdClosed += _OnInterstitialClosed_7_1_0;
 
 #if UNITY_EDITOR
-            _OnInterstitialLoaded(null, null);
+            _OnInterstitialLoaded_7_1_0(null, null);
 #endif
 #else
             if (_interstitialAd != null)
@@ -936,7 +936,7 @@ namespace MyClasses
             _rewardedAd.OnAdClosed += _OnRewardedAdClosed_7_1_0;
 
 #if UNITY_EDITOR
-            _OnRewardedAdLoaded(null, null);
+            _OnRewardedAdLoaded_7_1_0(null, null);
 #endif
 #else
             if (_rewardedAd != null)
