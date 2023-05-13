@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MySoundManager (version 2.19)
+ * Class:       MySoundManager (version 2.20)
  */
 
 using UnityEngine;
@@ -12,10 +12,21 @@ namespace MyClasses
 {
     public partial class MySoundManager : MonoBehaviour
     {
+        #region ----- Define -----
+
+        private readonly string KEY_BGM_MUTE = "MyBGM_Mute";
+        private readonly string KEY_BGM_VOLUME = "MyBGM_Volume";
+        private readonly string KEY_SFX_MUTE = "MySFX_Mute";
+        private readonly string KEY_SFX_VOLUME = "MySFX_Volume";
+        private readonly string KEY_ENABLE_VIBRATE = "MyVibrate";
+
+        #endregion
+
         #region ----- Variable -----
 
         private AudioSource _audioSourceBGM;
         private List<AudioSource> _listAudioSourceSFX;
+        private Dictionary<string, AudioSource> _dictionaryAudioSource = new Dictionary<string, AudioSource>();
 
         #endregion
 
@@ -56,21 +67,21 @@ namespace MyClasses
 
         public bool IsMuteBGM
         {
-            get { return PlayerPrefs.GetInt("MyBGM_Mute", 0) == 1; }
+            get { return PlayerPrefs.GetInt(KEY_BGM_MUTE, 0) == 1; }
             set
             {
-                PlayerPrefs.SetInt("MyBGM_Mute", value ? 1 : 0);
+                PlayerPrefs.SetInt(KEY_BGM_MUTE, value ? 1 : 0);
                 _audioSourceBGM.volume = value ? 0 : VolumeBGM;
             }
         }
 
         public float VolumeBGM
         {
-            get { return PlayerPrefs.GetFloat("MyBGM_Volume", 1f); }
+            get { return PlayerPrefs.GetFloat(KEY_BGM_VOLUME, 1f); }
             set
             {
                 float volume = Mathf.Clamp01(value);
-                PlayerPrefs.SetFloat("MyBGM_Volume", volume);
+                PlayerPrefs.SetFloat(KEY_BGM_VOLUME, volume);
                 _audioSourceBGM.volume = IsMuteBGM ? 0 : volume;
             }
         }
@@ -82,10 +93,10 @@ namespace MyClasses
 
         public bool IsMuteSFX
         {
-            get { return PlayerPrefs.GetInt("MySFX_Mute", 0) == 1; }
+            get { return PlayerPrefs.GetInt(KEY_SFX_MUTE, 0) == 1; }
             set
             {
-                PlayerPrefs.SetInt("MySFX_Mute", value ? 1 : 0);
+                PlayerPrefs.SetInt(KEY_SFX_MUTE, value ? 1 : 0);
                 float volume = value ? 0 : VolumeSFX;
                 for (int i = _listAudioSourceSFX.Count - 1; i >= 0; i--)
                 {
@@ -96,11 +107,11 @@ namespace MyClasses
 
         public float VolumeSFX
         {
-            get { return PlayerPrefs.GetFloat("MySFX_Volume", 1f); }
+            get { return PlayerPrefs.GetFloat(KEY_SFX_VOLUME, 1f); }
             set
             {
                 float volume = Mathf.Clamp01(value);
-                PlayerPrefs.SetFloat("MySFX_Volume", volume);
+                PlayerPrefs.SetFloat(KEY_SFX_VOLUME, volume);
                 if (IsMuteSFX)
                 {
                     volume = 0;
@@ -114,8 +125,8 @@ namespace MyClasses
 
         public bool IsEnableVibrate
         {
-            get { return PlayerPrefs.GetInt("MyVibrate", 1) == 1; }
-            set { PlayerPrefs.SetInt("MyVibrate", value ? 1 : 0); }
+            get { return PlayerPrefs.GetInt(KEY_ENABLE_VIBRATE, 1) == 1; }
+            set { PlayerPrefs.SetInt(KEY_ENABLE_VIBRATE, value ? 1 : 0); }
         }
 
         #endregion
@@ -249,7 +260,8 @@ namespace MyClasses
         {
             AudioSource audioSource = _GetAudioSourceSFX();
             audioSource.clip = audioClip;
-            audioSource.volume = (IsMuteSFX ? 0 : VolumeSFX) * localVolume;
+            audioSource.volume = IsMuteSFX ? 0 : VolumeSFX * localVolume;
+            audioSource.time = 0;
             audioSource.PlayDelayed(delayTime);
             return audioSource;
         }
@@ -288,7 +300,7 @@ namespace MyClasses
         }
 
         /// <summary>
-        /// Return a available audio source.
+        /// Return an available audio source.
         /// </summary>
         private AudioSource _GetAudioSourceSFX()
         {
