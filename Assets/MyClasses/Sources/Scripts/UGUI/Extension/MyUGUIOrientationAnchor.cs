@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyUGUIOrientationAnchor (version 2.3)
+ * Class:       MyUGUIOrientationAnchor (version 2.4)
  */
 
 #pragma warning disable 0414
@@ -210,7 +210,7 @@ namespace MyClasses.UI
             mLandscapeOffsetMin = serializedObject.FindProperty("mLandscapeOffsetMin");
             mLandscapeOffsetMax = serializedObject.FindProperty("mLandscapeOffsetMax");
 
-            if (!mScript.IsCurrentAnchorLoaded)
+            if (!mScript.IsCurrentAnchorLoaded && !Application.isPlaying)
             {
                 mScript.IsCurrentAnchorLoaded = true;
 

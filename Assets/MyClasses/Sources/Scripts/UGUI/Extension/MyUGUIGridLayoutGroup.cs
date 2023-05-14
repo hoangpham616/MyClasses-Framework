@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyUGUIGridLayoutGroup (version 2.2)
+ * Class:       MyUGUIGridLayoutGroup (version 2.3)
  */
 
 #pragma warning disable 0414
@@ -593,7 +593,7 @@ namespace MyClasses.UI
             mLowestConstraint = serializedObject.FindProperty("mLowestConstraint");
             mLowestConstraintCount = serializedObject.FindProperty("mLowestConstraintCount");
 
-            if (!mScript.IsCurrentRefreshLoaded)
+            if (!mScript.IsCurrentRefreshLoaded && !Application.isPlaying)
             {
                 mScript.IsCurrentRefreshLoaded = true;
 

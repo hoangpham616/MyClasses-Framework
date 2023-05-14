@@ -4,13 +4,13 @@ Ads: DEBUG_MY_UNITY_ADS		USE_MY_UNITY_ADS
 
 AssetBundles: DEBUG_MY_ASSET_BUNDLE
 
-IAP: DEBUG_MY_IAP	USE_MY_IAP
+IAP: DEBUG_MY_IAP   USE_MY_IAP
 
 Logger: DISABLE_MY_LOGGER_ALL   DISABLE_MY_LOGGER_INFO    DISABLE_MY_LOGGER_WARNING   DISABLE_MY_LOGGER_ERROR
 
 Sound: DEBUG_MY_SOUND
 
-UGUI: DEBUG_MY_UI	USE_MY_UI_TMPRO
+UGUI: DEBUG_MY_UI   USE_MY_UI_TMPRO
 
 **********************************
 
@@ -40,7 +40,9 @@ UGUI: DEBUG_MY_UI	USE_MY_UI_TMPRO
 
 ********** How to use **********
 
-+ Copy scripts from "Scripts/UGUI/Sample" to re-use
++ Create prefabs and store them at Resources\Prefabs\UGUI\
+
++ Genegrate scripts at Menu Bar -> MyClasses -> UGUI -> Create
 
 + Call methods from MyUGUIManager class:
 
@@ -52,11 +54,13 @@ UGUI: DEBUG_MY_UI	USE_MY_UI_TMPRO
 
   - MyUGUIManager.Instance.ShowFloatPopup(EPopupID.BattleInvite)
 
-  - MyUGUIManager.Instance.ShowLoadingIndicator(ELoadingIndicatorID.Circle, 30, onTimeOutCallback)
+  - MyUGUIManager.Instance.ShowLoadingIndicator(10, onTimeOutCallback)
 
-  - MyUGUIManager.Instance.ShowRunningText("This is Running Text", ERunningTextSpeed.Normal)
+  - MyUGUIManager.Instance.ShowFlyingMessage("This is Flying Message", MyUGUIFlyingMessage.EType.ShortFlyFromBot)
 
-  - MyUGUIManager.Instance.ShowToast("This is Toast", EToastDuration.Medium)
+  - MyUGUIManager.Instance.ShowRunningMessage("This is Running Message", ERunningMessageSpeed.Normal)
+
+  - MyUGUIManager.Instance.ShowToastMessage("This is Toast Message", EToastMessageDuration.Medium)
 
   - MyUGUIManager.Instance.Back()
 
@@ -78,12 +82,12 @@ UGUI: DEBUG_MY_UI	USE_MY_UI_TMPRO
 
 ********** How to custom UI **********
 
++ HUDs: "Resources\Prefabs\UGUI\HUDs\"
+
 + Scenes: "Resources\Prefabs\UGUI\Scenes\"
 
 + Popups: "Resources\Prefabs\UGUI\Popups\"
 
-+ HUDs: "Resources\Prefabs\UGUI\HUDs\"
-
-+ Popup overlay, loading indicator, toast, running text...: "Resources\Prefabs\UGUI\Specials\"
++ Popup Overlay, Loading Indicator, Toast Message, Flying Message, Running Message...: "Resources\Prefabs\UGUI\Specialities\"
 
 **************************************

@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyUGUIAnchor (version 2.5)
+ * Class:       MyUGUIAnchor (version 2.6)
  */
 
 #pragma warning disable 0414
@@ -709,7 +709,7 @@ namespace MyClasses.UI
             mLowestOffsetMin = serializedObject.FindProperty("mLowestOffsetMin");
             mLowestOffsetMax = serializedObject.FindProperty("mLowestOffsetMax");
 
-            if (!mScript.IsCurrentAnchorLoaded)
+            if (!mScript.IsCurrentAnchorLoaded && !Application.isPlaying)
             {
                 mScript.IsCurrentAnchorLoaded = true;
 

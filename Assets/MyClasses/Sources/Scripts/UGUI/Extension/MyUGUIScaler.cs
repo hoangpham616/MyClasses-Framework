@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyUGUIScaler (version 2.3)
+ * Class:       MyUGUIScaler (version 2.4)
  */
 
 #pragma warning disable 0114
@@ -453,7 +453,7 @@ namespace MyClasses.UI
             mLowestRatio = serializedObject.FindProperty("mLowestRatio");
             mLowestScale = serializedObject.FindProperty("mLowestScale");
 
-            if (!mScript.IsCurrentAnchorLoaded)
+            if (!mScript.IsCurrentAnchorLoaded && !Application.isPlaying)
             {
                 mScript.IsCurrentAnchorLoaded = true;
 
