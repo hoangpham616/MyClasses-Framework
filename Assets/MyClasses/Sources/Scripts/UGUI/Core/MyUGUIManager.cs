@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyUGUIManager (version 2.39)
+ * Class:       MyUGUIManager (version 2.40)
  */
 
 #pragma warning disable 0162
@@ -94,6 +94,8 @@ namespace MyClasses.UI
         private bool _isHideToastWhenSwitchingScene;
 
         private int _previousInitSceneIndex;
+
+        private List<RaycastResult> _raycastResults = new List<RaycastResult>();
 
         #endregion
 
@@ -192,43 +194,31 @@ namespace MyClasses.UI
             set { _isClosePopupByClickingOutside = value; }
         }
 
-        public bool IsTouchingOnUI
-        {
-            get
-            {
-                if (EventSystem.current == null)
-                {
-                    return false;
-                }
-                return EventSystem.current.IsPointerOverGameObject();
-            }
-        }
-
         #endregion
 
         #region ----- Singleton -----
 
-        private static object mSingletonLock = new object();
-        private static MyUGUIManager mInstance;
+        private static object _singletonLock = new object();
+        private static MyUGUIManager _instance;
 
         public static MyUGUIManager Instance
         {
             get
             {
-                if (mInstance == null)
+                if (_instance == null)
                 {
-                    lock (mSingletonLock)
+                    lock (_singletonLock)
                     {
-                        mInstance = (MyUGUIManager)FindObjectOfType(typeof(MyUGUIManager));
-                        if (mInstance == null)
+                        _instance = (MyUGUIManager)FindObjectOfType(typeof(MyUGUIManager));
+                        if (_instance == null)
                         {
                             GameObject obj = new GameObject(typeof(MyUGUIManager).Name);
-                            mInstance = obj.AddComponent<MyUGUIManager>();
+                            _instance = obj.AddComponent<MyUGUIManager>();
                             DontDestroyOnLoad(obj);
                         }
                     }
                 }
-                return mInstance;
+                return _instance;
             }
         }
 
@@ -302,6 +292,23 @@ namespace MyClasses.UI
         #endregion
 
         #region ----- Public Method -----
+
+        public bool IsPointerOverUIGameObject()
+        {
+            if (EventSystem.current == null)
+            {
+                return false;
+            }
+
+            if (EventSystem.current.IsPointerOverGameObject())
+            {
+                return true;
+            }
+            
+            _raycastResults.Clear();
+            EventSystem.current.RaycastAll(new PointerEventData(EventSystem.current) { position = Input.mousePosition }, _raycastResults);
+            return _raycastResults.Count > 0;
+        }
 
         /// <summary>
         /// Set asset bundle for core UI (scene fading, popup overlay, toast, running text, loading indicator).
