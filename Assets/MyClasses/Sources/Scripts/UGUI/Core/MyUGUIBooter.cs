@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyUGUIConfig (version 2.10)
+ * Class:       MyUGUIConfig (version 2.11)
  */
 
 #pragma warning disable 0414
@@ -33,23 +33,27 @@ namespace MyClasses.UI
         #region ----- Variable -----
 
         [SerializeField]
-        private EUnitySceneID mDefaultUnitySceneID;
+        private EBootMode _bootMode = EBootMode.Instant;
         [SerializeField]
-        private ESceneID mDefaultSceneID;
+        private EShowMode _showMode = EShowMode.Default;
         [SerializeField]
-        private EBootMode mBootMode = 0;
+        private EUnitySceneID _defaultUnitySceneID;
         [SerializeField]
-        private float mDelayTimeOnEditor = 0;
+        private ESceneID _defaultSceneID;
         [SerializeField]
-        private float mDelayTimeOnDevice = 0;
+        private float _delayTimeOnEditor = 0;
         [SerializeField]
-        private UnityEventAction mOnPreLoadSync;
+        private float _delayTimeOnDevice = 0;
         [SerializeField]
-        private UnityEventVoid mOnPreLoad;
+        private UnityEventAction _onPreShowSync;
         [SerializeField]
-        private UnityEventVoid mOnPostLoad;
+        private UnityEventVoid _onPreShow;
+        [SerializeField]
+        private UnityEventVoid _onCustomShow;
+        [SerializeField]
+        private UnityEventVoid _onPostShow;
 
-        private static bool mIsBooted = false;
+        private static bool _isBooted = false;
 
         #endregion
 
@@ -60,39 +64,40 @@ namespace MyClasses.UI
         /// </summary>
         void Start()
         {
-            if (mIsBooted)
+            if (_isBooted)
             {
                 return;
             }
 
-            switch (mBootMode)
+            switch (_bootMode)
             {
                 case EBootMode.Instant:
                     {
-                        if (mOnPreLoad != null)
+                        if (_onPreShow != null)
                         {
-                            mOnPreLoad.Invoke();
+                            _onPreShow.Invoke();
                         }
 
                         _ShowDefaultScene();
                     }
                     break;
+
                 case EBootMode.FixedTimeDelay:
                     {
-                        if (mOnPreLoad != null)
+                        if (_onPreShow != null)
                         {
-                            mOnPreLoad.Invoke();
+                            _onPreShow.Invoke();
                         }
 
 #if UNITY_EDITOR
-                        if (mDelayTimeOnEditor > 0)
+                        if (_delayTimeOnEditor > 0)
                         {
-                            StartCoroutine(_ShowDefaultSceneWithDelay(mDelayTimeOnEditor));
+                            StartCoroutine(_ShowDefaultSceneWithDelay(_delayTimeOnEditor));
                         }
 #else
-                        if (mDelayTimeOnDevice > 0)
+                        if (_delayTimeOnDevice > 0)
                         {
-                            StartCoroutine(_ShowDefaultSceneWithDelay(mDelayTimeOnDevice));
+                            StartCoroutine(_ShowDefaultSceneWithDelay(_delayTimeOnDevice));
                         }
 #endif
                         else
@@ -101,11 +106,12 @@ namespace MyClasses.UI
                         }
                     }
                     break;
+
                 case EBootMode.WaitForInitializing:
                     {
-                        if (mOnPreLoadSync != null)
+                        if (_onPreShowSync != null)
                         {
-                            mOnPreLoadSync.Invoke(_ShowDefaultScene);
+                            _onPreShowSync.Invoke(_ShowDefaultScene);
                         }
                         else
                         {
@@ -134,18 +140,32 @@ namespace MyClasses.UI
         /// </summary>
         private void _ShowDefaultScene()
         {
-            MyUGUIManager.Instance.ShowUnityScene(mDefaultUnitySceneID, mDefaultSceneID);
-            mIsBooted = true;
-
-            if (mOnPostLoad != null)
+            if (_onCustomShow != null)
             {
-                mOnPostLoad.Invoke();
+                _onCustomShow.Invoke();
+            }
+            else
+            {
+                MyUGUIManager.Instance.ShowUnityScene(_defaultUnitySceneID, _defaultSceneID);
+            }
+
+            _isBooted = true;
+
+            if (_onPostShow != null)
+            {
+                _onPostShow.Invoke();
             }
         }
 
         #endregion
 
         #region ----- Enumeration -----
+
+        public enum EShowMode
+        {
+            Default = 0,
+            Custom = 1,
+        }
 
         public enum EBootMode
         {
@@ -162,30 +182,34 @@ namespace MyClasses.UI
     [CustomEditor(typeof(MyUGUIBooter))]
     public class MyUGUIConfigEditor : Editor
     {
-        private MyUGUIBooter mScript;
-        private SerializedProperty mDefaultUnitySceneID;
-        private SerializedProperty mDefaultSceneID;
-        private SerializedProperty mBootMode;
-        private SerializedProperty mDelayTimeOnEditor;
-        private SerializedProperty mDelayTimeOnDevice;
-        private SerializedProperty mOnPreLoadSync;
-        private SerializedProperty mOnPreLoad;
-        private SerializedProperty mOnPostLoad;
+        private MyUGUIBooter _script;
+        private SerializedProperty _showMode;
+        private SerializedProperty _bootMode;
+        private SerializedProperty _defaultUnitySceneID;
+        private SerializedProperty _defaultSceneID;
+        private SerializedProperty _delayTimeOnEditor;
+        private SerializedProperty _delayTimeOnDevice;
+        private SerializedProperty _onPreShowSync;
+        private SerializedProperty _onPreShow;
+        private SerializedProperty _onCustomShow;
+        private SerializedProperty _onPostShow;
 
         /// <summary>
         /// OnEnable.
         /// </summary>
         void OnEnable()
         {
-            mScript = (MyUGUIBooter)target;
-            mDefaultUnitySceneID = serializedObject.FindProperty("mDefaultUnitySceneID");
-            mDefaultSceneID = serializedObject.FindProperty("mDefaultSceneID");
-            mBootMode = serializedObject.FindProperty("mBootMode");
-            mDelayTimeOnEditor = serializedObject.FindProperty("mDelayTimeOnEditor");
-            mDelayTimeOnDevice = serializedObject.FindProperty("mDelayTimeOnDevice");
-            mOnPreLoadSync = serializedObject.FindProperty("mOnPreLoadSync");
-            mOnPreLoad = serializedObject.FindProperty("mOnPreLoad");
-            mOnPostLoad = serializedObject.FindProperty("mOnPostLoad");
+            _script = (MyUGUIBooter)target;
+            _showMode = serializedObject.FindProperty("_showMode");
+            _bootMode = serializedObject.FindProperty("_bootMode");
+            _defaultUnitySceneID = serializedObject.FindProperty("_defaultUnitySceneID");
+            _defaultSceneID = serializedObject.FindProperty("_defaultSceneID");
+            _delayTimeOnEditor = serializedObject.FindProperty("_delayTimeOnEditor");
+            _delayTimeOnDevice = serializedObject.FindProperty("_delayTimeOnDevice");
+            _onPreShowSync = serializedObject.FindProperty("_onPreShowSync");
+            _onPreShow = serializedObject.FindProperty("_onPreShow");
+            _onCustomShow = serializedObject.FindProperty("_onCustomShow");
+            _onPostShow = serializedObject.FindProperty("_onPostShow");
         }
 
         /// <summary>
@@ -193,41 +217,47 @@ namespace MyClasses.UI
         /// </summary>
         public override void OnInspectorGUI()
         {
-            EditorGUILayout.ObjectField("Script", MonoScript.FromMonoBehaviour(mScript), typeof(MyUGUIBooter), false);
+            EditorGUILayout.ObjectField("Script", MonoScript.FromMonoBehaviour(_script), typeof(MyUGUIBooter), false);
 
             serializedObject.Update();
 
-            mDefaultUnitySceneID.enumValueIndex = (int)(EUnitySceneID)EditorGUILayout.EnumPopup("Default Unity Scene", (EUnitySceneID)mDefaultUnitySceneID.enumValueIndex);
-            mDefaultSceneID.enumValueIndex = (int)(ESceneID)EditorGUILayout.EnumPopup("Default Scene", (ESceneID)mDefaultSceneID.enumValueIndex);
-            mBootMode.enumValueIndex = (int)(MyUGUIBooter.EBootMode)EditorGUILayout.EnumPopup("Boot Mode", (MyUGUIBooter.EBootMode)mBootMode.enumValueIndex);
-            switch ((MyUGUIBooter.EBootMode)mBootMode.enumValueIndex)
+            _bootMode.enumValueIndex = (int)(MyUGUIBooter.EBootMode)EditorGUILayout.EnumPopup("Boot Mode", (MyUGUIBooter.EBootMode)_bootMode.enumValueIndex);
+            _showMode.enumValueIndex = (int)(MyUGUIBooter.EShowMode)EditorGUILayout.EnumPopup("Show Mode", (MyUGUIBooter.EShowMode)_showMode.enumValueIndex);
+            if ((MyUGUIBooter.EShowMode)_showMode.enumValueIndex == MyUGUIBooter.EShowMode.Default)
+            {
+                _defaultUnitySceneID.enumValueIndex = (int)(EUnitySceneID)EditorGUILayout.EnumPopup("Default Unity Scene", (EUnitySceneID)_defaultUnitySceneID.enumValueIndex);
+                _defaultSceneID.enumValueIndex = (int)(ESceneID)EditorGUILayout.EnumPopup("Default Scene", (ESceneID)_defaultSceneID.enumValueIndex);
+            }
+            switch ((MyUGUIBooter.EBootMode)_bootMode.enumValueIndex)
             {
                 case MyUGUIBooter.EBootMode.Instant:
                     {
                         EditorGUI.BeginChangeCheck();
-                        EditorGUILayout.PropertyField(mOnPreLoad, new GUIContent("On Pre Load"));
+                        EditorGUILayout.PropertyField(_onPreShow, new GUIContent("On Pre Show"));
                         if (EditorGUI.EndChangeCheck())
                         {
                             serializedObject.ApplyModifiedProperties();
                         }
                     }
                     break;
+
                 case MyUGUIBooter.EBootMode.FixedTimeDelay:
                     {
-                        mDelayTimeOnEditor.floatValue = EditorGUILayout.FloatField("Delay Second (On Editor)", mDelayTimeOnEditor.floatValue);
-                        mDelayTimeOnDevice.floatValue = EditorGUILayout.FloatField("Delay Second (On Device)", mDelayTimeOnDevice.floatValue);
+                        _delayTimeOnEditor.floatValue = EditorGUILayout.FloatField("Delay Second (On Editor)", _delayTimeOnEditor.floatValue);
+                        _delayTimeOnDevice.floatValue = EditorGUILayout.FloatField("Delay Second (On Device)", _delayTimeOnDevice.floatValue);
                         EditorGUI.BeginChangeCheck();
-                        EditorGUILayout.PropertyField(mOnPreLoad, new GUIContent("On Pre Load"));
+                        EditorGUILayout.PropertyField(_onPreShow, new GUIContent("On Pre Show"));
                         if (EditorGUI.EndChangeCheck())
                         {
                             serializedObject.ApplyModifiedProperties();
                         }
                     }
                     break;
+
                 case MyUGUIBooter.EBootMode.WaitForInitializing:
                     {
                         EditorGUI.BeginChangeCheck();
-                        EditorGUILayout.PropertyField(mOnPreLoadSync, new GUIContent("On Pre Load"));
+                        EditorGUILayout.PropertyField(_onPreShowSync, new GUIContent("On Pre Show"));
                         if (EditorGUI.EndChangeCheck())
                         {
                             serializedObject.ApplyModifiedProperties();
@@ -236,7 +266,11 @@ namespace MyClasses.UI
                     break;
             }
             EditorGUI.BeginChangeCheck();
-            EditorGUILayout.PropertyField(mOnPostLoad, new GUIContent("On Post Load"));
+            if ((MyUGUIBooter.EShowMode)_showMode.enumValueIndex == MyUGUIBooter.EShowMode.Custom)
+            {
+                EditorGUILayout.PropertyField(_onCustomShow, new GUIContent("On Custom Show", "You should call MyUGUIManager.Instance.ShowUnityScene() here"));
+            }
+            EditorGUILayout.PropertyField(_onPostShow, new GUIContent("On Post Show"));
             if (EditorGUI.EndChangeCheck())
             {
                 serializedObject.ApplyModifiedProperties();
