@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyLocalizationManager (version 3.4)
+ * Class:       MyLocalizationManager (version 3.5)
  */
 
 #pragma warning disable 0162
@@ -221,7 +221,7 @@ namespace MyClasses
         /// </summary>
         public string LoadKey(string key)
         {
-            if (_languageType == ELanguage.None)
+            if (_languageType == ELanguage.None || _languageKeys == null)
             {
                 LoadLanguage(Language);
             }
@@ -230,9 +230,9 @@ namespace MyClasses
             {
 #if USE_MY_LOCALIZATION_ARABIC
                 // please import "Arabic Support" package
-                if (mLanguageType == ELanguage.Arabic)
+                if (_languageType == ELanguage.Arabic)
                 {
-                    string value = mDictionary[key][mLanguageIndex];
+                    string value = _dictionary[key][_languageIndex];
                     string arabic = ArabicSupport.ArabicFixer.Fix(value, false, false);
                     for (int i = 0; i < 10; ++i)
                     {
@@ -254,9 +254,9 @@ namespace MyClasses
                 }
 #endif
 #if USE_MY_LOCALIZATION_KHMER
-                if (mLanguageType == ELanguage.Unknown)
+                if (_languageType == ELanguage.Unknown)
                 {
-                    return MyFontKhmerConverter.Convert(mDictionary[key][mLanguageIndex]);
+                    return MyFontKhmerConverter.Convert(_dictionary[key][_languageIndex]);
                 }
 #endif
                 return _dictionary[key][_languageIndex];
