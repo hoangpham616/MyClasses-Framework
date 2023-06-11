@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyLocalizationManager (version 3.5)
+ * Class:       MyLocalizationManager (version 3.6)
  */
 
 #pragma warning disable 0162
@@ -57,31 +57,18 @@ namespace MyClasses
             {
                 if (_languageType == ELanguage.None)
                 {
-                    switch (Config.Mode)
-                    {
-                        case EMode.CACHE_ONLY:
-                            {
-                                _LoadLanguageFromCache();
-                            }
-                            break;
-
-                        case EMode.DEVICE_LANGUAGE_ONLY:
-                            {
-                                _LoadLanguageBasedOnDevice();
-                            }
-                            break;
-
-                        case EMode.DEVICE_LANGUAGE_AND_CACHE:
-                            {
-                                _LoadLanguagBasedOnDeviceAndCache();
-                            }
-                            break;
-                    }
+                    _LoadLanguage();
+                    _LoadLocalization();
                 }
                 return _languageType;
             }
             set
             {
+                if (_languageType == ELanguage.None)
+                {
+                    _LoadLanguage();
+                    _LoadLocalization();
+                }
                 _languageType = value;
 
                 PlayerPrefs.SetInt("MyLocalizationManager_Language", (int)_languageType);
@@ -197,11 +184,6 @@ namespace MyClasses
                 _languageKeys = null;
             }
 
-            if (_languageKeys == null)
-            {
-                _LoadLocalization();
-            }
-
 #if USE_MY_LOCALIZATION_KHMER
             MyFontKhmerConverter.Initialize();
 #endif
@@ -221,7 +203,7 @@ namespace MyClasses
         /// </summary>
         public string LoadKey(string key)
         {
-            if (_languageType == ELanguage.None || _languageKeys == null)
+            if (_languageType == ELanguage.None)
             {
                 LoadLanguage(Language);
             }
@@ -399,6 +381,33 @@ namespace MyClasses
         }
 
         /// <summary>
+        /// Load language type by config.
+        /// </summary>
+        private void _LoadLanguage()
+        {
+            switch (Config.Mode)
+            {
+                case EMode.CACHE_ONLY:
+                    {
+                        _LoadLanguageFromCache();
+                    }
+                    break;
+
+                case EMode.DEVICE_LANGUAGE_ONLY:
+                    {
+                        _LoadLanguageBasedOnDevice();
+                    }
+                    break;
+
+                case EMode.DEVICE_LANGUAGE_AND_CACHE:
+                    {
+                        _LoadLanguageBasedOnDeviceAndCache();
+                    }
+                    break;
+            }
+        }
+
+        /// <summary>
         /// Load language type from cache.
         /// </summary>
         private void _LoadLanguageFromCache()
@@ -432,7 +441,7 @@ namespace MyClasses
         /// <summary>
         /// Load language type based on device language and cache.
         /// </summary>
-        private void _LoadLanguagBasedOnDeviceAndCache()
+        private void _LoadLanguageBasedOnDeviceAndCache()
         {
             int languageValue = PlayerPrefs.GetInt("MyLocalizationManager_Language", (int)ELanguage.None);
             if (languageValue != (int)ELanguage.None && Enum.IsDefined(typeof(ELanguage), languageValue))

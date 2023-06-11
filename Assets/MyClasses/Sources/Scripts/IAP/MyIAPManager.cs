@@ -74,7 +74,7 @@ public class MyIAPManager : MonoBehaviour, IStoreListener
 
     #endregion
 
-    #region ----- IStoreListener Implemention -----
+    #region ----- IStoreListener Implementation -----
 
     /// <summary>
     /// OnInitialized.
