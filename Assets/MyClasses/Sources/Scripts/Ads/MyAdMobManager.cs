@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyAdMobManager (version 1.27)
+ * Class:       MyAdMobManager (version 1.28)
  * Require:     GoogleMobileAds-v8.0.0
  * Require:     GoogleMobileAds-v7.1.0 (USE_MY_ADMOB_7_1_0)
  */
@@ -42,7 +42,7 @@ namespace MyClasses
     {
         #region ----- Define -----
 
-        private const int CALLBACK_DELAY_FRAME = 3;
+        private readonly int CALLBACK_DELAY_FRAME = 3;
 
         #endregion
 
@@ -51,7 +51,7 @@ namespace MyClasses
         [SerializeField]
         private bool _isInitialized = false;
         [SerializeField]
-        private bool _isEnableTest = true;
+        private bool _isTestMode = true;
         [SerializeField]
         private bool _isUseGoogleTestAdsId = true;
         [SerializeField]
@@ -89,6 +89,8 @@ namespace MyClasses
         [SerializeField]
         private bool _isLoadingInterstitial = false;
         [SerializeField]
+        private bool _isShowingInterstitial = false;
+        [SerializeField]
         private int _interstitialLoadedDelayFrameCallback = 0;
         [SerializeField]
         private int _interstitialFailedToLoadDelayFrameCallback = 0;
@@ -104,7 +106,9 @@ namespace MyClasses
         [SerializeField]
         private long _lastRewardedHideTimestamp = 0;
         [SerializeField]
-        private bool _isLoadingRewardred = false;
+        private bool _isLoadingRewarded = false;
+        [SerializeField]
+        private bool _isShowingRewarded = false;
         [SerializeField]
         private bool _isHasReward = false;
         [SerializeField]
@@ -121,7 +125,7 @@ namespace MyClasses
         [SerializeField]
         private string _androidDefaultAppOpenAdId = string.Empty;
         [SerializeField]
-        private string mIosDefaultAppOpenAdId = string.Empty;
+        private string _iosDefaultAppOpenAdId = string.Empty;
         [SerializeField]
         private bool _isLoadingAppOpen = false;
         [SerializeField]
@@ -165,6 +169,11 @@ namespace MyClasses
         public bool IsInitialized
         {
             get { return _isInitialized; }
+        }
+
+        public bool IsTestMode
+        {
+            get { return _isTestMode; }
         }
 
         public long CountBannerRequest
@@ -390,7 +399,7 @@ namespace MyClasses
                     Debug.Log("[" + typeof(MyAdMobManager).Name + "] _OnRewardedAdLoaded(): callback");
 #endif
 
-                    _isLoadingRewardred = false;
+                    _isLoadingRewarded = false;
 
                     if (_onRewardedAdLoadedCallback != null)
                     {
@@ -407,7 +416,7 @@ namespace MyClasses
                     Debug.LogError("[" + typeof(MyAdMobManager).Name + "] _OnRewardedAdFaiedToLoad(): callback");
 #endif
 
-                    _isLoadingRewardred = false;
+                    _isLoadingRewarded = false;
 
                     if (_onRewardedAdFailedToLoadCallback != null)
                     {
@@ -450,7 +459,7 @@ namespace MyClasses
                 _rewardedClosedDelayFrameCallback -= 1;
                 if (_rewardedClosedDelayFrameCallback == 0)
                 {
-                    _isLoadingRewardred = false;
+                    _isLoadingRewarded = false;
                     _lastRewardedHideTimestamp = MyLocalTime.CurrentUnixTime;
 
                     if (_isHasReward)
@@ -491,13 +500,27 @@ namespace MyClasses
         /// <summary>
         /// Initialize.
         /// </summary>
+        public void Initialize(bool isTestMode, Action onCompleteCallback = null)
+        {
+#if DEBUG_MY_ADMOB
+            Debug.Log("[" + typeof(MyAdMobManager).Name + "] Initialize()");
+#endif
+
+            _isTestMode = isTestMode;
+
+            Initialize(onCompleteCallback);
+        }
+
+        /// <summary>
+        /// Initialize.
+        /// </summary>
         public void Initialize(Action onCompleteCallback = null)
         {
 #if DEBUG_MY_ADMOB
             Debug.Log("[" + typeof(MyAdMobManager).Name + "] Initialize()");
 #endif
 
-            if (_isEnableTest && _testDeviceId.Length > 0)
+            if (_isTestMode && _testDeviceId.Length > 0)
             {
                 if (_isUseGoogleTestAdsId)
                 {
@@ -509,7 +532,7 @@ namespace MyClasses
                     _iosDefaultBannerId = "ca-app-pub-3940256099942544/2934735716";
                     _iosDefaultInterstitialAdId = "ca-app-pub-3940256099942544/4411468910";
                     _iosDefaultRewardedAdId = "ca-app-pub-3940256099942544/1712485313";
-                    mIosDefaultAppOpenAdId = "ca-app-pub-3940256099942544/5662855259";
+                    _iosDefaultAppOpenAdId = "ca-app-pub-3940256099942544/5662855259";
 
 #if UNITY_ANDROID
                     PlayerPrefs.SetString("MyAdMobManager_BannerId", _androidDefaultBannerId);
@@ -575,7 +598,7 @@ namespace MyClasses
             Debug.Log("[" + typeof(MyAdMobManager).Name + "] SetDefaultBannerId(): id=" + id);
 #endif
 
-            if (_isEnableTest && _isUseGoogleTestAdsId)
+            if (_isTestMode && _isUseGoogleTestAdsId)
             {
                 return;
             }
@@ -610,7 +633,7 @@ namespace MyClasses
         /// </summary>
         public void ShowBanner(string adUnitId = null, AdSize size = null, AdPosition position = AdPosition.Bottom, Action onLoadedCallback = null, Action onFailedToLoadCallback = null, Action onOpeningCallback = null, Action onClosedCallback = null)
         {
-            if (_isEnableTest && _isUseGoogleTestAdsId)
+            if (_isTestMode && _isUseGoogleTestAdsId)
             {
 #if UNITY_ANDROID
                 adUnitId = _androidDefaultBannerId;
@@ -703,7 +726,7 @@ namespace MyClasses
             Debug.Log("[" + typeof(MyAdMobManager).Name + "] SetDefaultInterstitialAdId(): id=" + id);
 #endif
 
-            if (_isEnableTest && _isUseGoogleTestAdsId)
+            if (_isTestMode && _isUseGoogleTestAdsId)
             {
                 return;
             }
@@ -733,7 +756,7 @@ namespace MyClasses
 #if USE_MY_ADMOB_7_1_0
             return _interstitialAd != null && _interstitialAd.IsLoaded();
 #else
-            return _interstitialAd != null && _interstitialAd.CanShowAd();
+            return _isShowingInterstitial || (_interstitialAd != null && _interstitialAd.CanShowAd());
 #endif
         }
 
@@ -742,7 +765,7 @@ namespace MyClasses
         /// </summary>
         public void LoadInterstitialAd(string adUnitId = null, Action onLoadedCallback = null, Action onFailedToLoadCallback = null)
         {
-            if (_isEnableTest && _isUseGoogleTestAdsId)
+            if (_isTestMode && _isUseGoogleTestAdsId)
             {
 #if UNITY_ANDROID
                 adUnitId = _androidDefaultInterstitialAdId;
@@ -783,7 +806,7 @@ namespace MyClasses
             _interstitialAd.OnAdClosed += _OnInterstitialClosed_7_1_0;
 
 #if UNITY_EDITOR
-            _OnInterstitialLoaded_7_1_0(null, null);
+            _OnInterstitialLoaded(null, null);
 #endif
 #else
             if (_interstitialAd != null)
@@ -842,6 +865,8 @@ namespace MyClasses
 
                 _lastInterstitialHideTimestamp = MyLocalTime.CurrentUnixTime;
 
+                _isShowingInterstitial = true;
+
                 _interstitialAd.Show();
             }
         }
@@ -855,7 +880,7 @@ namespace MyClasses
             Debug.Log("[" + typeof(MyAdMobManager).Name + "] SetDefaultRewardedAdId(): id=" + id);
 #endif
 
-            if (_isEnableTest && _isUseGoogleTestAdsId)
+            if (_isTestMode && _isUseGoogleTestAdsId)
             {
                 return;
             }
@@ -874,7 +899,7 @@ namespace MyClasses
         /// </summary>
         public bool IsRewardedAdLoading()
         {
-            return _isLoadingRewardred;
+            return _isLoadingRewarded;
         }
 
         /// <summary>
@@ -885,7 +910,7 @@ namespace MyClasses
 #if USE_MY_ADMOB_7_1_0
             return _rewardedAd != null && _rewardedAd.IsLoaded();
 #else
-            return _rewardedAd != null && _rewardedAd.CanShowAd();
+            return _isShowingRewarded || (_rewardedAd != null && _rewardedAd.CanShowAd());
 #endif
         }
 
@@ -894,7 +919,7 @@ namespace MyClasses
         /// </summary>
         public void LoadRewardedAd(string adUnitId = null, Action onLoadedCallback = null, Action onFailedToLoadCallback = null)
         {
-            if (_isEnableTest && _isUseGoogleTestAdsId)
+            if (_isTestMode && _isUseGoogleTestAdsId)
             {
 #if UNITY_ANDROID
                 adUnitId = _androidDefaultRewardedAdId;
@@ -918,7 +943,7 @@ namespace MyClasses
             _onRewardedAdLoadedCallback = onLoadedCallback;
             _onRewardedAdFailedToLoadCallback = onFailedToLoadCallback;
 
-            _isLoadingRewardred = true;
+            _isLoadingRewarded = true;
 
             if (_rewardedAdRequest == null)
             {
@@ -936,7 +961,7 @@ namespace MyClasses
             _rewardedAd.OnAdClosed += _OnRewardedAdClosed_7_1_0;
 
 #if UNITY_EDITOR
-            _OnRewardedAdLoaded_7_1_0(null, null);
+            _OnRewardedAdLoaded(null, null);
 #endif
 #else
             if (_rewardedAd != null)
@@ -992,6 +1017,7 @@ namespace MyClasses
                 _onRewardedAdClosedCallback = onClosedCallback;
 
                 _isHasReward = false;
+                _isShowingRewarded = true;
 
 #if USE_MY_ADMOB_7_1_0
                 _rewardedAd.Show();
@@ -1013,7 +1039,7 @@ namespace MyClasses
             Debug.Log("[" + typeof(MyAdMobManager).Name + "] SetDefaultAppOpenAdId(): id=" + id);
 #endif
 
-            if (_isEnableTest && _isUseGoogleTestAdsId)
+            if (_isTestMode && _isUseGoogleTestAdsId)
             {
                 return;
             }
@@ -1021,7 +1047,7 @@ namespace MyClasses
 #if UNITY_ANDROID
             PlayerPrefs.SetString("MyAdMobManager_AppOpenAdId", string.IsNullOrEmpty(id) ? _androidDefaultAppOpenAdId : id);
 #elif UNITY_IOS
-            PlayerPrefs.SetString("MyAdMobManager_AppOpenAdId", string.IsNullOrEmpty(id) ? mIosDefaultAppOpenAdId : id);
+            PlayerPrefs.SetString("MyAdMobManager_AppOpenAdId", string.IsNullOrEmpty(id) ? _iosDefaultAppOpenAdId : id);
 #endif
             PlayerPrefs.Save();
         }
@@ -1055,12 +1081,12 @@ namespace MyClasses
         /// </summary>
         public void LoadAppOpenAd(ScreenOrientation screenOrientation = ScreenOrientation.Portrait, string adUnitId = null, Action onLoadedCallback = null, Action onFailedToLoadCallback = null)
         {
-            if (_isEnableTest && _isUseGoogleTestAdsId)
+            if (_isTestMode && _isUseGoogleTestAdsId)
             {
 #if UNITY_ANDROID
                 adUnitId = _androidDefaultAppOpenAdId;
 #elif UNITY_IOS
-                adUnitId = mIosDefaultAppOpenAdId;
+                adUnitId = _iosDefaultAppOpenAdId;
 #endif
             }
 
@@ -1069,7 +1095,7 @@ namespace MyClasses
 #if UNITY_ANDROID
                 adUnitId = PlayerPrefs.GetString("MyAdMobManager_AppOpenAdId", _androidDefaultAppOpenAdId);
 #elif UNITY_IOS
-                adUnitId = PlayerPrefs.GetString("MyAdMobManager_AppOpenAdId", mIosDefaultAppOpenAdId);
+                adUnitId = PlayerPrefs.GetString("MyAdMobManager_AppOpenAdId", _iosDefaultAppOpenAdId);
 #endif
             }
 
@@ -1308,6 +1334,7 @@ namespace MyClasses
             Debug.Log("[" + typeof(MyAdMobManager).Name + "] _OnInterstitialClosed()");
 #endif
 
+            _isShowingInterstitial = false;
             _interstitialClosedDelayFrameCallback = CALLBACK_DELAY_FRAME;
         }
 
@@ -1404,6 +1431,7 @@ namespace MyClasses
             Debug.Log("[" + typeof(MyAdMobManager).Name + "] _OnRewardedAdClosed()");
 #endif
 
+            _isShowingRewarded = false;
             _rewardedClosedDelayFrameCallback = CALLBACK_DELAY_FRAME;
         }
 
@@ -1586,7 +1614,7 @@ namespace MyClasses
     public class MyAdMobManagerEditor : Editor
     {
         private MyAdMobManager _script;
-        private SerializedProperty _isEnableTest;
+        private SerializedProperty _isTestMode;
         private SerializedProperty _isUseGoogleTestAdsId;
         private SerializedProperty _testDeviceId;
         private SerializedProperty _androidDefaultBannerId;
@@ -1599,7 +1627,7 @@ namespace MyClasses
         private SerializedProperty _iosDefaultRewardedAdId;
         private SerializedProperty _lastRewardedHideTimestamp;
         private SerializedProperty _androidDefaultAppOpenAdId;
-        private SerializedProperty mIosDefaultAppOpenAdId;
+        private SerializedProperty _iosDefaultAppOpenAdId;
         private SerializedProperty _lastAppOpenHideTimestamp;
 
         /// <summary>
@@ -1608,7 +1636,7 @@ namespace MyClasses
         void OnEnable()
         {
             _script = (MyAdMobManager)target;
-            _isEnableTest = serializedObject.FindProperty("_isEnableTest");
+            _isTestMode = serializedObject.FindProperty("_isTestMode");
             _isUseGoogleTestAdsId = serializedObject.FindProperty("_isUseGoogleTestAdsId");
             _testDeviceId = serializedObject.FindProperty("_testDeviceId");
             _androidDefaultBannerId = serializedObject.FindProperty("_androidDefaultBannerId");
@@ -1621,7 +1649,7 @@ namespace MyClasses
             _iosDefaultRewardedAdId = serializedObject.FindProperty("_iosDefaultRewardedAdId");
             _lastRewardedHideTimestamp = serializedObject.FindProperty("_lastRewardedHideTimestamp");
             _androidDefaultAppOpenAdId = serializedObject.FindProperty("_androidDefaultAppOpenAdId");
-            mIosDefaultAppOpenAdId = serializedObject.FindProperty("mIosDefaultAppOpenAdId");
+            _iosDefaultAppOpenAdId = serializedObject.FindProperty("_iosDefaultAppOpenAdId");
             _lastAppOpenHideTimestamp = serializedObject.FindProperty("_lastAppOpenHideTimestamp");
         }
 
@@ -1636,7 +1664,7 @@ namespace MyClasses
 
             EditorGUILayout.LabelField(string.Empty);
             EditorGUILayout.LabelField("Test", EditorStyles.boldLabel);
-            _isEnableTest.boolValue = EditorGUILayout.Toggle("   Enable", _isEnableTest.boolValue);
+            _isTestMode.boolValue = EditorGUILayout.Toggle("   Enable", _isTestMode.boolValue);
             _isUseGoogleTestAdsId.boolValue = EditorGUILayout.Toggle("   Use Google Ads Id", _isUseGoogleTestAdsId.boolValue);
             _testDeviceId.stringValue = EditorGUILayout.TextField("   Device Ids (separate by \";\")", _testDeviceId.stringValue);
 
@@ -1676,7 +1704,7 @@ namespace MyClasses
             EditorGUILayout.LabelField(string.Empty);
             EditorGUILayout.LabelField("App Open Ad", EditorStyles.boldLabel);
             _androidDefaultAppOpenAdId.stringValue = EditorGUILayout.TextField("   Android Default ID", _androidDefaultAppOpenAdId.stringValue);
-            mIosDefaultAppOpenAdId.stringValue = EditorGUILayout.TextField("   IOS Default ID", mIosDefaultAppOpenAdId.stringValue);
+            _iosDefaultAppOpenAdId.stringValue = EditorGUILayout.TextField("   IOS Default ID", _iosDefaultAppOpenAdId.stringValue);
             EditorGUILayout.BeginHorizontal();
             {
                 EditorGUILayout.LabelField("   Last Hide Timestamp", GUILayout.Width(EditorGUIUtility.labelWidth));
