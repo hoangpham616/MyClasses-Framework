@@ -2,7 +2,7 @@
  * Copyright (c) 2016 Phạm Minh Hoàng
  * Email:       hoangpham61691@gmail.com
  * Framework:   MyClasses
- * Class:       MyUGUIConfig (version 2.11)
+ * Class:       MyUGUIConfig (version 2.12)
  */
 
 #pragma warning disable 0414
@@ -140,7 +140,7 @@ namespace MyClasses.UI
         /// </summary>
         private void _ShowDefaultScene()
         {
-            if (_onCustomShow != null)
+            if (_showMode == EShowMode.Custom && _onCustomShow != null)
             {
                 _onCustomShow.Invoke();
             }

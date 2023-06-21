@@ -51,7 +51,7 @@ namespace MyClasses
         [SerializeField]
         private bool _isInitialized = false;
         [SerializeField]
-        private bool _isTestMode = true;
+        private bool _isTestMode = false;
         [SerializeField]
         private bool _isUseGoogleTestAdsId = true;
         [SerializeField]
